@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starlight Palliative Care - โรงพยาบาลทับคล้อ</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            900: '#060B19',
+                            800: '#0A1128',
+                            700: '#121E3F',
+                        },
+                        starlight: {
+                            cyan: '#66FCF1',
+                            blue: '#45A29E',
+                            gold: '#F4D03F',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #060B19;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        /* Starry Background */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+        }
+
+        /* CSS for generated stars */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 5px #fff, 0 0 10px #66FCF1; }
+        }
+
+        /* Meteor Animation */
+        .meteor-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #F4D03F 100%);
+            transform: rotate(45deg);
+            opacity: 0;
+            animation: fall linear forwards;
+        }
+
+        .meteor::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -2px;
+            width: 6px;
+            height: 6px;
+            background-color: #F4D03F;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(244, 208, 63, 0.6);
+        }
+
+        @keyframes fall {
+            0% { transform: rotate(45deg) translate(0, -200px); opacity: 1; }
+            100% { transform: rotate(45deg) translate(1500px, 1500px); opacity: 0; }
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(18, 30, 63, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(102, 252, 241, 0.15);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #66FCF1;
+            box-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+            outline: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A1128; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #45A29E; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #66FCF1; 
+        }
+
+        /* Hide sections by default */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #45A29E;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Background Animations -->
+    <div class="stars-bg" id="stars-container"></div>
+    <div class="meteor-container" id="meteor-container"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 glass-panel m-4 flex flex-col hidden md:flex z-10">
+        <div class="p-6 text-center border-b border-starlight-cyan/20">
+            <i class="fa-solid fa-hands-holding-circle text-4xl text-starlight-gold mb-3"></i>
+            <h1 class="text-xl font-semibold text-starlight-cyan tracking-wide">Starlight Care</h1>
+            <p class="text-xs text-gray-400 mt-1">โรงพยาบาลทับคล้อ</p>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center p-3 rounded-lg text-starlight-cyan bg-white/10 transition-colors">
+                <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
+            </button>
+            <button onclick="switchView('ipd')" id="nav-ipd" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i class="fa-solid fa-bed-pulse w-6"></i> บันทึก IPD
+            </button>
+            <button onclick="switchView('opd')" id="nav-opd" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i class="fa-solid fa-stethoscope w-6"></i> บันทึก OPD
+            </button>
+            <button onclick="switchView('homevisit')" id="nav-homevisit" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i class="fa-solid fa-house-medical w-6"></i> บันทึกเยี่ยมบ้าน
+            </button>
+        </nav>
+        <div class="p-4 border-t border-starlight-cyan/20">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-starlight-cyan flex items-center justify-center text-space-900 font-bold">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <div class="text-sm">
+                    <p class="text-white">นพ. ทับคล้อ</p>
+                    <p class="text-starlight-gold text-xs">แพทย์ประคับประคอง</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Nav (Header) -->
+    <div class="md:hidden fixed top-0 left-0 w-full glass-panel z-20 flex justify-between items-center p-4 rounded-none border-x-0 border-t-0">
+        <h1 class="text-lg font-semibold text-starlight-cyan"><i class="fa-solid fa-hands-holding-circle text-starlight-gold"></i> Starlight Care</h1>
+        <div class="flex space-x-4 text-xl text-gray-400">
+            <button onclick="switchView('dashboard')"><i class="fa-solid fa-chart-pie"></i></button>
+            <button onclick="switchView('ipd')"><i class="fa-solid fa-bed-pulse"></i></button>
+            <button onclick="switchView('opd')"><i class="fa-solid fa-stethoscope"></i></button>
+            <button onclick="switchView('homevisit')"><i class="fa-solid fa-house-medical"></i></button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 z-10">
+        
+        <!-- ================= DASHBOARD VIEW ================= -->
+        <section id="dashboard" class="view-section active h-full">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-white">ภาพรวมระบบ Palliative Care</h2>
+                    <p class="text-gray-400">ข้อมูลผู้ป่วยระยะท้าย โรงพยาบาลทับคล้อ</p>
+                </div>
+                <button class="glass-panel px-4 py-2 text-starlight-gold hover:bg-white/10 transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Export Data
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel p-6 border-l-4 border-l-starlight-cyan">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-400 text-sm">ผู้ป่วยทั้งหมด (Active)</p>
+                            <h3 class="text-4xl font-bold text-white mt-2">124</h3>
+                        </div>
+                        <i class="fa-solid fa-users text-3xl text-starlight-cyan opacity-50"></i>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-pink-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-400 text-sm">ผู้ป่วยใน (IPD)</p>
+                            <h3 class="text-4xl font-bold text-white mt-2">15</h3>
+                        </div>
+                        <i class="fa-solid fa-bed text-3xl text-pink-500 opacity-50"></i>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-starlight-blue">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-400 text-sm">ผู้ป่วยนอก (OPD)</p>
+                            <h3 class="text-4xl font-bold text-white mt-2">42</h3>
+                        </div>
+                        <i class="fa-solid fa-wheelchair text-3xl text-starlight-blue opacity-50"></i>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-starlight-gold">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-400 text-sm">ดูแลที่บ้าน (Home Care)</p>
+                            <h3 class="text-4xl font-bold text-white mt-2">67</h3>
+                        </div>
+                        <i class="fa-solid fa-house-chimney-medical text-3xl text-starlight-gold opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-starlight-cyan">สัดส่วนผู้ป่วยตามประเภท</h3>
+                    <div class="h-64 flex justify-center">
+                        <canvas id="patientTypeChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-starlight-cyan">แนวโน้มคะแนนความปวด (ESAS Pain Score)</h3>
+                    <div class="h-64 w-full">
+                        <canvas id="painTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Patients Table -->
+            <div class="glass-panel p-6">
+                <h3 class="text-xl font-semibold mb-4 text-starlight-cyan">รายชื่อผู้ป่วยล่าสุด (Recent Updates)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-starlight-cyan/20">
+                                <th class="pb-3 px-4">HN</th>
+                                <th class="pb-3 px-4">ชื่อ-สกุล</th>
+                                <th class="pb-3 px-4">ประเภท</th>
+                                <th class="pb-3 px-4">Diagnosis</th>
+                                <th class="pb-3 px-4">PPS</th>
+                                <th class="pb-3 px-4">อัปเดตล่าสุด</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                                <td class="py-3 px-4">012345</td>
+                                <td class="py-3 px-4 text-white">สมชาย หวังดี</td>
+                                <td class="py-3 px-4"><span class="bg-pink-500/20 text-pink-300 px-2 py-1 rounded text-xs border border-pink-500/30">IPD</span></td>
+                                <td class="py-3 px-4">CA Lung</td>
+                                <td class="py-3 px-4 text-starlight-gold">30%</td>
+                                <td class="py-3 px-4">วันนี้ 09:30</td>
+                            </tr>
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                                <td class="py-3 px-4">098765</td>
+                                <td class="py-3 px-4 text-white">สมหญิง ใจสู้</td>
+                                <td class="py-3 px-4"><span class="bg-starlight-gold/20 text-starlight-gold px-2 py-1 rounded text-xs border border-starlight-gold/30">Home</span></td>
+                                <td class="py-3 px-4">ESRD</td>
+                                <td class="py-3 px-4 text-starlight-gold">40%</td>
+                                <td class="py-3 px-4">เมื่อวาน 14:00</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="py-3 px-4">055667</td>
+                                <td class="py-3 px-4 text-white">บุญมี ศรีสุข</td>
+                                <td class="py-3 px-4"><span class="bg-starlight-blue/20 text-starlight-cyan px-2 py-1 rounded text-xs border border-starlight-cyan/30">OPD</span></td>
+                                <td class="py-3 px-4">CA Colon</td>
+                                <td class="py-3 px-4 text-starlight-gold">60%</td>
+                                <td class="py-3 px-4">12 ต.ค. 2566</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= IPD FORM VIEW ================= -->
+        <section id="ipd" class="view-section h-full max-w-4xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-bed-pulse text-pink-500 mr-2"></i> บันทึกเวชระเบียน IPD</h2>
+            <p class="text-gray-400 mb-8">Palliative Care Inpatient Department</p>
+
+            <form onsubmit="handleFormSubmit(event, 'IPD')" class="space-y-6">
+                <!-- Patient Info -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">ข้อมูลพื้นฐานผู้ป่วย</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">HN</label>
+                            <input type="text" required class="glass-input w-full p-2 rounded" placeholder="เช่น 012345">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">ชื่อ - นามสกุล</label>
+                            <input type="text" required class="glass-input w-full p-2 rounded" placeholder="ชื่อผู้ป่วย">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Diagnosis (โรคหลัก)</label>
+                            <input type="text" required class="glass-input w-full p-2 rounded" placeholder="เช่น CA Lung">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">เตียง/วอร์ด</label>
+                            <input type="text" class="glass-input w-full p-2 rounded" placeholder="เช่น อายุรกรรมชาย เตียง 5">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">การประเมิน (Assessment)</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-1">PPS (Palliative Performance Scale) %</label>
+                        <select class="glass-input w-full p-2 rounded">
+                            <option value="">เลือก PPS</option>
+                            <option value="100">100% - ปกติ</option>
+                            <option value="90">90% - กิจวัตรปกติ มีอาการโรคบ้าง</option>
+                            <option value="50">50% - นั่ง/นอนส่วนใหญ่ ต้องการความช่วยเหลือ</option>
+                            <option value="30">30% - นอนติดเตียง ต้องการความช่วยเหลือทั้งหมด</option>
+                            <option value="10">10% - โคม่า ไม่รู้สึกตัว</option>
+                        </select>
+                    </div>
+
+                    <p class="text-sm text-gray-400 mb-2">ESAS (Edmonton Symptom Assessment System) 0-10</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">ปวด (Pain)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">เหนื่อย (Tiredness)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">คลื่นไส้ (Nausea)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">ซึมเศร้า (Depression)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">เบื่ออาหาร (Appetite)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-starlight-gold mb-1">หอบเหนื่อย (Drowsiness)</label>
+                            <input type="number" min="0" max="10" class="glass-input w-full p-2 rounded text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Care Plan -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">แผนการดูแล (Care Plan)</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-1">การจัดการความปวด / อาการ (Symptom Management)</label>
+                        <textarea rows="3" class="glass-input w-full p-2 rounded" placeholder="ระบุการให้ยา เช่น Morphine วางแผนอย่างไร..."></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="flex items-center space-x-2 text-gray-300">
+                            <input type="checkbox" class="rounded text-starlight-cyan bg-white/10 border-white/20">
+                            <span>ผู้ป่วยมี Advance Care Plan (สมุดเบาใจ) แล้ว</span>
+                        </label>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-1">Family Meeting & Psychosocial</label>
+                        <textarea rows="2" class="glass-input w-full p-2 rounded" placeholder="สรุปผลการพูดคุยกับญาติ ความกังวล..."></textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" class="px-6 py-2 rounded glass-panel text-gray-300 hover:text-white transition">ยกเลิก</button>
+                    <button type="submit" class="px-6 py-2 rounded bg-starlight-cyan text-space-900 font-bold hover:bg-white transition shadow-[0_0_15px_rgba(102,252,241,0.5)]">บันทึกข้อมูล IPD</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= OPD FORM VIEW ================= -->
+        <section id="opd" class="view-section h-full max-w-4xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-stethoscope text-starlight-cyan mr-2"></i> บันทึกเวชระเบียน OPD</h2>
+            <p class="text-gray-400 mb-8">Palliative Care Outpatient Clinic</p>
+            
+            <form onsubmit="handleFormSubmit(event, 'OPD')" class="space-y-6">
+                 <!-- Patient Info -->
+                 <div class="glass-panel p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">HN</label>
+                            <div class="flex gap-2">
+                                <input type="text" required class="glass-input w-full p-2 rounded" placeholder="กรอก HN">
+                                <button type="button" class="bg-white/10 px-4 rounded text-starlight-gold hover:bg-white/20"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">ชื่อ - นามสกุล</label>
+                            <input type="text" class="glass-input w-full p-2 rounded" readonly value="ดึงข้อมูลอัตโนมัติ">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">อาการปัจจุบันและการปรับยา</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Pain Score ปัจจุบัน (0-10)</label>
+                            <input type="number" class="glass-input w-full p-2 rounded text-center text-xl font-bold text-starlight-gold" placeholder="-">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">อาการรบกวนหลัก</label>
+                            <input type="text" class="glass-input w-full p-2 rounded" placeholder="เช่น ปวดกระดูก, ท้องผูก, นอนไม่หลับ">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-1">Medication & Refill (การปรับยา)</label>
+                        <textarea rows="3" class="glass-input w-full p-2 rounded" placeholder="ระบุการสั่งยา MO IR, MST, หรือยาอื่นๆ..."></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                            <label class="block text-sm text-gray-400 mb-1">วันนัดครั้งต่อไป</label>
+                            <input type="date" class="glass-input w-full p-2 rounded text-gray-300">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="submit" class="px-6 py-2 rounded bg-starlight-cyan text-space-900 font-bold hover:bg-white transition shadow-[0_0_15px_rgba(102,252,241,0.5)]">บันทึกข้อมูล OPD</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= HOME VISIT FORM VIEW ================= -->
+        <section id="homevisit" class="view-section h-full max-w-4xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-house-medical text-starlight-gold mr-2"></i> บันทึกการเยี่ยมบ้าน</h2>
+            <p class="text-gray-400 mb-8">Palliative Home Care Assessment</p>
+
+            <form onsubmit="handleFormSubmit(event, 'Home Visit')" class="space-y-6">
+                <div class="glass-panel p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">HN</label>
+                            <input type="text" required class="glass-input w-full p-2 rounded">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-gray-400 mb-1">ชื่อ - นามสกุล ผู้ป่วย</label>
+                            <input type="text" class="glass-input w-full p-2 rounded">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">วันที่เยี่ยม</label>
+                            <input type="date" class="glass-input w-full p-2 rounded text-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">ผู้เยี่ยม (ทีมแพทย์/พยาบาล)</label>
+                            <input type="text" class="glass-input w-full p-2 rounded" placeholder="ชื่อผู้ปฏิบัติงาน">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">การประเมินที่บ้าน</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">BP (mmHg)</label>
+                            <input type="text" class="glass-input w-full p-2 rounded text-center" placeholder="120/80">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">HR (/min)</label>
+                            <input type="number" class="glass-input w-full p-2 rounded text-center" placeholder="80">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">O2 Sat (%)</label>
+                            <input type="number" class="glass-input w-full p-2 rounded text-center" placeholder="98">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Pain Score</label>
+                            <input type="number" class="glass-input w-full p-2 rounded text-center text-starlight-gold" placeholder="0-10">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-2">ปัญหาที่พบ / อาการปัจจุบัน</label>
+                        <textarea rows="3" class="glass-input w-full p-2 rounded" placeholder="เช่น ผู้ป่วยมีแผลกดทับบริเวณก้นกบ, ญาติมีความเครียดสูง..."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-2">การจัดการและการให้คำแนะนำ (Intervention)</label>
+                        <textarea rows="3" class="glass-input w-full p-2 rounded" placeholder="เช่น ทำแผล สอนญาติพลิกตัว ให้กำลังใจ..."></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div class="p-3 border border-white/10 rounded bg-white/5">
+                            <label class="block text-sm text-starlight-gold mb-2">ความต้องการอุปกรณ์เพิ่ม</label>
+                            <div class="space-y-2 text-sm text-gray-300">
+                                <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"> <span>เตียงลม</span></label>
+                                <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"> <span>เครื่องผลิตออกซิเจน</span></label>
+                                <label class="flex items-center space-x-2"><input type="checkbox" class="rounded"> <span>เครื่องดูดเสมหะ</span></label>
+                            </div>
+                        </div>
+                         <div class="p-3 border border-white/10 rounded bg-white/5">
+                            <label class="block text-sm text-starlight-gold mb-2">ประเมิน Caregiver (ผู้ดูแล)</label>
+                            <select class="glass-input w-full p-2 rounded mb-2">
+                                <option>สามารถดูแลได้ดี</option>
+                                <option>ดูแลได้ แต่มีความเครียด/เหนื่อยล้า</option>
+                                <option>ต้องการผู้ช่วยดูแลด่วน</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="submit" class="px-6 py-2 rounded bg-starlight-cyan text-space-900 font-bold hover:bg-white transition shadow-[0_0_15px_rgba(102,252,241,0.5)]">บันทึกข้อมูลเยี่ยมบ้าน</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast">บันทึกข้อมูลสำเร็จ! แสงสว่างได้ถูกส่งต่อแล้ว</div>
+
+    <script>
+        // --- Navigation Logic ---
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show target view
+            document.getElementById(viewId).classList.add('active');
+
+            // Update nav styling
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-starlight-cyan', 'bg-white/10');
+                el.classList.add('text-gray-400');
+            });
+            const activeBtn = document.getElementById(`nav-${viewId}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-gray-400');
+                activeBtn.classList.add('text-starlight-cyan', 'bg-white/10');
+            }
+        }
+
+        // --- Form Submit & Toast ---
+        function handleFormSubmit(event, formName) {
+            event.preventDefault(); // Prevent page reload
+            showToast(`บันทึกข้อมูล ${formName} สำเร็จ!`);
+            event.target.reset(); // Clear form
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.innerText = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // --- Dashboard Charts (Chart.js) ---
+        document.addEventListener("DOMContentLoaded", function() {
+            // Setup Chart Defaults for dark theme
+            Chart.defaults.color = '#a1a1aa';
+            Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+            // 1. Patient Type Doughnut Chart
+            const ctxType = document.getElementById('patientTypeChart').getContext('2d');
+            new Chart(ctxType, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Home Care', 'OPD', 'IPD'],
+                    datasets: [{
+                        data: [67, 42, 15],
+                        backgroundColor: [
+                            '#F4D03F', // Gold
+                            '#45A29E', // Blue
+                            '#ec4899'  // Pink
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // 2. Pain Trend Line Chart
+            const ctxTrend = document.getElementById('painTrendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                    datasets: [{
+                        label: 'ค่าเฉลี่ย ESAS Pain',
+                        data: [6.5, 5.8, 5.2, 4.5, 3.8, 3.2],
+                        borderColor: '#66FCF1',
+                        backgroundColor: 'rgba(102, 252, 241, 0.2)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#F4D03F',
+                        pointBorderColor: '#060B19',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 10 }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+
+        // --- Background Animations Generator ---
+        const starsContainer = document.getElementById('stars-container');
+        const meteorContainer = document.getElementById('meteor-container');
+
+        // Generate static twinkling stars
+        for (let i = 0; i < 150; i++) {
+            let star = document.createElement('div');
+            star.className = 'star';
+            let size = Math.random() * 3;
+            star.style.width = size + 'px';
+            super.style.height = size + 'px'; // Fix context error slightly: star.style.height
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Generate random meteors periodically
+        function createMeteor() {
+            let meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            // Start from top or slightly left
+            meteor.style.left = (Math.random() * 150 - 50) + 'vw'; 
+            meteor.style.top = '-100px';
+            meteor.style.animationDuration = (Math.random() * 1 + 1) + 's';
+            
+            meteorContainer.appendChild(meteor);
+
+            // Remove meteor after animation ends to clean up DOM
+            setTimeout(() => {
+                meteor.remove();
+            }, 2000);
+        }
+
+        // Drop a meteor every 1-4 seconds randomly
+        function scheduleNextMeteor() {
+            createMeteor();
+            setTimeout(scheduleNextMeteor, Math.random() * 3000 + 1000);
+        }
+        scheduleNextMeteor();
+
+    </script>
+</body>
+</html>
+```
