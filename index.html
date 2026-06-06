@@ -183,42 +183,24 @@
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">การจัดการผู้ป่วย</p>
             </div>
             <button onclick="switchView('patient-record')" id="nav-patient-record" class="nav-btn w-full flex items-center p-3 rounded-lg text-starlight-cyan bg-white/10 transition-colors">
-                <i class="fa-solid fa-users-viewfinder w-6"></i> ทะเบียนผู้ป่วย (Ward)
+                <i class="fa-solid fa-users-viewfinder w-6"></i> ทะเบียน/แก้ไขประวัติ
             </button>
 
             <div class="pt-4 pb-1">
                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">เวชระเบียน (Records)</p>
             </div>
             <button onclick="switchView('daily-record')" id="nav-daily-record" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-clipboard-list w-6"></i> บันทึกอาการประจำวัน
+                <i class="fa-solid fa-notes-medical w-6"></i> บันทึกอาการ & กราฟ
             </button>
-            <button onclick="switchView('ipd')" id="nav-ipd" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-bed-pulse w-6"></i> IPD Case
-            </button>
-            <button onclick="switchView('opd')" id="nav-opd" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-stethoscope w-6"></i> OPD Case
-            </button>
-            <button onclick="switchView('homevisit')" id="nav-homevisit" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-house-medical w-6"></i> เยี่ยมบ้าน (Home Visit)
-            </button>
-            <button onclick="switchView('activedying')" id="nav-activedying" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-moon w-6"></i> Active Dying Case
+            <button onclick="switchView('acp')" id="nav-acp" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i class="fa-solid fa-hand-holding-medical w-6"></i> Advanced Care Plan
             </button>
 
             <div class="pt-4 pb-1">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">เอกสาร (Documents)</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">ระบบเอกสาร</p>
             </div>
-            <button onclick="switchView('acp')" id="nav-acp" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-file-signature w-6"></i> Living Will / ACP
-            </button>
-            <button onclick="switchView('morphine')" id="nav-morphine" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-syringe w-6"></i> บันทึก Morphine PRN
-            </button>
-            <button onclick="switchView('narcotic2-morphine')" id="nav-narcotic2-morphine" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-file-prescription w-6"></i> อนุมัติยาเสพติด ป.2
-            </button>
-            <button onclick="switchView('narcotic5')" id="nav-narcotic5" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-cannabis w-6"></i> อนุมัติกัญชาทางการแพทย์
+            <button onclick="switchView('document-center')" id="nav-document-center" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+                <i class="fa-solid fa-folder-open w-6"></i> คลังเอกสารแบบฟอร์ม
             </button>
         </nav>
     </aside>
@@ -229,7 +211,7 @@
         <div class="flex space-x-4 text-xl text-gray-400">
             <button onclick="switchView('dashboard')"><i class="fa-solid fa-chart-pie"></i></button>
             <button onclick="switchView('patient-record')"><i class="fa-solid fa-users-viewfinder text-starlight-cyan"></i></button>
-            <button onclick="switchView('daily-record')"><i class="fa-solid fa-clipboard-list"></i></button>
+            <button onclick="switchView('document-center')"><i class="fa-solid fa-folder-open"></i></button>
         </div>
     </div>
 
@@ -556,16 +538,260 @@
             </div>
         </section>
 
-        <!-- Keep empty sections for routing if needed -->
-        <section id="daily-record" class="view-section h-full"><h2 class="text-white text-2xl">บันทึกอาการประจำวัน (แบบย่อ)</h2></section>
-        <section id="ipd" class="view-section h-full"><h2 class="text-white text-2xl">IPD Case</h2></section>
-        <section id="opd" class="view-section h-full"><h2 class="text-white text-2xl">OPD Case</h2></section>
-        <section id="homevisit" class="view-section h-full"><h2 class="text-white text-2xl">Home Visit</h2></section>
-        <section id="activedying" class="view-section h-full"><h2 class="text-white text-2xl">Active Dying</h2></section>
-        <section id="acp" class="view-section h-full"><h2 class="text-white text-2xl">Advance Care Plan</h2></section>
-        <section id="morphine" class="view-section h-full"><h2 class="text-white text-2xl">Morphine PRN</h2></section>
-        <section id="narcotic2-morphine" class="view-section h-full"><h2 class="text-white text-2xl">Narcotic 2</h2></section>
-        <section id="narcotic5" class="view-section h-full"><h2 class="text-white text-2xl">Narcotic 5</h2></section>
+        <!-- ================= DAILY SYMPTOM RECORD & CHARTS ================= -->
+        <section id="daily-record" class="view-section h-full max-w-7xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-notes-medical text-pink-400 mr-2"></i> บันทึกการเปลี่ยนแปลงอาการประจำวัน</h2>
+            <p class="text-gray-400 mb-6">Daily Symptom & Vital Sign Log</p>
+
+            <!-- Visit Type Selector -->
+            <div class="flex flex-wrap space-x-2 bg-space-900/80 p-1.5 rounded-lg w-max mb-6 border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                <label class="cursor-pointer">
+                    <input type="radio" name="visitType" value="ipd" class="peer sr-only" checked>
+                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-pink-500/20 peer-checked:text-pink-400 peer-checked:shadow-[inset_0_0_10px_rgba(236,72,153,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
+                        <i class="fa-solid fa-bed-pulse mr-2"></i> ผู้ป่วยใน (IPD)
+                    </div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="visitType" value="opd" class="peer sr-only">
+                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-starlight-cyan/20 peer-checked:text-starlight-cyan peer-checked:shadow-[inset_0_0_10px_rgba(102,252,241,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
+                        <i class="fa-solid fa-stethoscope mr-2"></i> ผู้ป่วยนอก (OPD)
+                    </div>
+                </label>
+                <label class="cursor-pointer">
+                    <input type="radio" name="visitType" value="home" class="peer sr-only">
+                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-green-500/20 peer-checked:text-green-400 peer-checked:shadow-[inset_0_0_10px_rgba(34,197,94,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
+                        <i class="fa-solid fa-house-medical mr-2"></i> เยี่ยมบ้าน (Home Visit)
+                    </div>
+                </label>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left: Form Entry -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-5 border-t-2 border-t-pink-400">
+                        <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">1. สัญญาณชีพ (Vital Signs)</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div><label class="block text-xs text-gray-400 mb-1">วันที่-เวลา</label><input type="datetime-local" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">BP (mmHg)</label><input type="text" placeholder="120/80" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">HR (/min)</label><input type="number" placeholder="80" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">RR (/min)</label><input type="number" placeholder="20" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">Temp (°C)</label><input type="number" step="0.1" placeholder="37.0" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">O2 Sat (%)</label><input type="number" placeholder="98" class="glass-input w-full p-2 rounded text-sm"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 border-t-2 border-t-starlight-gold">
+                        <h3 class="text-lg font-semibold text-starlight-gold mb-4 border-b border-white/10 pb-2">2. ประเมินอาการ (ESAS 0-10)</h3>
+                        <p class="text-xs text-gray-400 mb-3">0 = ไม่มีอาการเลย, 10 = เป็นมากที่สุด</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                            <!-- ESAS Inputs -->
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ความปวด (Pain)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-pink-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">อ่อนเพลีย (Tiredness)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-starlight-cyan font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">คลื่นไส้ (Nausea)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-green-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ซึมเศร้า (Depression)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-purple-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">วิตกกังวล (Anxiety)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-yellow-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ง่วงซึม (Drowsiness)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-blue-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">เบื่ออาหาร (Appetite)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-orange-400 font-bold"></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">สุขสบาย (Wellbeing)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-white font-bold"></div>
+                            <div class="flex items-center justify-between md:col-span-2"><span class="text-sm text-gray-300">หอบเหนื่อย (Shortness of Breath)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-red-400 font-bold"></div>
+                        </div>
+                        <button class="w-full mt-6 bg-starlight-cyan/20 text-starlight-cyan hover:bg-starlight-cyan hover:text-space-900 font-bold py-2 rounded transition border border-starlight-cyan/50">บันทึกข้อมูลอาการ</button>
+                    </div>
+                </div>
+
+                <!-- Right: Charts Dashboard -->
+                <div class="space-y-6">
+                    <div class="glass-panel p-4 border border-white/5 h-64 flex flex-col">
+                        <h3 class="text-sm text-gray-400 mb-2 flex justify-between"><span>แนวโน้มสัญญาณชีพ (Vital Sign Trend)</span> <i class="fa-solid fa-heart-pulse text-pink-400"></i></h3>
+                        <div class="flex-1 relative w-full h-full"><canvas id="vitalChart"></canvas></div>
+                    </div>
+                    <div class="glass-panel p-4 border border-white/5 h-80 flex flex-col">
+                        <h3 class="text-sm text-gray-400 mb-2 flex justify-between"><span>แผนภาพ ESAS (Symptom Radar)</span> <i class="fa-solid fa-spider text-starlight-cyan"></i></h3>
+                        <div class="flex-1 relative w-full h-full"><canvas id="esasChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ADVANCED CARE PLAN (ACP) ================= -->
+        <section id="acp" class="view-section h-full max-w-7xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-hand-holding-medical text-green-400 mr-2"></i> Advanced Care Plan (ACP)</h2>
+            <p class="text-gray-400 mb-6">บันทึกแผนการดูแลล่วงหน้า และประวัติการปรับเปลี่ยนเป้าหมายการรักษา</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Update Form -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-6 border-t-2 border-t-green-400">
+                        <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">อัปเดตสถานะเป้าหมายการรักษา</h3>
+                        
+                        <label class="block text-sm text-gray-400 mb-1">เป้าหมายหลัก (Goal of Care)</label>
+                        <select class="glass-input w-full p-2.5 rounded text-starlight-gold font-medium mb-4">
+                            <option value="Curative">Curative Care (มุ่งหวังรักษาให้หาย)</option>
+                            <option value="Life-prolonging">Life-prolonging (ยืดอายุขัย)</option>
+                            <option value="Palliative" selected>Palliative Care (ประคับประคอง)</option>
+                            <option value="Comfort">Comfort Care (เน้นความสุขสบายช่วงท้าย)</option>
+                        </select>
+
+                        <label class="block text-sm text-gray-400 mb-2">ข้อจำกัดการช่วยฟื้นคืนชีพ (Code Status)</label>
+                        <div class="space-y-2 bg-space-900/50 p-4 rounded border border-white/5 mb-4">
+                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
+                                <input type="checkbox" class="space-radio-red" checked> <span>No CPR (ไม่ปั๊มหัวใจ)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
+                                <input type="checkbox" class="space-radio-red" checked> <span>No Intubation (ไม่ใส่ท่อช่วยหายใจ)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
+                                <input type="checkbox" class="space-radio-red" checked> <span>No Inotropes (ไม่ใช้ยากระตุ้นความดัน)</span>
+                            </label>
+                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
+                                <input type="checkbox" class="space-radio-red"> <span>No Defibrillation (ไม่ช็อกไฟฟ้า)</span>
+                            </label>
+                        </div>
+
+                        <label class="block text-sm text-gray-400 mb-1">หมายเหตุเพิ่มเติม / ผู้ร่วมตัดสินใจ</label>
+                        <textarea rows="3" class="glass-input w-full p-2.5 rounded text-sm mb-4" placeholder="เช่น ภรรยาและบุตรเห็นพ้องต้องกัน..."></textarea>
+
+                        <button class="w-full bg-green-500 hover:bg-green-400 text-space-900 font-bold py-2.5 rounded transition shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> เพิ่มบันทึกการเปลี่ยนแปลง
+                        </button>
+                    </div>
+                </div>
+
+                <!-- History Timeline -->
+                <div class="lg:col-span-7">
+                    <div class="glass-panel p-6 h-full">
+                        <h3 class="text-lg font-semibold text-starlight-cyan mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Timeline ประวัติเจตจำนง</h3>
+                        
+                        <div class="relative border-l border-starlight-cyan/30 ml-3 space-y-8 pb-4">
+                            <!-- Timeline Item 1 -->
+                            <div class="relative pl-6">
+                                <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-starlight-cyan shadow-[0_0_10px_#66FCF1]"></div>
+                                <div class="text-xs text-starlight-cyan font-bold mb-1">10 ต.ค. 2566 | 14:30 น.</div>
+                                <div class="bg-space-800/80 p-4 rounded-lg border border-white/10">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="text-white font-medium">เปลี่ยนเป้าหมายเป็น: <span class="text-starlight-gold">Comfort Care</span></h4>
+                                        <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-400">ล่าสุด</span>
+                                    </div>
+                                    <div class="flex gap-2 flex-wrap mb-2">
+                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No CPR</span>
+                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No Intube</span>
+                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No Inotropes</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400">ญาติ (ลูกสาว) รับทราบและเซ็นหนังสือแสดงเจตนาแล้ว อาการผู้ป่วยทรุดลง</p>
+                                    <p class="text-xs text-gray-500 mt-2 text-right">- นพ. ใจดี รักษา</p>
+                                </div>
+                            </div>
+
+                            <!-- Timeline Item 2 -->
+                            <div class="relative pl-6">
+                                <div class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-gray-500"></div>
+                                <div class="text-xs text-gray-500 font-bold mb-1">15 ก.ย. 2566 | 09:00 น.</div>
+                                <div class="bg-space-900/50 p-4 rounded-lg border border-white/5 opacity-80">
+                                    <h4 class="text-gray-300 font-medium mb-2">เป้าหมาย: <span class="text-starlight-cyan">Palliative Care</span></h4>
+                                    <div class="flex gap-2 flex-wrap mb-2">
+                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No CPR</span>
+                                        <span class="bg-gray-700 text-gray-300 text-[10px] px-2 py-1 rounded">Try Intube</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400">ผู้ป่วยยังรู้สึกตัวดี ประสงค์ให้รักษาประคับประคอง แต่ถ้าหอบเหนื่อยขอลองใส่ท่อดูก่อน</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= DOCUMENT CENTER ================= -->
+        <section id="document-center" class="view-section h-full max-w-7xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-folder-open text-starlight-gold mr-2"></i> คลังเอกสารแบบฟอร์ม (Document Center)</h2>
+            <p class="text-gray-400 mb-6">รวมแบบฟอร์มและบันทึกทางการแพทย์</p>
+
+            <div class="glass-panel p-1">
+                <!-- Tab Headers -->
+                <div class="flex flex-wrap border-b border-white/10 bg-space-900/50 rounded-t-lg">
+                    <button id="btn-doc-livingwill" onclick="switchDocTab('livingwill')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-starlight-cyan text-starlight-cyan bg-starlight-cyan/10 transition"><i class="fa-solid fa-file-signature mr-2"></i> Living Will</button>
+                    <button id="btn-doc-mo" onclick="switchDocTab('mo')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-syringe mr-2"></i> บันทึก MO PRN</button>
+                    <button id="btn-doc-narcotic" onclick="switchDocTab('narcotic')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-file-prescription mr-2"></i> อนุมัติยาเสพติด</button>
+                    <button id="btn-doc-syringe" onclick="switchDocTab('syringe')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-pump-medical mr-2"></i> บันทึก Syringe Driver</button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="p-6 min-h-[500px]">
+                    
+                    <!-- 1. Living Will -->
+                    <div id="doc-livingwill" class="doc-tab-content block animate-[fadeIn_0.3s_ease-in-out]">
+                        <h3 class="text-xl text-white mb-4">หนังสือแสดงเจตนา (Living Will)</h3>
+                        <p class="text-gray-400 mb-4 text-sm">อัปโหลดไฟล์แสกน หรือลิงก์ไปยังสมุดเบาใจ (PDF)</p>
+                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-10 text-center hover:border-starlight-cyan hover:bg-starlight-cyan/5 transition cursor-pointer">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-white">คลิกเพื่ออัปโหลดไฟล์ PDF/รูปภาพ</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Morphine PRN -->
+                    <div id="doc-mo" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                        <h3 class="text-xl text-white mb-4">ใบบันทึกการใช้ Morphine PRN ที่บ้าน</h3>
+                        <div class="overflow-x-auto bg-space-900/50 rounded border border-white/5">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-starlight-cyan border-b border-white/10 bg-black/20">
+                                    <tr><th class="p-3">วันที่/เวลา</th><th class="p-3">Pain Score</th><th class="p-3">Dose ที่ใช้ (mg)</th><th class="p-3">ผู้บริหารยา</th><th class="p-3">หมายเหตุ</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-white/5"><td class="p-3 text-gray-300">10 ต.ค. 08:00</td><td class="p-3 text-pink-400 font-bold">8</td><td class="p-3">3 mg</td><td class="p-3">ญาติ</td><td class="p-3 text-gray-500">ปวดขยับตัว</td></tr>
+                                    <tr class="border-b border-white/5"><td class="p-3"><input type="datetime-local" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><input type="number" class="glass-input p-1 rounded w-16 text-xs"></td><td class="p-3"><input type="text" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><input type="text" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><button class="bg-starlight-cyan text-space-900 px-3 py-1 rounded text-xs font-bold w-full">บันทึก</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. Narcotic Approval -->
+                    <div id="doc-narcotic" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                        <h3 class="text-xl text-white mb-4">ใบขออนุมัติการใช้ยาเสพติดให้โทษประเภท 2/5</h3>
+                        <div class="grid grid-cols-2 gap-4 max-w-2xl">
+                            <div><label class="block text-sm text-gray-400 mb-1">ประเภท</label><select class="glass-input w-full p-2 rounded"><option>แบบ ย.ส.2 (Morphine)</option><option>ยาเสพติดประเภท 5 (กัญชา)</option></select></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">จำนวนที่เบิก (Dose/ขวด)</label><input type="text" class="glass-input w-full p-2 rounded"></div>
+                            <div class="col-span-2"><label class="block text-sm text-gray-400 mb-1">เหตุผลทางการแพทย์</label><textarea rows="2" class="glass-input w-full p-2 rounded">Palliative Care / Pain Control</textarea></div>
+                            <div class="col-span-2"><button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded w-full transition">สร้างฟอร์มอนุมัติสำหรับพิมพ์ (PDF)</button></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Syringe Driver -->
+                    <div id="doc-syringe" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl text-white">ใบบันทึกการใช้ Syringe Driver ที่บ้าน</h3>
+                            <button class="bg-starlight-cyan/20 text-starlight-cyan px-3 py-1.5 rounded text-sm hover:bg-starlight-cyan hover:text-space-900 transition"><i class="fa-solid fa-print mr-1"></i> พิมพ์แบบฟอร์มเปล่า</button>
+                        </div>
+                        
+                        <!-- Syringe Info Card -->
+                        <div class="bg-space-800/80 p-4 rounded-lg border border-starlight-cyan/30 mb-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div><label class="block text-xs text-gray-400">สูตรยาผสม (Drug Mixture)</label><div class="text-sm text-white font-medium">MO 30mg + Midazolam 5mg</div></div>
+                            <div><label class="block text-xs text-gray-400">ปริมาตรรวม (Total Vol)</label><div class="text-sm text-white font-medium">24 ml</div></div>
+                            <div><label class="block text-xs text-gray-400">อัตราการให้ (Rate)</label><div class="text-sm text-starlight-cyan font-bold">1 ml / hr</div></div>
+                            <div><label class="block text-xs text-gray-400">เปลี่ยน Syringe ล่าสุด</label><div class="text-sm text-gray-300">10 ต.ค. (โดย พยบ.เยี่ยมบ้าน)</div></div>
+                        </div>
+
+                        <div class="overflow-x-auto bg-space-900/50 rounded border border-white/5">
+                            <table class="w-full text-sm text-left whitespace-nowrap">
+                                <thead class="text-gray-400 border-b border-white/10 bg-black/20">
+                                    <tr><th class="p-2">วันที่/เวลา</th><th class="p-2">ปริมาตรยาที่เหลือ (ml)</th><th class="p-2">ตำแหน่งแทงเข็ม (แดง/บวม)</th><th class="p-2">อาการผู้ป่วย/หมายเหตุ</th><th class="p-2">ผู้ประเมิน</th><th class="p-2">บันทึก</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-white/5">
+                                        <td class="p-2"><input type="datetime-local" class="glass-input p-1 rounded w-32 text-xs"></td>
+                                        <td class="p-2"><input type="number" step="0.5" class="glass-input p-1 rounded w-20 text-xs" placeholder="ml"></td>
+                                        <td class="p-2"><select class="glass-input p-1 rounded w-24 text-xs"><option>ปกติ</option><option class="text-red-400">บวมแดง</option><option class="text-yellow-400">ซึม</option></select></td>
+                                        <td class="p-2"><input type="text" class="glass-input p-1 rounded w-full text-xs" placeholder="หลับพักได้..."></td>
+                                        <td class="p-2"><input type="text" class="glass-input p-1 rounded w-20 text-xs" placeholder="ชื่อ..."></td>
+                                        <td class="p-2"><button class="bg-green-500 text-white px-2 py-1 rounded text-xs">เพิ่ม</button></td>
+                                    </tr>
+                                    <tr class="border-b border-white/5"><td class="p-2 text-gray-300">10 ต.ค. 16:00</td><td class="p-2 text-white">16 ml</td><td class="p-2 text-green-400">ปกติ</td><td class="p-2 text-gray-400">ผู้ป่วยหลับดี ไม่กระสับกระส่าย</td><td class="p-2">พยบ. เอ</td><td class="p-2"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -589,6 +815,31 @@
                 activeBtn.classList.add('bg-white/10', 'text-starlight-cyan');
                 activeBtn.classList.remove('text-gray-400');
             }
+
+            // Force resize charts when tab is visible to prevent layout bugs
+            if(viewId === 'daily-record') {
+                setTimeout(() => {
+                    if(window.esasChart) window.esasChart.resize();
+                    if(window.vitalChart) window.vitalChart.resize();
+                }, 100);
+            }
+        }
+
+        // Document Center Tab Switcher
+        function switchDocTab(tabId) {
+            document.querySelectorAll('.doc-tab-content').forEach(el => el.classList.remove('block'));
+            document.querySelectorAll('.doc-tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('doc-' + tabId).classList.remove('hidden');
+            document.getElementById('doc-' + tabId).classList.add('block');
+            
+            document.querySelectorAll('.doc-tab-btn').forEach(el => {
+                el.classList.remove('border-starlight-cyan', 'text-starlight-cyan', 'bg-starlight-cyan/10');
+                el.classList.add('border-transparent', 'text-gray-400');
+            });
+            
+            const activeBtn = document.getElementById('btn-doc-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-gray-400');
+            activeBtn.classList.add('border-starlight-cyan', 'text-starlight-cyan', 'bg-starlight-cyan/10');
         }
 
         function togglePatientView(viewType) {
@@ -758,6 +1009,67 @@
                 new Chart(document.getElementById('painTrendChart').getContext('2d'), {
                     type: 'line', data: { labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'], datasets: [{ label: 'Pain Score', data: [6.5, 5.8, 5.2, 4.5, 3.8, 3.2], borderColor: '#66FCF1', backgroundColor: 'rgba(102, 252, 241, 0.2)', fill: true, tension: 0.4 }] },
                     options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 10 } }, plugins:{legend:{display:false}} }
+                });
+            }
+
+            // Init ESAS Radar Chart
+            if(document.getElementById('esasChart')) {
+                window.esasChart = new Chart(document.getElementById('esasChart').getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['Pain', 'Tiredness', 'Nausea', 'Depression', 'Anxiety', 'Drowsiness', 'Appetite', 'Wellbeing', 'SOB'],
+                        datasets: [{
+                            label: 'ประเมินล่าสุด',
+                            data: [8, 6, 2, 4, 5, 7, 3, 4, 5],
+                            backgroundColor: 'rgba(244, 208, 63, 0.3)',
+                            borderColor: '#F4D03F',
+                            pointBackgroundColor: '#F4D03F',
+                            pointBorderColor: '#fff',
+                            borderWidth: 2
+                        }, {
+                            label: 'ครั้งก่อนหน้า',
+                            data: [5, 4, 1, 3, 4, 3, 5, 7, 2],
+                            backgroundColor: 'rgba(102, 252, 241, 0.1)',
+                            borderColor: '#66FCF1',
+                            pointBackgroundColor: '#66FCF1',
+                            pointBorderColor: '#fff',
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { 
+                            r: { 
+                                angleLines: { color: 'rgba(255,255,255,0.1)' }, 
+                                grid: { color: 'rgba(255,255,255,0.1)' }, 
+                                pointLabels: { color: '#e2e8f0', font: { size: 10, family: 'Kanit' } }, 
+                                ticks: { display: false, max: 10, min: 0 } 
+                            } 
+                        },
+                        plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: {family: 'Kanit'} } } }
+                    }
+                });
+            }
+
+            // Init Vital Signs Line Chart
+            if(document.getElementById('vitalChart')) {
+                window.vitalChart = new Chart(document.getElementById('vitalChart').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['08:00', '12:00', '16:00', '20:00', '00:00', '04:00'],
+                        datasets: [
+                            { label: 'Heart Rate', data: [85, 88, 92, 85, 80, 78], borderColor: '#FF4C4C', backgroundColor: 'rgba(255,76,76,0.1)', fill: true, tension: 0.3 },
+                            { label: 'BP Systolic', data: [120, 118, 125, 110, 105, 100], borderColor: '#66FCF1', backgroundColor: 'transparent', tension: 0.3 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { 
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a1a1aa' } }, 
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a1a1aa' } } 
+                        },
+                        plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: {family: 'Kanit'} } } }
+                    }
                 });
             }
         };
