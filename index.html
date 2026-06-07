@@ -17,10 +17,8 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- SheetJS & jsPDF -->
+    <!-- SheetJS (for Excel export) -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -31,9 +29,11 @@
                     },
                     colors: {
                         space: {
-                            900: '#030612', /* Darker space */
-                            800: '#070E20',
-                            700: '#121E3F',
+                            950: '#02040a',
+                            900: '#050a18',
+                            800: '#0c1635',
+                            700: '#172754',
+                            600: '#233875',
                         },
                         starlight: {
                             cyan: '#66FCF1',
@@ -49,18 +49,18 @@
 
     <style>
         body {
-            background-color: #030612;
+            background-color: #02040a;
             color: #E2E8F0;
             overflow-x: hidden;
         }
 
-        /* --- STARRY BACKGROUND (Brighter & More Twinkling) --- */
+        /* --- STARRY BACKGROUND (Highly Twinkling & Brilliant) --- */
         .stars-bg {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             z-index: -2;
-            background: radial-gradient(ellipse at bottom, #121A2F 0%, #030612 100%);
+            background: radial-gradient(ellipse at bottom, #09122c 0%, #02040a 100%);
         }
 
         .star {
@@ -71,12 +71,12 @@
         }
 
         @keyframes twinkle {
-            0% { opacity: 0.1; transform: scale(0.6); box-shadow: 0 0 2px #ffffff; }
-            50% { opacity: 0.8; box-shadow: 0 0 10px #66FCF1; }
-            100% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 15px #ffffff, 0 0 25px #F4D03F; }
+            0% { opacity: 0.1; transform: scale(0.6); box-shadow: 0 0 2px rgba(255,255,255,0.4); }
+            50% { opacity: 0.9; box-shadow: 0 0 12px #66FCF1; }
+            100% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 18px #ffffff, 0 0 28px #F4D03F; }
         }
 
-        /* --- DIAGONAL METEOR SHOWER --- */
+        /* --- DIAGONAL SLANTED METEOR SHOWER --- */
         .meteor-container {
             position: fixed;
             top: 0; left: 0;
@@ -88,16 +88,16 @@
 
         .meteor {
             position: absolute;
-            width: 2px;
-            height: 120px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.8), #66FCF1);
-            transform: rotate(45deg); /* ทแยงมุม */
+            width: 1.5px;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.9), #66FCF1);
+            transform: rotate(35deg); /* ทแยงเฉียงเหมือนของจริง */
             transform-origin: top center;
             opacity: 0;
             animation: fall linear forwards;
         }
 
-        /* หัวดาวตกสว่างๆ */
+        /* หัวดาวตกสว่างจ้า */
         .meteor::after {
             content: '';
             position: absolute;
@@ -105,686 +105,754 @@
             width: 7px; height: 7px;
             background-color: #ffffff;
             border-radius: 50%;
-            box-shadow: 0 0 20px 8px rgba(102, 252, 241, 0.9), 0 0 40px 15px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 25px 10px rgba(102, 252, 241, 0.95), 0 0 45px 18px rgba(255, 255, 255, 0.8);
         }
 
         @keyframes fall {
-            0% { transform: rotate(45deg) translateY(-200px); opacity: 1; }
-            100% { transform: rotate(45deg) translateY(2500px); opacity: 0; }
+            0% { transform: rotate(35deg) translateY(-250px); opacity: 1; }
+            100% { transform: rotate(35deg) translateY(2800px); opacity: 0; }
         }
 
-        /* --- UI COMPONENTS --- */
+        /* --- GLASSMORPHISM & SHADOWS --- */
         .glass-panel {
-            background: rgba(18, 30, 63, 0.5);
+            background: rgba(12, 22, 53, 0.45);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(102, 252, 241, 0.2);
+            border: 1px solid rgba(102, 252, 241, 0.15);
             border-radius: 1rem;
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(102, 252, 241, 0.05);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(102, 252, 241, 0.05);
         }
 
         .glass-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(102, 252, 241, 0.3);
+            background: rgba(2, 4, 10, 0.45);
+            border: 1px solid rgba(102, 252, 241, 0.25);
             color: white;
             transition: all 0.3s ease;
         }
 
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-color: #66FCF1;
-            box-shadow: 0 0 12px rgba(102, 252, 241, 0.4);
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.45);
             outline: none;
         }
 
         .space-radio { accent-color: #66FCF1; width: 1.2rem; height: 1.2rem; cursor: pointer; }
         .space-radio-red { accent-color: #FF4C4C; width: 1.2rem; height: 1.2rem; cursor: pointer; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0A1128; }
-        ::-webkit-scrollbar-thumb { background: #45A29E; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #66FCF1; }
-
         .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        #toast {
-            visibility: hidden; min-width: 250px; background-color: #45A29E; color: #fff;
-            text-align: center; border-radius: 8px; padding: 16px; position: fixed;
-            z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5); font-weight: 500;
+        /* --- PRINT STYLES FOR COMPREHENSIVE MEDICAL EXPORT --- */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            #print-container { display: block !important; }
+            .print-card { border: 1px solid #ccc !important; page-break-inside: avoid; margin-bottom: 20px; padding: 15px; color: black !important; background: white !important; }
+            .print-title { font-size: 20pt; font-weight: bold; text-align: center; margin-bottom: 20px; color: black !important; }
         }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        #print-container { display: none; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- Background -->
+    <!-- Starry Night Background Elements -->
     <div class="stars-bg" id="stars-container"></div>
     <div class="meteor-container" id="meteor-container"></div>
 
     <!-- Sidebar Navigation -->
-    <aside class="w-72 glass-panel m-4 flex flex-col hidden md:flex z-10 overflow-y-auto">
+    <aside class="w-80 glass-panel m-4 flex flex-col hidden md:flex z-10 overflow-y-auto no-print">
         <div class="p-6 text-center border-b border-starlight-cyan/20 shrink-0">
-            <i class="fa-solid fa-hands-holding-circle text-4xl text-starlight-gold mb-3"></i>
-            <h1 class="text-xl font-semibold text-starlight-cyan tracking-wide">Starlight Care</h1>
+            <i class="fa-solid fa-hands-holding-circle text-4xl text-starlight-gold mb-3 animate-pulse"></i>
+            <h1 class="text-2xl font-bold text-starlight-cyan tracking-wider">Starlight Care</h1>
             <p class="text-xs text-gray-400 mt-1">โรงพยาบาลทับคล้อ</p>
         </div>
         
         <nav class="flex-1 p-4 space-y-1">
-            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
+            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center p-3 rounded-lg text-starlight-cyan bg-white/5 transition-all">
+                <i class="fa-solid fa-chart-pie w-6"></i> Dashboard ภาพรวม
             </button>
             
             <div class="pt-4 pb-1">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">การจัดการผู้ป่วย</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">ระบบจัดการผู้ป่วย</p>
             </div>
-            <button onclick="switchView('patient-record')" id="nav-patient-record" class="nav-btn w-full flex items-center p-3 rounded-lg text-starlight-cyan bg-white/10 transition-colors">
-                <i class="fa-solid fa-users-viewfinder w-6"></i> ทะเบียน/แก้ไขประวัติ
+            <button onclick="switchView('patient-record')" id="nav-patient-record" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="fa-solid fa-hospital-user w-6"></i> หอผู้ป่วย (Ward Grid)
+            </button>
+            <button onclick="openRegisterForm()" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="fa-solid fa-user-plus w-6"></i> ลงทะเบียนผู้ป่วยใหม่
             </button>
 
             <div class="pt-4 pb-1">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">เวชระเบียน (Records)</p>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">เวชระเบียนแบบฟอร์มรวม</p>
             </div>
-            <button onclick="switchView('daily-record')" id="nav-daily-record" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-notes-medical w-6"></i> บันทึกอาการ & กราฟ
-            </button>
-            <button onclick="switchView('acp')" id="nav-acp" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-hand-holding-medical w-6"></i> Advanced Care Plan
-            </button>
-
-            <div class="pt-4 pb-1">
-                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider pl-3">ระบบเอกสาร</p>
-            </div>
-            <button onclick="switchView('document-center')" id="nav-document-center" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                <i class="fa-solid fa-folder-open w-6"></i> คลังเอกสารแบบฟอร์ม
+            <button onclick="switchView('document-center')" id="nav-document-center" class="nav-btn w-full flex items-center p-3 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="fa-solid fa-folder-open w-6"></i> คลังเอกสาร & สารเสพติด
             </button>
         </nav>
+
+        <div class="p-4 border-t border-starlight-cyan/20 shrink-0 bg-space-950/80">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-starlight-cyan flex items-center justify-center text-space-900 font-bold shadow-[0_0_10px_rgba(102,252,241,0.6)]">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <div class="text-sm">
+                    <p class="text-white font-medium">นพ.ยตนา มาพันธ์สุ</p>
+                    <p class="text-starlight-gold text-xs">แพทย์เวชศาสตร์ครอบครัว</p>
+                </div>
+            </div>
+        </div>
     </aside>
 
-    <!-- Mobile Header -->
-    <div class="md:hidden fixed top-0 left-0 w-full glass-panel z-20 flex justify-between items-center p-4 rounded-none border-x-0 border-t-0">
-        <h1 class="text-lg font-semibold text-starlight-cyan"><i class="fa-solid fa-hands-holding-circle text-starlight-gold"></i> Starlight</h1>
+    <!-- Mobile Nav Header -->
+    <div class="md:hidden fixed top-0 left-0 w-full glass-panel z-20 flex justify-between items-center p-4 rounded-none border-x-0 border-t-0 no-print">
+        <h1 class="text-lg font-bold text-starlight-cyan"><i class="fa-solid fa-hands-holding-circle text-starlight-gold"></i> Starlight Care</h1>
         <div class="flex space-x-4 text-xl text-gray-400">
             <button onclick="switchView('dashboard')"><i class="fa-solid fa-chart-pie"></i></button>
-            <button onclick="switchView('patient-record')"><i class="fa-solid fa-users-viewfinder text-starlight-cyan"></i></button>
-            <button onclick="switchView('document-center')"><i class="fa-solid fa-folder-open"></i></button>
+            <button onclick="switchView('patient-record')"><i class="fa-solid fa-hospital-user text-starlight-cyan"></i></button>
+            <button onclick="openRegisterForm()"><i class="fa-solid fa-user-plus"></i></button>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 z-10" id="main-content">
+    <!-- Main Content Panel -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 z-10 no-print" id="main-content">
         
-        <!-- ================= PATIENT RECORD (REGISTRATION & WARD) ================= -->
-        <!-- Default Active View -->
-        <section id="patient-record" class="view-section active h-full max-w-7xl mx-auto pb-12">
-            
-            <!-- LIST VIEW (หน้ารวมผู้ป่วยแบบหอผู้ป่วย) -->
-            <div id="patient-list-view" class="block">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                    <div>
-                        <h2 class="text-3xl font-bold text-white"><i class="fa-solid fa-users-viewfinder text-starlight-cyan mr-2"></i> ทะเบียนผู้ป่วย (Patient Ward)</h2>
-                        <p class="text-gray-400">หน้ารวมประวัติและหอผู้ป่วยจำลอง (Ward Dashboard)</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="exportData('excel', 'all')" class="bg-[#107c41]/80 hover:bg-[#107c41] text-white px-4 py-2 rounded transition shadow-[0_0_10px_rgba(16,124,65,0.4)]"><i class="fa-solid fa-file-excel mr-2"></i>Export Excel</button>
-                        <button onclick="togglePatientView('form')" class="bg-starlight-cyan text-space-900 font-bold px-4 py-2 rounded hover:bg-white transition shadow-[0_0_15px_rgba(102,252,241,0.5)]"><i class="fa-solid fa-user-plus mr-2"></i>เพิ่มผู้ป่วยใหม่</button>
-                    </div>
+        <!-- ================= STREAMING_CHUNK: Building Dashboard View... ================= -->
+        <!-- DASHBOARD VIEW -->
+        <section id="dashboard" class="view-section active h-full max-w-7xl mx-auto pb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight"><i class="fa-solid fa-chart-line text-starlight-cyan mr-2"></i> Dashboard ภาพรวม</h2>
+                    <p class="text-gray-400">สถิติและข้อมูลเชิงลึกของผู้ป่วยประคับประคอง รพ.ทับคล้อ จากเวชระเบียน</p>
                 </div>
+                <button onclick="exportAllToExcel()" class="bg-[#107c41] hover:bg-[#107c41]/80 text-white font-bold px-4 py-2 rounded-lg transition flex items-center gap-2 shadow-[0_0_15px_rgba(16,124,65,0.4)]">
+                    <i class="fa-solid fa-file-excel text-lg"></i> Export คลังเวชระเบียนทั้งหมด (Excel)
+                </button>
+            </div>
 
-                <!-- Filters & Search -->
-                <div class="glass-panel p-5 mb-6 bg-space-800/60 border-t-2 border-t-starlight-gold">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                        <div class="md:col-span-1">
-                            <label class="block text-xs text-gray-400 mb-1"><i class="fa-solid fa-magnifying-glass mr-1"></i> ค้นหาข้อมูล</label>
-                            <input type="text" id="search-input" class="glass-input w-full p-2 rounded text-sm" placeholder="ชื่อ, HN, รหัสปชช...">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1"><i class="fa-solid fa-filter mr-1"></i> ตัวกรองสถานะ</label>
-                            <select id="filter-status" class="glass-input w-full p-2 rounded text-sm text-starlight-gold font-medium">
-                                <option value="">ทั้งหมด (All)</option>
-                                <option value="Active">Active (รับดูแล/อยู่บ้าน)</option>
-                                <option value="Admit">Admit (ผู้ป่วยใน)</option>
-                                <option value="Death">Death (เสียชีวิต)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1"><i class="fa-solid fa-filter mr-1"></i> กลุ่มโรค</label>
-                            <select id="filter-disease" class="glass-input w-full p-2 rounded text-sm text-pink-400">
-                                <option value="">ทุกกลุ่มโรค</option>
-                                <option value="Cancer">Cancer</option>
-                                <option value="ESRD">ESRD</option>
-                                <option value="COPD">COPD</option>
-                                <option value="CVA">CVA</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-400 mb-1"><i class="fa-solid fa-filter mr-1"></i> รพ.สต. ที่รับผิดชอบ</label>
-                            <select id="filter-pcu" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan">
-                                <option value="">ทุกพื้นที่</option>
-                                <option value="PCU ทับคล้อ">PCU ทับคล้อ</option>
-                                <option value="รพ.สต. เขาทราย">รพ.สต. เขาทราย</option>
-                                <option value="รพ.สต. บ้านวังแดง">รพ.สต. บ้านวังแดง</option>
-                            </select>
-                        </div>
-                    </div>
+            <!-- Dynamic KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
+                <div class="glass-panel p-6 border-l-4 border-l-starlight-cyan">
+                    <p class="text-gray-400 text-sm">ผู้ป่วยสะสมทั้งหมด</p>
+                    <h3 class="text-4xl font-extrabold text-white mt-2" id="kpi-total">0</h3>
                 </div>
-
-                <!-- Patient Grid (Ward Cards) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="patient-grid">
-                    <!-- Card 1 -->
-                    <div class="glass-panel p-5 border-t-4 border-t-green-400 hover:bg-white/5 transition cursor-pointer relative group" onclick="togglePatientView('form')">
-                        <div class="absolute top-3 right-3"><span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs font-bold border border-green-500/30">Active</span></div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-full bg-space-800 flex items-center justify-center text-starlight-cyan text-2xl border border-starlight-cyan/30 shadow-[0_0_10px_rgba(102,252,241,0.2)]"><i class="fa-solid fa-user-injured"></i></div>
-                            <div>
-                                <h3 class="text-white font-bold text-lg truncate w-40">นาย สมหมาย ใจดี</h3>
-                                <p class="text-xs text-gray-400">HN: <span class="text-white">1234567</span> | อายุ: 68 ปี</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2 text-sm text-gray-300 bg-space-800/40 p-3 rounded-lg border border-white/5">
-                            <p class="flex justify-between"><span class="text-gray-500">กลุ่มโรค:</span> <span class="text-pink-400 font-medium">Cancer</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">PPS Score:</span> <span class="text-starlight-gold font-bold">40%</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">พื้นที่:</span> <span>PCU ทับคล้อ</span></p>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <span class="text-starlight-cyan text-sm font-medium bg-starlight-cyan/10 px-4 py-2 rounded-full group-hover:bg-starlight-cyan group-hover:text-space-900 transition">ดูประวัติแบบละเอียด <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                        </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="glass-panel p-5 border-t-4 border-t-[#FF4C4C] hover:bg-white/5 transition cursor-pointer relative group" onclick="togglePatientView('form')">
-                        <div class="absolute top-3 right-3"><span class="bg-[#FF4C4C]/20 text-[#FF4C4C] px-2 py-1 rounded text-xs font-bold border border-[#FF4C4C]/30 animate-pulse">Admit</span></div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-14 h-14 rounded-full bg-space-800 flex items-center justify-center text-pink-400 text-2xl border border-pink-400/30 shadow-[0_0_10px_rgba(255,76,76,0.2)]"><i class="fa-solid fa-bed"></i></div>
-                            <div>
-                                <h3 class="text-white font-bold text-lg truncate w-40">นาง สมศรี รักสงบ</h3>
-                                <p class="text-xs text-gray-400">HN: <span class="text-white">9876543</span> | อายุ: 75 ปี</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2 text-sm text-gray-300 bg-space-800/40 p-3 rounded-lg border border-white/5">
-                            <p class="flex justify-between"><span class="text-gray-500">กลุ่มโรค:</span> <span class="text-pink-400 font-medium">ESRD</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">PPS Score:</span> <span class="text-[#FF4C4C] font-bold">20%</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">พื้นที่:</span> <span>รพ.สต. เขาทราย</span></p>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <span class="text-starlight-cyan text-sm font-medium bg-starlight-cyan/10 px-4 py-2 rounded-full group-hover:bg-starlight-cyan group-hover:text-space-900 transition">ดูประวัติแบบละเอียด <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-6 border-l-4 border-l-starlight-gold">
+                    <p class="text-gray-400 text-sm">ผู้ป่วยต้องดูแลพิเศษ (Pinned)</p>
+                    <h3 class="text-4xl font-extrabold text-starlight-gold mt-2 flex items-center gap-2" id="kpi-pinned">
+                        0 <i class="fa-solid fa-thumbtack text-sm animate-bounce"></i>
+                    </h3>
+                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-pink-400">
+                    <p class="text-gray-400 text-sm">ผู้ป่วยในปัจจุบัน (Admit/Active)</p>
+                    <h3 class="text-4xl font-extrabold text-pink-400 mt-2" id="kpi-active">0</h3>
+                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-green-400">
+                    <p class="text-gray-400 text-sm">ส่งงานประกัน รพ. เรียบร้อย</p>
+                    <h3 class="text-4xl font-extrabold text-green-400 mt-2" id="kpi-insurance">0%</h3>
                 </div>
             </div>
 
-            <!-- DETAIL / EDIT FORM VIEW (ทะเบียนประวัติแบบละเอียด 16 ข้อ) -->
-            <div id="patient-detail-view" class="hidden">
-                <div class="flex items-center justify-between mb-6 bg-space-800/80 p-3 rounded-lg border border-white/10 sticky top-0 z-10 backdrop-blur-md">
-                    <button type="button" onclick="togglePatientView('list')" class="text-starlight-cyan hover:text-white transition flex items-center font-medium"><i class="fa-solid fa-arrow-left mr-2"></i> กลับหน้ารวม (Ward)</button>
-                    <div class="flex gap-2">
-                        <button type="button" onclick="window.print()" class="bg-[#d32f2f]/80 hover:bg-[#d32f2f] text-white px-4 py-1.5 rounded text-sm transition shadow-[0_0_10px_rgba(211,47,47,0.4)] flex items-center"><i class="fa-solid fa-file-pdf mr-2"></i>Export PDF</button>
-                    </div>
-                </div>
-                
-                <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-user-pen text-starlight-cyan mr-2"></i> บันทึกทะเบียนประวัติผู้ป่วย</h2>
-                <p class="text-gray-400 mb-8">Palliative Care Patient Registration Form</p>
-
-                <form onsubmit="handleFormSubmit(event, 'ทะเบียนประวัติผู้ป่วย'); togglePatientView('list');" class="space-y-6">
-                    
-                    <!-- Section 1: ข้อมูลบุคคล (ข้อ 1-5) -->
-                    <div class="glass-panel p-6 border-t-4 border-t-starlight-cyan">
-                        <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-address-card mr-2"></i> 1. ข้อมูลส่วนบุคคล (Personal Information)</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div><label class="block text-sm text-gray-400 mb-1">1. ลำดับ (No.)</label><input type="number" class="glass-input w-full p-2.5 rounded" placeholder="Auto"></div>
-                            <div class="md:col-span-1"><label class="block text-sm text-gray-400 mb-1">5. HN <span class="text-red-500">*</span></label>
-                                <div class="flex"><input type="text" required class="glass-input w-full p-2.5 rounded-l"><button type="button" class="bg-starlight-cyan/20 px-4 rounded-r hover:bg-starlight-cyan/40 text-starlight-cyan transition"><i class="fa-solid fa-magnifying-glass"></i></button></div>
-                            </div>
-                            <div class="md:col-span-2"><label class="block text-sm text-gray-400 mb-1">4. รหัสบัตรประจำตัวประชาชน</label><input type="text" maxlength="13" class="glass-input w-full p-2.5 rounded" placeholder="เลข 13 หลัก"></div>
-                            
-                            <div class="md:col-span-3"><label class="block text-sm text-gray-400 mb-1">2. คำนำหน้า ชื่อ - นามสกุล <span class="text-red-500">*</span></label><input type="text" required class="glass-input w-full p-2.5 rounded" placeholder="นาย / นาง / นางสาว ..."></div>
-                            <div><label class="block text-sm text-gray-400 mb-1">3. อายุ (ปี) <span class="text-red-500">*</span></label><input type="number" required class="glass-input w-full p-2.5 rounded"></div>
-                        </div>
-                    </div>
-
-                    <!-- Section 2: สิทธิ์ & ที่อยู่ (ข้อ 6-8) -->
-                    <div class="glass-panel p-6">
-                        <h3 class="text-xl text-starlight-gold mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-house-chimney-user mr-2"></i> 2. สิทธิ์การรักษา และ ที่อยู่</h3>
-                        
-                        <!-- 6. สิทธิ์การรักษา -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">6. สิทธิ์การรักษา (Medical Rights)</label>
-                                <select id="reg-right" onchange="toggleInput('reg-right', 'reg-right-other', 'อื่นๆ')" class="glass-input w-full p-2.5 rounded text-white">
-                                    <option value="">-- เลือกสิทธิ์ --</option>
-                                    <option value="UC ผู้สูงอายุ">UC ผู้สูงอายุ (บัตรทอง)</option>
-                                    <option value="กรมบัญชีกลาง">กรมบัญชีกลาง (ข้าราชการ/รัฐวิสาหกิจ)</option>
-                                    <option value="ประกันสังคม">ประกันสังคม</option>
-                                    <option value="UC นอกเขต">UC นอกเขต</option>
-                                    <option value="อื่นๆ">อื่นๆ</option>
-                                </select>
-                            </div>
-                            <div id="reg-right-other-container" class="hidden">
-                                <label class="block text-sm text-starlight-gold mb-1">ระบุสิทธิ์อื่นๆ</label>
-                                <input type="text" id="reg-right-other" class="glass-input w-full p-2.5 rounded border-starlight-gold">
-                            </div>
-                        </div>
-
-                        <!-- 7. ที่อยู่ -->
-                        <label class="block text-sm text-gray-400 mb-2">7. ที่อยู่ปัจจุบัน (Address)</label>
-                        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6 bg-white/5 p-4 rounded-lg border border-white/10">
-                            <div class="col-span-2 md:col-span-1"><label class="block text-xs text-gray-400 mb-1">บ้านเลขที่</label><input type="text" class="glass-input w-full p-2 rounded"></div>
-                            <div class="col-span-2 md:col-span-1"><label class="block text-xs text-gray-400 mb-1">หมู่ที่</label><input type="text" class="glass-input w-full p-2 rounded"></div>
-                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ถนน / ซอย</label><input type="text" class="glass-input w-full p-2 rounded"></div>
-                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ตำบล</label><input type="text" class="glass-input w-full p-2 rounded"></div>
-                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">อำเภอ</label><input type="text" class="glass-input w-full p-2 rounded" value="ทับคล้อ"></div>
-                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">จังหวัด</label><input type="text" class="glass-input w-full p-2 rounded" value="พิจิตร"></div>
-                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">รหัสไปรษณีย์</label><input type="text" class="glass-input w-full p-2 rounded" value="66230"></div>
-                        </div>
-
-                        <!-- 8. รพ.สต. -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">8. เขตรพ.สต.รับผิดชอบ (PCU Zone)</label>
-                                <select id="reg-pcu" onchange="toggleInput('reg-pcu', 'reg-pcu-other', 'นอกเขต')" class="glass-input w-full p-2.5 rounded text-starlight-cyan">
-                                    <option value="">-- เลือก รพ.สต. --</option>
-                                    <option>PCU ทับคล้อ</option>
-                                    <option>รพ.สต. บ้านสายดงยาง</option>
-                                    <option>รพ.สต. เขาทราย</option>
-                                    <option>รพ.สต. บ้านวังแดง</option>
-                                    <option>รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)</option>
-                                    <option>รพ.สต. ตำบลเขาเจ็ดลูก</option>
-                                    <option>รพ.สต. บ้านท้ายทุ่งหมู่2</option>
-                                    <option>รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)</option>
-                                    <option>รพ.สต. บ้านไดอีเผือก</option>
-                                    <option value="นอกเขต">นอกเขต</option>
-                                </select>
-                            </div>
-                            <div id="reg-pcu-other-container" class="hidden">
-                                <label class="block text-sm text-starlight-gold mb-1">ระบุพื้นที่นอกเขต</label>
-                                <input type="text" id="reg-pcu-other" class="glass-input w-full p-2.5 rounded border-starlight-gold">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 3: ทางการแพทย์ (ข้อ 9-11, 13) -->
-                    <div class="glass-panel p-6 border-t-4 border-t-pink-500">
-                        <h3 class="text-xl text-pink-400 mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-stethoscope mr-2"></i> 3. ข้อมูลทางการแพทย์ (Clinical Info)</h3>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- 9. กลุ่มโรค -->
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">9. กลุ่มโรค (Disease Group)</label>
-                                <select id="reg-disease" onchange="toggleInput('reg-disease', 'reg-disease-other', 'อื่นๆ')" class="glass-input w-full p-2.5 rounded text-pink-400 font-medium">
-                                    <option value="">-- เลือกกลุ่มโรค --</option>
-                                    <option value="Cancer">Cancer</option>
-                                    <option value="ESRD">ESRD</option>
-                                    <option value="CVA">CVA</option>
-                                    <option value="COPD">COPD</option>
-                                    <option value="Cirrhosis">Cirrhosis</option>
-                                    <option value="Geriatric care">Geriatric care</option>
-                                    <option value="อื่นๆ">อื่นๆ</option>
-                                </select>
-                            </div>
-                            <div id="reg-disease-other-container" class="hidden">
-                                <label class="block text-sm text-starlight-gold mb-1">ระบุกลุ่มโรคอื่นๆ</label>
-                                <input type="text" id="reg-disease-other" class="glass-input w-full p-2.5 rounded border-starlight-gold">
-                            </div>
-                            
-                            <!-- 13. PPS -->
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">13. PPS Score (Palliative Performance Scale)</label>
-                                <select class="glass-input w-full p-2.5 rounded text-starlight-gold font-bold">
-                                    <option value="100">100%</option><option value="90">90%</option><option value="80">80%</option>
-                                    <option value="70">70%</option><option value="60">60%</option><option value="50">50%</option>
-                                    <option value="40">40%</option><option value="30">30%</option><option value="20">20%</option>
-                                    <option value="10">10%</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- 10. การวินิจฉัย -->
-                        <div class="mb-4">
-                            <label class="block text-sm text-gray-400 mb-1">10. การวินิจฉัย (Primary Diagnosis & Metastasis)</label>
-                            <textarea rows="2" class="glass-input w-full p-3 rounded" placeholder="ระบุการวินิจฉัยอย่างละเอียด..."></textarea>
-                        </div>
-
-                        <!-- 11. โรคประจำตัว -->
-                        <div class="bg-space-800/60 p-4 rounded-lg border border-white/5">
-                            <label class="block text-sm text-starlight-cyan mb-2">11. โรคประจำตัวอื่นๆ (Underlying Diseases)</label>
-                            <div class="flex space-x-2">
-                                <input type="text" id="udx-input" class="glass-input flex-1 p-2 rounded" placeholder="ระบุโรคประจำตัว (เช่น DM, HT...)">
-                                <button type="button" onclick="addUdx()" class="bg-starlight-cyan/20 text-starlight-cyan px-4 rounded hover:bg-starlight-cyan hover:text-space-900 transition font-medium"><i class="fa-solid fa-plus mr-1"></i> เพิ่ม</button>
-                            </div>
-                            <ul id="udx-list" class="mt-3 space-y-2"></ul>
-                        </div>
-                    </div>
-
-                    <!-- Section 4: การดูแล & ประสานงาน (ข้อ 12, 14-16) -->
-                    <div class="glass-panel p-6 border-t-4 border-t-green-400">
-                        <h3 class="text-xl text-green-400 mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-hand-holding-heart mr-2"></i> 4. การจัดการและการประสานงาน</h3>
-                        
-                        <!-- 12. สถานะล่าสุด -->
-                        <div class="bg-white/5 p-4 rounded-lg border border-green-400/20 mb-6">
-                            <label class="block text-sm text-green-400 mb-2 font-medium">12. สถานะล่าสุด (Current Status Log)</label>
-                            <div class="flex flex-wrap gap-3 items-end mb-4">
-                                <div class="w-full md:w-1/4">
-                                    <select id="status-select" class="glass-input w-full p-2.5 rounded text-white">
-                                        <option value="Active">Active (อยู่บ้าน)</option>
-                                        <option value="Admit">Admit (ผู้ป่วยใน)</option>
-                                        <option value="Death">Death (เสียชีวิต)</option>
-                                    </select>
-                                </div>
-                                <div class="flex-1">
-                                    <input type="text" id="status-note" class="glass-input w-full p-2.5 rounded" placeholder="หมายเหตุเพิ่มเติม">
-                                </div>
-                                <button type="button" onclick="addStatusHistory()" class="bg-green-500 text-white px-4 py-2.5 rounded font-bold hover:bg-green-400 transition shadow-[0_0_10px_rgba(34,197,94,0.4)]"><i class="fa-solid fa-clock-rotate-left mr-1"></i> บันทึกประวัติ</button>
-                            </div>
-                            <div class="overflow-x-auto bg-space-900/50 rounded border border-white/5">
-                                <table class="w-full text-sm text-left">
-                                    <thead class="text-gray-400 border-b border-white/10 bg-black/20">
-                                        <tr><th class="p-2">วันที่-เวลา</th><th class="p-2">สถานะ</th><th class="p-2">หมายเหตุ</th><th class="p-2 text-right">ลบ</th></tr>
-                                    </thead>
-                                    <tbody id="status-history-list">
-                                        <tr class="border-b border-white/5"><td class="p-2 text-gray-300">Auto</td><td class="p-2"><span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">Active</span></td><td class="p-2 text-gray-400">ลงทะเบียนครั้งแรก</td><td class="p-2 text-right"></td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- 14. ACP -->
-                        <div class="mb-6">
-                            <label class="block text-sm text-gray-400 mb-1">14. Advance Care Plan (สรุปเจตจำนงล่วงหน้า)</label>
-                            <textarea rows="2" class="glass-input w-full p-3 rounded" placeholder="เช่น No CPR, No Tube..."></textarea>
-                        </div>
-
-                        <!-- 15. ข้อมูลติดต่อญาติ -->
-                        <div class="mb-6">
-                            <label class="block text-sm text-[#FF4C4C] mb-2 font-medium">15. ข้อมูลติดต่อผู้ป่วยและญาติ (Contact Info)</label>
-                            <div id="contact-list" class="space-y-3 mb-3">
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 bg-space-800/60 p-3 rounded border border-white/5 relative group">
-                                    <div><input type="text" class="glass-input w-full p-2 rounded text-sm" placeholder="ชื่อ-นามสกุล ญาติ"></div>
-                                    <div><input type="text" class="glass-input w-full p-2 rounded text-sm" placeholder="ความสัมพันธ์"></div>
-                                    <div><input type="tel" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan" placeholder="เบอร์โทร"></div>
-                                    <div><input type="text" class="glass-input w-full p-2 rounded text-sm text-green-400" placeholder="Line ID"></div>
-                                </div>
-                            </div>
-                            <button type="button" onclick="addContact()" class="text-sm text-starlight-gold hover:text-white transition bg-starlight-gold/10 px-3 py-1.5 rounded border border-starlight-gold/30"><i class="fa-solid fa-user-plus mr-1"></i> เพิ่มญาติ</button>
-                        </div>
-
-                        <!-- 16. งานประกัน -->
-                        <div class="p-4 rounded-lg bg-[#107c41]/10 border border-[#107c41]/30">
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input type="checkbox" class="space-radio w-5 h-5" style="accent-color: #4ade80;">
-                                <span class="text-white font-medium text-lg">16. สถานะส่งงานประกัน รพ.ทับคล้อ เรียบร้อยแล้ว</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center mt-8 pt-4 border-t border-white/10">
-                        <button type="button" onclick="togglePatientView('list')" class="px-6 py-3 rounded bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition">ยกเลิก</button>
-                        <button type="submit" class="px-8 py-3 rounded bg-starlight-cyan text-space-900 font-bold hover:bg-white transition shadow-[0_0_20px_rgba(102,252,241,0.6)] text-lg"><i class="fa-solid fa-save mr-2"></i> บันทึกประวัติ</button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- (Other sections like Dashboard, IPD, OPD, HomeVisit, ActiveDying, ACP, Morphine, Narcotic5 remain hidden but functional as requested previously. Included below to ensure a complete working file) -->
-        
-        <section id="dashboard" class="view-section h-full max-w-7xl mx-auto pb-12">
-            <h2 class="text-3xl font-bold text-white mb-8">Dashboard ภาพรวม</h2>
+            <!-- Charting Visualizations -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="glass-panel p-6 h-80"><h3 class="text-xl text-starlight-cyan mb-4">สัดส่วนผู้ป่วย</h3><canvas id="patientTypeChart"></canvas></div>
-                <div class="glass-panel p-6 h-80"><h3 class="text-xl text-starlight-cyan mb-4">แนวโน้มความปวด</h3><canvas id="painTrendChart"></canvas></div>
-            </div>
-        </section>
-
-        <!-- ================= DAILY SYMPTOM RECORD & CHARTS ================= -->
-        <section id="daily-record" class="view-section h-full max-w-7xl mx-auto pb-12">
-            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-notes-medical text-pink-400 mr-2"></i> บันทึกการเปลี่ยนแปลงอาการประจำวัน</h2>
-            <p class="text-gray-400 mb-6">Daily Symptom & Vital Sign Log</p>
-
-            <!-- Visit Type Selector -->
-            <div class="flex flex-wrap space-x-2 bg-space-900/80 p-1.5 rounded-lg w-max mb-6 border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                <label class="cursor-pointer">
-                    <input type="radio" name="visitType" value="ipd" class="peer sr-only" checked>
-                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-pink-500/20 peer-checked:text-pink-400 peer-checked:shadow-[inset_0_0_10px_rgba(236,72,153,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
-                        <i class="fa-solid fa-bed-pulse mr-2"></i> ผู้ป่วยใน (IPD)
-                    </div>
-                </label>
-                <label class="cursor-pointer">
-                    <input type="radio" name="visitType" value="opd" class="peer sr-only">
-                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-starlight-cyan/20 peer-checked:text-starlight-cyan peer-checked:shadow-[inset_0_0_10px_rgba(102,252,241,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
-                        <i class="fa-solid fa-stethoscope mr-2"></i> ผู้ป่วยนอก (OPD)
-                    </div>
-                </label>
-                <label class="cursor-pointer">
-                    <input type="radio" name="visitType" value="home" class="peer sr-only">
-                    <div class="px-5 py-2.5 rounded-md peer-checked:bg-green-500/20 peer-checked:text-green-400 peer-checked:shadow-[inset_0_0_10px_rgba(34,197,94,0.2)] text-gray-400 hover:text-white transition font-medium text-sm flex items-center">
-                        <i class="fa-solid fa-house-medical mr-2"></i> เยี่ยมบ้าน (Home Visit)
-                    </div>
-                </label>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Left: Form Entry -->
-                <div class="space-y-6">
-                    <div class="glass-panel p-5 border-t-2 border-t-pink-400">
-                        <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">1. สัญญาณชีพ (Vital Signs)</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            <div><label class="block text-xs text-gray-400 mb-1">วันที่-เวลา</label><input type="datetime-local" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
-                            <div><label class="block text-xs text-gray-400 mb-1">BP (mmHg)</label><input type="text" placeholder="120/80" class="glass-input w-full p-2 rounded text-sm"></div>
-                            <div><label class="block text-xs text-gray-400 mb-1">HR (/min)</label><input type="number" placeholder="80" class="glass-input w-full p-2 rounded text-sm"></div>
-                            <div><label class="block text-xs text-gray-400 mb-1">RR (/min)</label><input type="number" placeholder="20" class="glass-input w-full p-2 rounded text-sm"></div>
-                            <div><label class="block text-xs text-gray-400 mb-1">Temp (°C)</label><input type="number" step="0.1" placeholder="37.0" class="glass-input w-full p-2 rounded text-sm"></div>
-                            <div><label class="block text-xs text-gray-400 mb-1">O2 Sat (%)</label><input type="number" placeholder="98" class="glass-input w-full p-2 rounded text-sm"></div>
-                        </div>
-                    </div>
-
-                    <div class="glass-panel p-5 border-t-2 border-t-starlight-gold">
-                        <h3 class="text-lg font-semibold text-starlight-gold mb-4 border-b border-white/10 pb-2">2. ประเมินอาการ (ESAS 0-10)</h3>
-                        <p class="text-xs text-gray-400 mb-3">0 = ไม่มีอาการเลย, 10 = เป็นมากที่สุด</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-                            <!-- ESAS Inputs -->
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ความปวด (Pain)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-pink-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">อ่อนเพลีย (Tiredness)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-starlight-cyan font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">คลื่นไส้ (Nausea)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-green-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ซึมเศร้า (Depression)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-purple-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">วิตกกังวล (Anxiety)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-yellow-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">ง่วงซึม (Drowsiness)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-blue-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">เบื่ออาหาร (Appetite)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-orange-400 font-bold"></div>
-                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300">สุขสบาย (Wellbeing)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-white font-bold"></div>
-                            <div class="flex items-center justify-between md:col-span-2"><span class="text-sm text-gray-300">หอบเหนื่อย (Shortness of Breath)</span> <input type="number" min="0" max="10" value="0" class="glass-input w-16 p-1 text-center rounded text-red-400 font-bold"></div>
-                        </div>
-                        <button class="w-full mt-6 bg-starlight-cyan/20 text-starlight-cyan hover:bg-starlight-cyan hover:text-space-900 font-bold py-2 rounded transition border border-starlight-cyan/50">บันทึกข้อมูลอาการ</button>
-                    </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-virus-slash text-pink-400 mr-2"></i> สัดส่วนโรคหลักประคับประคอง</h3>
+                    <div class="h-64 flex justify-center"><canvas id="diseaseChart"></canvas></div>
                 </div>
-
-                <!-- Right: Charts Dashboard -->
-                <div class="space-y-6">
-                    <div class="glass-panel p-4 border border-white/5 h-64 flex flex-col">
-                        <h3 class="text-sm text-gray-400 mb-2 flex justify-between"><span>แนวโน้มสัญญาณชีพ (Vital Sign Trend)</span> <i class="fa-solid fa-heart-pulse text-pink-400"></i></h3>
-                        <div class="flex-1 relative w-full h-full"><canvas id="vitalChart"></canvas></div>
-                    </div>
-                    <div class="glass-panel p-4 border border-white/5 h-80 flex flex-col">
-                        <h3 class="text-sm text-gray-400 mb-2 flex justify-between"><span>แผนภาพ ESAS (Symptom Radar)</span> <i class="fa-solid fa-spider text-starlight-cyan"></i></h3>
-                        <div class="flex-1 relative w-full h-full"><canvas id="esasChart"></canvas></div>
-                    </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-map-location-dot text-starlight-cyan mr-2"></i> จำนวนผู้ป่วยตามรพ.สต. ในความรับผิดชอบ</h3>
+                    <div class="h-64"><canvas id="pcuChart"></canvas></div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= ADVANCED CARE PLAN (ACP) ================= -->
-        <section id="acp" class="view-section h-full max-w-7xl mx-auto pb-12">
-            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-hand-holding-medical text-green-400 mr-2"></i> Advanced Care Plan (ACP)</h2>
-            <p class="text-gray-400 mb-6">บันทึกแผนการดูแลล่วงหน้า และประวัติการปรับเปลี่ยนเป้าหมายการรักษา</p>
+        <!-- ================= STREAMING_CHUNK: Building Patient Record Ward & Focus System... ================= -->
+        <!-- PATIENT RECORD (WARD INDEX) -->
+        <section id="patient-record" class="view-section h-full max-w-7xl mx-auto pb-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-white"><i class="fa-solid fa-hospital-user text-starlight-cyan mr-2"></i> หอผู้ป่วยประคับประคองจำลอง</h2>
+                    <p class="text-gray-400">คลิกที่การ์ดผู้ป่วยเพื่อเข้าถึงระบบเวชระเบียนย่อย อาการประจำวัน และแผนดูแลล่วงหน้า</p>
+                </div>
+                <button onclick="openRegisterForm()" class="bg-starlight-cyan text-space-950 font-bold px-5 py-2.5 rounded-lg hover:bg-white transition shadow-[0_0_15px_#66FCF1]">
+                    <i class="fa-solid fa-user-plus mr-2"></i> ลงทะเบียนเคสใหม่
+                </button>
+            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Update Form -->
-                <div class="lg:col-span-5 space-y-4">
-                    <div class="glass-panel p-6 border-t-2 border-t-green-400">
-                        <h3 class="text-lg font-semibold text-white mb-4 border-b border-white/10 pb-2">อัปเดตสถานะเป้าหมายการรักษา</h3>
-                        
-                        <label class="block text-sm text-gray-400 mb-1">เป้าหมายหลัก (Goal of Care)</label>
-                        <select class="glass-input w-full p-2.5 rounded text-starlight-gold font-medium mb-4">
-                            <option value="Curative">Curative Care (มุ่งหวังรักษาให้หาย)</option>
-                            <option value="Life-prolonging">Life-prolonging (ยืดอายุขัย)</option>
-                            <option value="Palliative" selected>Palliative Care (ประคับประคอง)</option>
-                            <option value="Comfort">Comfort Care (เน้นความสุขสบายช่วงท้าย)</option>
+            <!-- Filters, Searches & Sorts -->
+            <div class="glass-panel p-5 mb-8 bg-space-900/85">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">ค้นหาด่วน</label>
+                        <input type="text" id="ward-search" oninput="filterWard()" class="glass-input w-full p-2 rounded text-sm" placeholder="ค้นชื่อ, HN, หรือ รหัส ปชช...">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">กลุ่มโรค</label>
+                        <select id="ward-filter-disease" onchange="filterWard()" class="glass-input w-full p-2 rounded text-sm text-pink-400 font-medium">
+                            <option value="All">ทั้งหมด</option>
+                            <option value="Cancer">Cancer</option>
+                            <option value="ESRD">ESRD</option>
+                            <option value="CVA">CVA</option>
+                            <option value="COPD">COPD</option>
+                            <option value="Cirrhosis">Cirrhosis</option>
+                            <option value="Geriatric care">Geriatric care</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">เขตรพ.สต.</label>
+                        <select id="ward-filter-pcu" onchange="filterWard()" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan font-medium">
+                            <option value="All">ทั้งหมด</option>
+                            <option value="PCU ทับคล้อ">PCU ทับคล้อ</option>
+                            <option value="รพ.สต. บ้านสายดงยาง">รพ.สต. บ้านสายดงยาง</option>
+                            <option value="รพ.สต. เขาทราย">รพ.สต. เขาทราย</option>
+                            <option value="รพ.สต. บ้านวังแดง">รพ.สต. บ้านวังแดง</option>
+                            <option value="นอกเขต">นอกเขต</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">สถานะผู้ป่วย</label>
+                        <select id="ward-filter-status" onchange="filterWard()" class="glass-input w-full p-2 rounded text-sm text-starlight-gold font-medium">
+                            <option value="Active">Active / Admit / Pinned เท่านั้น</option>
+                            <option value="All">ผู้ป่วยทั้งหมดในระบบ</option>
+                            <option value="Discharged">Discharged (จำหน่ายแล้ว)</option>
+                            <option value="Death">เสียชีวิตแล้ว</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-                        <label class="block text-sm text-gray-400 mb-2">ข้อจำกัดการช่วยฟื้นคืนชีพ (Code Status)</label>
-                        <div class="space-y-2 bg-space-900/50 p-4 rounded border border-white/5 mb-4">
-                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
-                                <input type="checkbox" class="space-radio-red" checked> <span>No CPR (ไม่ปั๊มหัวใจ)</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
-                                <input type="checkbox" class="space-radio-red" checked> <span>No Intubation (ไม่ใส่ท่อช่วยหายใจ)</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
-                                <input type="checkbox" class="space-radio-red" checked> <span>No Inotropes (ไม่ใช้ยากระตุ้นความดัน)</span>
-                            </label>
-                            <label class="flex items-center space-x-3 cursor-pointer text-sm text-white hover:text-starlight-cyan transition">
-                                <input type="checkbox" class="space-radio-red"> <span>No Defibrillation (ไม่ช็อกไฟฟ้า)</span>
-                            </label>
+            <!-- Ward Grid of Patient Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="ward-grid">
+                <!-- Cards injected dynamically via javascript -->
+            </div>
+        </section>
+
+        <!-- ================= STREAMING_CHUNK: Designing Patient Sub-sections & Medical Record View... ================= -->
+        <!-- PATIENT EXPANDED PROFILE (SUB-SECTIONS VIEW) -->
+        <section id="patient-profile" class="view-section h-full max-w-7xl mx-auto pb-12">
+            <!-- Header Panel -->
+            <div class="glass-panel p-6 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
+                <div class="flex items-center gap-4">
+                    <button onclick="switchView('patient-record')" class="bg-white/5 hover:bg-white/10 p-3 rounded-full text-starlight-cyan transition">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-3xl font-extrabold text-white" id="p-prof-name">คนไข้ ตัวอย่าง</h2>
+                            <button id="p-prof-pin-btn" onclick="togglePinProfile()" class="text-gray-400 hover:text-starlight-gold text-xl transition"><i class="fa-solid fa-thumbtack"></i></button>
                         </div>
+                        <p class="text-gray-400 text-sm mt-1">HN: <span id="p-prof-hn" class="text-white font-semibold">12345</span> | อายุ: <span id="p-prof-age">0</span> ปี | รหัสบัตร ปชช: <span id="p-prof-cid">0</span></p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="p-prof-discharge-btn" onclick="openDischargeModal()" class="bg-[#d32f2f]/20 border border-[#d32f2f]/50 text-red-400 px-4 py-2 rounded-lg transition hover:bg-[#d32f2f]/40 font-medium">
+                        <i class="fa-solid fa-user-minus mr-1"></i> ทำเรื่องจำหน่าย (Discharge)
+                    </button>
+                    <button id="p-prof-edit-btn" onclick="openEditForm()" class="bg-starlight-cyan/20 border border-starlight-cyan/40 text-starlight-cyan px-4 py-2 rounded-lg transition hover:bg-starlight-cyan hover:text-space-950 font-medium">
+                        <i class="fa-solid fa-user-pen mr-1"></i> แก้ไขประวัติแยก
+                    </button>
+                    <button onclick="exportSinglePatientPDF()" class="bg-[#d32f2f] text-white px-4 py-2 rounded-lg transition hover:bg-[#d32f2f]/80 font-bold shadow-[0_0_15px_rgba(211,47,47,0.4)]">
+                        <i class="fa-solid fa-file-pdf mr-1"></i> Export PDF คนไข้ทั้งหมด
+                    </button>
+                </div>
+            </div>
 
-                        <label class="block text-sm text-gray-400 mb-1">หมายเหตุเพิ่มเติม / ผู้ร่วมตัดสินใจ</label>
-                        <textarea rows="3" class="glass-input w-full p-2.5 rounded text-sm mb-4" placeholder="เช่น ภรรยาและบุตรเห็นพ้องต้องกัน..."></textarea>
+            <!-- Profile Sub-sections Navigation Tabs -->
+            <div class="flex border-b border-white/10 mb-6 bg-space-800/40 rounded-t-lg">
+                <button onclick="switchProfileTab('general')" id="tab-general" class="p-4 flex-1 text-center font-bold text-starlight-cyan border-b-2 border-starlight-cyan transition-all"><i class="fa-solid fa-id-card-clip mr-2"></i> 1. ข้อมูลทั่วไป & ประวัติ 16 ข้อ</button>
+                <button onclick="switchProfileTab('daily')" id="tab-daily" class="p-4 flex-1 text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-clipboard-list mr-2"></i> 2. บันทึกอาการประจำวัน & สัญญาณชีพ</button>
+                <button onclick="switchProfileTab('acp-timeline')" id="tab-acp-timeline" class="p-4 flex-1 text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-timeline-loop mr-2"></i> 3. Advanced Care Plan Timeline</button>
+            </div>
 
-                        <button class="w-full bg-green-500 hover:bg-green-400 text-space-900 font-bold py-2.5 rounded transition shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-                            <i class="fa-solid fa-plus-circle mr-1"></i> เพิ่มบันทึกการเปลี่ยนแปลง
-                        </button>
+            <!-- Tab Content 1: General Info -->
+            <div id="prof-sub-general" class="profile-sub-tab space-y-6 block">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6">
+                        <h3 class="text-xl font-bold text-starlight-cyan mb-4 border-b border-white/5 pb-2"><i class="fa-solid fa-file-invoice-dollar mr-2"></i> สิทธิ์และที่อยู่</h3>
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li><span class="text-gray-500 font-medium">สิทธิ์การรักษา:</span> <span id="p-v-right">-</span></li>
+                            <li><span class="text-gray-500 font-medium">ที่อยู่ปัจจุบัน:</span> <span id="p-v-address">-</span></li>
+                            <li><span class="text-gray-500 font-medium">เขตรพ.สต. รับผิดชอบ:</span> <span id="p-v-pcu" class="text-starlight-cyan font-semibold">-</span></li>
+                            <li><span class="text-gray-500 font-medium">สถานะส่งงานประกันโรงพยาบาลทับคล้อ:</span> <span id="p-v-insurance" class="font-bold">-</span></li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <h3 class="text-xl font-bold text-pink-400 mb-4 border-b border-white/5 pb-2"><i class="fa-solid fa-virus mr-2"></i> อาการทางการแพทย์และโรคประประจำตัว</h3>
+                        <ul class="space-y-3 text-sm text-gray-300">
+                            <li><span class="text-gray-500 font-medium">กลุ่มโรคประคับประคองหลัก:</span> <span id="p-v-disease" class="text-pink-400 font-bold">-</span></li>
+                            <li><span class="text-gray-500 font-medium">การวินิจฉัย (Primary Diagnosis):</span> <span id="p-v-diagnosis">-</span></li>
+                            <li><span class="text-gray-500 font-medium">PPS Score ปัจจุบัน:</span> <span id="p-v-pps" class="text-starlight-gold font-bold">-</span></li>
+                            <li><span class="text-gray-500 font-medium">โรคประจำตัวอื่น ๆ :</span> <span id="p-v-udx" class="text-starlight-blue font-semibold">-</span></li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- History Timeline -->
-                <div class="lg:col-span-7">
-                    <div class="glass-panel p-6 h-full">
-                        <h3 class="text-lg font-semibold text-starlight-cyan mb-6 flex items-center"><i class="fa-solid fa-clock-rotate-left mr-2"></i> Timeline ประวัติเจตจำนง</h3>
-                        
-                        <div class="relative border-l border-starlight-cyan/30 ml-3 space-y-8 pb-4">
-                            <!-- Timeline Item 1 -->
-                            <div class="relative pl-6">
-                                <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-starlight-cyan shadow-[0_0_10px_#66FCF1]"></div>
-                                <div class="text-xs text-starlight-cyan font-bold mb-1">10 ต.ค. 2566 | 14:30 น.</div>
-                                <div class="bg-space-800/80 p-4 rounded-lg border border-white/10">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h4 class="text-white font-medium">เปลี่ยนเป้าหมายเป็น: <span class="text-starlight-gold">Comfort Care</span></h4>
-                                        <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded text-gray-400">ล่าสุด</span>
-                                    </div>
-                                    <div class="flex gap-2 flex-wrap mb-2">
-                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No CPR</span>
-                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No Intube</span>
-                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No Inotropes</span>
-                                    </div>
-                                    <p class="text-sm text-gray-400">ญาติ (ลูกสาว) รับทราบและเซ็นหนังสือแสดงเจตนาแล้ว อาการผู้ป่วยทรุดลง</p>
-                                    <p class="text-xs text-gray-500 mt-2 text-right">- นพ. ใจดี รักษา</p>
-                                </div>
-                            </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl font-bold text-starlight-gold mb-4 border-b border-white/5 pb-2"><i class="fa-solid fa-users mr-2"></i> ข้อมูลการติดต่อญาติและผู้ดูแล</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-gray-400 border-b border-white/10">
+                                    <th class="p-2">ชื่อญาติ-ผู้ประสานงาน</th>
+                                    <th class="p-2">ความสัมพันธ์</th>
+                                    <th class="p-2">เบอร์โทรศัพท์ติดต่อ</th>
+                                    <th class="p-2">Line ID</th>
+                                </tr>
+                            </thead>
+                            <tbody id="p-v-contacts">
+                                <!-- injected -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                            <!-- Timeline Item 2 -->
-                            <div class="relative pl-6">
-                                <div class="absolute -left-[7px] top-1 w-3 h-3 rounded-full bg-gray-500"></div>
-                                <div class="text-xs text-gray-500 font-bold mb-1">15 ก.ย. 2566 | 09:00 น.</div>
-                                <div class="bg-space-900/50 p-4 rounded-lg border border-white/5 opacity-80">
-                                    <h4 class="text-gray-300 font-medium mb-2">เป้าหมาย: <span class="text-starlight-cyan">Palliative Care</span></h4>
-                                    <div class="flex gap-2 flex-wrap mb-2">
-                                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-1 rounded border border-red-500/30">No CPR</span>
-                                        <span class="bg-gray-700 text-gray-300 text-[10px] px-2 py-1 rounded">Try Intube</span>
-                                    </div>
-                                    <p class="text-sm text-gray-400">ผู้ป่วยยังรู้สึกตัวดี ประสงค์ให้รักษาประคับประคอง แต่ถ้าหอบเหนื่อยขอลองใส่ท่อดูก่อน</p>
-                                </div>
+                <div class="glass-panel p-6 border-l-4 border-l-[#FF4C4C] bg-[#FF4C4C]/5 hidden" id="discharge-summary-block">
+                    <h3 class="text-xl font-bold text-[#FF4C4C] mb-2"><i class="fa-solid fa-door-open mr-2"></i> ข้อมูลการจำหน่ายคนไข้ (Discharge Summary)</h3>
+                    <p class="text-sm text-gray-300">จำหน่ายเมื่อ: <span id="p-v-dc-date" class="font-bold">-</span> | สถานะจำหน่าย: <span id="p-v-dc-status" class="font-extrabold">-</span></p>
+                    <p class="text-sm text-gray-300 mt-2">หมายเหตุการจำหน่าย: <span id="p-v-dc-note">-</span></p>
+                </div>
+            </div>
+
+            <!-- Tab Content 2: Daily Symptoms Assessment (Injected per Patient) -->
+            <div id="prof-sub-daily" class="profile-sub-tab space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Daily Form inside patient profile -->
+                    <form onsubmit="handlePatientDailySubmit(event)" class="glass-panel p-6">
+                        <h3 class="text-xl font-bold text-starlight-gold mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-plus-circle mr-2"></i> บันทึกสัญญาณชีพ & ESAS ใหม่</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-xs text-gray-400 mb-1">วันที่บันทึก</label><input type="date" required id="rec-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">BP (mmHg)</label><input type="text" id="rec-bp" placeholder="120/80" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">Pulse (bpm)</label><input type="number" id="rec-pulse" placeholder="80" class="glass-input w-full p-2 rounded text-sm"></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">SpO2 (%)</label><input type="number" id="rec-spo2" placeholder="98" class="glass-input w-full p-2 rounded text-sm"></div>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            <label class="block text-sm text-starlight-cyan">คะแนนประเมิน ESAS (0 - 10)</label>
+                            <div class="flex justify-between items-center gap-4 bg-white/5 p-2 rounded text-sm">
+                                <span>ความเจ็บปวด (Pain)</span>
+                                <input type="number" min="0" max="10" id="rec-esas-pain" value="0" class="glass-input w-16 p-1 text-center rounded text-pink-400 font-bold">
+                            </div>
+                            <div class="flex justify-between items-center gap-4 bg-white/5 p-2 rounded text-sm">
+                                <span>หอบเหนื่อย (Shortness of breath)</span>
+                                <input type="number" min="0" max="10" id="rec-esas-sob" value="0" class="glass-input w-16 p-1 text-center rounded text-starlight-cyan font-bold">
+                            </div>
+                            <div class="flex justify-between items-center gap-4 bg-white/5 p-2 rounded text-sm">
+                                <span>ความสุขสบาย (Wellbeing)</span>
+                                <input type="number" min="0" max="10" id="rec-esas-wellbeing" value="0" class="glass-input w-16 p-1 text-center rounded text-starlight-gold font-bold">
                             </div>
                         </div>
+
+                        <div class="mb-4">
+                            <label class="block text-xs text-gray-400 mb-1">ความเห็นเพิ่มเติมความก้าวหน้าอาการ</label>
+                            <textarea id="rec-note" rows="2" class="glass-input w-full p-2 rounded text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-starlight-cyan text-space-950 font-bold py-2 rounded-lg hover:bg-white transition">
+                            <i class="fa-solid fa-save mr-2"></i> บันทึกรายการ
+                        </button>
+                    </form>
+
+                    <!-- Profile Specific mini-charts -->
+                    <div class="space-y-6">
+                        <div class="glass-panel p-4 h-64"><h4 class="text-sm text-gray-400 mb-2">เทรนด์ Pain & SpO2</h4><canvas id="patPainTrend"></canvas></div>
+                        <div class="glass-panel p-4 h-64"><h4 class="text-sm text-gray-400 mb-2">สัญญาณชีพ</h4><canvas id="patVitalsTrend"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 mt-6">
+                    <h3 class="text-xl font-bold text-white mb-4">ตารางบันทึกอาการและสัญญาณชีพย้อนหลัง</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-gray-400 border-b border-white/10">
+                                    <th class="p-2">วัน-เวลา</th>
+                                    <th class="p-2">BP</th>
+                                    <th class="p-2">Pulse</th>
+                                    <th class="p-2">SpO2</th>
+                                    <th class="p-2 text-center">Pain</th>
+                                    <th class="p-2 text-center">SOB</th>
+                                    <th class="p-2 text-center">Wellbeing</th>
+                                    <th class="p-2">หมายเหตุ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="p-v-daily-list">
+                                <!-- injected -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content 3: ACP Goals of Care Timeline -->
+            <div id="prof-sub-acp" class="profile-sub-tab space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6">
+                        <h3 class="text-xl font-bold text-starlight-cyan mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-gavel mr-2"></i> ข้อมูลเป้าหมายและข้อจำกัดการยื้อชีวิต</h3>
+                        <div class="space-y-4" id="p-v-acp-summary">
+                            <!-- Injected -->
+                        </div>
+                    </div>
+
+                    <!-- Add timeline event inside patient profile -->
+                    <form onsubmit="handlePatientACPLogSubmit(event)" class="glass-panel p-6">
+                        <h3 class="text-xl font-bold text-starlight-gold mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-clock-rotate-left mr-2"></i> ปรับเป้าหมายการรักษาล่วงหน้า (Update ACP)</h3>
+                        <div class="mb-4">
+                            <label class="block text-xs text-gray-400 mb-1">วันที่ปรับเป้าหมาย</label>
+                            <input type="date" required id="acp-log-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-xs text-gray-400 mb-1">เป้าหมายหลัก (Goal of Care)</label>
+                            <select id="acp-log-goal" class="glass-input w-full p-2 rounded text-sm">
+                                <option value="Comfort Care">Comfort Care (มุ่งเน้นความสุขสบายสูงสุด ปฏิเสธการรักษายืดชีพ)</option>
+                                <option value="Palliative Care">Palliative Care (ประคับประคองตามแนวทางและขั้นตอน)</option>
+                                <option value="Life-prolonging">Life-prolonging (ยืดชีวิตตามความประสงค์ญาติ)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2 mb-4 bg-white/5 p-3 rounded">
+                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-cpr" class="space-radio"> <span>No CPR</span></label>
+                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-tube" class="space-radio"> <span>No Intubation</span></label>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-xs text-gray-400 mb-1">หมายเหตุและผู้ร่วมตัดสินใจ</label>
+                            <textarea id="acp-log-note" rows="2" class="glass-input w-full p-2 rounded text-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-starlight-cyan text-space-950 font-bold py-2 rounded-lg hover:bg-white transition">
+                            <i class="fa-solid fa-save mr-2"></i> อัปเดต ACP Log
+                        </button>
+                    </form>
+                </div>
+
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center"><i class="fa-solid fa-timeline-loop mr-2 text-starlight-cyan"></i> ลำดับบันทึกเจตจำนงการรักษาล่วงหน้า (Timeline)</h3>
+                    <div class="relative border-l border-starlight-cyan/20 ml-4 space-y-6" id="p-v-acp-timeline-list">
+                        <!-- Injected -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= DOCUMENT CENTER ================= -->
+        <!-- ================= STREAMING_CHUNK: Building Patient Register Form... ================= -->
+        <!-- PATIENT REGISTER FORM -->
+        <section id="patient-register" class="view-section h-full max-w-4xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-user-plus text-starlight-cyan mr-2"></i> ลงทะเบียนประวัติผู้ป่วยใหม่</h2>
+            <p class="text-gray-400 mb-8">กรอกข้อมูลพื้นฐานให้ครบเพื่อสร้างเวชระเบียนแบบองค์รวม</p>
+
+            <form onsubmit="handlePatientRegistrationSubmit(event)" class="space-y-6">
+                <!-- ข้อมูลส่วนตัว -->
+                <div class="glass-panel p-6 border-t-4 border-t-starlight-cyan">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">ข้อมูลส่วนบุคคล (Personal Information)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-sm text-gray-400 mb-1">HN <span class="text-red-500">*</span></label><input type="text" required id="reg-hn" class="glass-input w-full p-2 rounded" placeholder="เช่น 012345"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">เลขบัตรประชาชน <span class="text-red-500">*</span></label><input type="text" required id="reg-cid" class="glass-input w-full p-2 rounded" placeholder="13 หลัก"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">สิทธิ์การรักษา</label>
+                            <select id="reg-right" onchange="toggleInput('reg-right', 'reg-right-other', 'อื่นๆ')" class="glass-input w-full p-2 rounded text-white">
+                                <option>UC ผู้สูงอายุ</option><option>กรมบัญชีกลาง</option><option>ประกันสังคม</option><option>UC นอกเขต</option><option>อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div id="reg-right-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุสิทธิ์อื่น ๆ</label><input type="text" id="reg-right-other" class="glass-input w-full p-2 rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm text-gray-400 mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label><input type="text" required id="reg-name" class="glass-input w-full p-2 rounded"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">อายุ (ปี) <span class="text-red-500">*</span></label><input type="number" required id="reg-age" class="glass-input w-full p-2 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- ที่อยู่แยกช่อง -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-gold mb-4 border-b border-white/10 pb-2">ที่อยู่ปัจจุบันและพื้นที่รับผิดชอบ</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
+                        <div><label class="block text-xs text-gray-400 mb-1">บ้านเลขที่</label><input type="text" id="reg-addr-no" class="glass-input w-full p-2 rounded"></div>
+                        <div><label class="block text-xs text-gray-400 mb-1">หมู่ที่</label><input type="text" id="reg-addr-moo" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ถนน / ซอย</label><input type="text" id="reg-addr-road" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ตำบล</label><input type="text" id="reg-addr-sub" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">อำเภอ</label><input type="text" id="reg-addr-dist" class="glass-input w-full p-2 rounded" value="ทับคล้อ"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">จังหวัด</label><input type="text" id="reg-addr-prov" class="glass-input w-full p-2 rounded" value="พิจิตร"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">รหัสไปรษณีย์</label><input type="text" id="reg-addr-zip" class="glass-input w-full p-2 rounded" value="66230"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">เขตรพ.สต.รับผิดชอบ <span class="text-red-500">*</span></label>
+                            <select id="reg-pcu" onchange="toggleInput('reg-pcu', 'reg-pcu-other', 'นอกเขต')" class="glass-input w-full p-2 rounded">
+                                <option>PCU ทับคล้อ</option>
+                                <option>รพ.สต. บ้านสายดงยาง</option>
+                                <option>รพ.สต. เขาทราย</option>
+                                <option>รพ.สต. บ้านวังแดง</option>
+                                <option>รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)</option>
+                                <option>รพ.สต. ตำบลเขาเจ็ดลูก</option>
+                                <option>รพ.สต. บ้านท้ายทุ่งหมู่2</option>
+                                <option>รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)</option>
+                                <option>รพ.สต. บ้านไดอีเผือก</option>
+                                <option>นอกเขต</option>
+                            </select>
+                        </div>
+                        <div id="reg-pcu-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุนอกเขต</label><input type="text" id="reg-pcu-other" class="glass-input w-full p-2 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลทางการแพทย์ -->
+                <div class="glass-panel p-6 border-t-4 border-t-pink-500">
+                    <h3 class="text-xl text-pink-400 mb-4 border-b border-white/10 pb-2">ข้อมูลทางการแพทย์และกลุ่มโรค</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">กลุ่มโรคประคับประคองหลัก</label>
+                            <select id="reg-disease" onchange="toggleInput('reg-disease', 'reg-disease-other', 'อื่นๆ')" class="glass-input w-full p-2 rounded">
+                                <option>Cancer</option><option>ESRD</option><option>CVA</option><option>COPD</option><option>Cirrhosis</option><option>Geriatric care</option><option>อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div id="reg-disease-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุกลุ่มโรคอื่น ๆ</label><input type="text" id="reg-disease-other" class="glass-input w-full p-2 rounded"></div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">PPS Score (ประเมินกิจวัตร)</label>
+                            <select id="reg-pps" class="glass-input w-full p-2 rounded text-starlight-gold font-bold">
+                                <option value="100">100%</option><option value="90">90%</option><option value="80">80%</option>
+                                <option value="70">70%</option><option value="60">60%</option><option value="50">50%</option>
+                                <option value="40">40%</option><option value="30">30%</option><option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-gray-400 mb-1">การวินิจฉัยโรคอย่างละเอียด (Primary Diagnosis)</label>
+                            <textarea id="reg-diagnosis" rows="2" class="glass-input w-full p-2 rounded"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- โรคประจำตัวเพิ่มทีละรายการ -->
+                    <div class="bg-space-950/40 p-4 rounded-lg border border-white/10">
+                        <label class="block text-sm text-starlight-cyan mb-2 font-medium">โรคประจำตัวอื่น ๆ (Underlying Diseases)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="reg-udx-input" class="glass-input flex-1 p-2 rounded text-sm" placeholder="พิมพ์ชื่อโรคประจำตัวแล้วกดบวก">
+                            <button type="button" onclick="addRegisterUdxItem()" class="bg-starlight-cyan text-space-950 font-bold px-4 rounded-lg"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <ul id="reg-udx-list" class="mt-3 space-y-2"></ul>
+                    </div>
+                </div>
+
+                <!-- การจัดการและญาติ -->
+                <div class="glass-panel p-6 border-t-4 border-t-green-400">
+                    <h3 class="text-xl text-green-400 mb-4 border-b border-white/10 pb-2">แผนและข้อมูลการติดต่อญาติ</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-1">Advance Care Plan ล่วงหน้า</label>
+                        <textarea id="reg-acp" rows="2" class="glass-input w-full p-2 rounded" placeholder="ระบุ No CPR, No Intubation หรือ อื่นๆ..."></textarea>
+                    </div>
+
+                    <!-- รายชื่อญาติเพิ่มเป็นชุด -->
+                    <div class="mb-6">
+                        <label class="block text-sm text-starlight-gold mb-2 font-medium">รายชื่อญาติและผู้ดูแลประสานงาน</label>
+                        <div id="reg-contact-wrapper" class="space-y-3">
+                            <!-- Injected default row -->
+                        </div>
+                        <button type="button" onclick="addRegisterContactRow()" class="mt-3 text-xs text-starlight-cyan hover:underline"><i class="fa-solid fa-plus mr-1"></i> เพิ่มญาติเพิ่มเติม</button>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-[#107c41]/10 border border-[#107c41]/30">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="reg-insurance" class="space-radio w-5 h-5">
+                            <span class="text-white font-medium">ส่งงานประกัน รพ.ทับคล้อ เรียบร้อยแล้ว</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="switchView('patient-record')" class="px-6 py-2 rounded-lg bg-white/5 text-gray-400 hover:text-white transition">ยกเลิก</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-starlight-cyan text-space-950 font-bold hover:bg-white transition">บันทึกข้อมูลและเพิ่มในหอผู้ป่วย</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= STREAMING_CHUNK: Building Patient Edit Form... ================= -->
+        <!-- PATIENT EDIT FORM -->
+        <section id="patient-edit" class="view-section h-full max-w-4xl mx-auto pb-12">
+            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-user-pen text-starlight-gold mr-2"></i> แก้ไขประวัติเวชระเบียน</h2>
+            <p class="text-gray-400 mb-8">ปรับเปลี่ยนรายละเอียดตามความเป็นจริงเพื่อความถูกต้องของทะเบียน</p>
+
+            <form onsubmit="handlePatientEditSubmit(event)" class="space-y-6">
+                <!-- ข้อมูลส่วนตัว -->
+                <div class="glass-panel p-6 border-t-4 border-t-starlight-gold">
+                    <h3 class="text-xl text-starlight-gold mb-4 border-b border-white/10 pb-2">ข้อมูลส่วนบุคคล</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="block text-sm text-gray-400 mb-1">HN <span class="text-red-500">*</span></label><input type="text" required id="edit-hn" class="glass-input w-full p-2 rounded bg-black/40 text-gray-400" readonly></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">เลขบัตรประชาชน <span class="text-red-500">*</span></label><input type="text" required id="edit-cid" class="glass-input w-full p-2 rounded"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">สิทธิ์การรักษา</label>
+                            <select id="edit-right" onchange="toggleInput('edit-right', 'edit-right-other', 'อื่นๆ')" class="glass-input w-full p-2 rounded text-white">
+                                <option>UC ผู้สูงอายุ</option><option>กรมบัญชีกลาง</option><option>ประกันสังคม</option><option>UC นอกเขต</option><option>อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div id="edit-right-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุสิทธิ์อื่น ๆ</label><input type="text" id="edit-right-other" class="glass-input w-full p-2 rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm text-gray-400 mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label><input type="text" required id="edit-name" class="glass-input w-full p-2 rounded"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">อายุ (ปี) <span class="text-red-500">*</span></label><input type="number" required id="edit-age" class="glass-input w-full p-2 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- ที่อยู่แยกช่อง -->
+                <div class="glass-panel p-6">
+                    <h3 class="text-xl text-starlight-cyan mb-4 border-b border-white/10 pb-2">ที่อยู่ปัจจุบันและพื้นที่รับผิดชอบ</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4">
+                        <div><label class="block text-xs text-gray-400 mb-1">บ้านเลขที่</label><input type="text" id="edit-addr-no" class="glass-input w-full p-2 rounded"></div>
+                        <div><label class="block text-xs text-gray-400 mb-1">หมู่ที่</label><input type="text" id="edit-addr-moo" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ถนน / ซอย</label><input type="text" id="edit-addr-road" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">ตำบล</label><input type="text" id="edit-addr-sub" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">อำเภอ</label><input type="text" id="edit-addr-dist" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">จังหวัด</label><input type="text" id="edit-addr-prov" class="glass-input w-full p-2 rounded"></div>
+                        <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">รหัสไปรษณีย์</label><input type="text" id="edit-addr-zip" class="glass-input w-full p-2 rounded"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">เขตรพ.สต.รับผิดชอบ <span class="text-red-500">*</span></label>
+                            <select id="edit-pcu" onchange="toggleInput('edit-pcu', 'edit-pcu-other', 'นอกเขต')" class="glass-input w-full p-2 rounded">
+                                <option>PCU ทับคล้อ</option>
+                                <option>รพ.สต. บ้านสายดงยาง</option>
+                                <option>รพ.สต. เขาทราย</option>
+                                <option>รพ.สต. บ้านวังแดง</option>
+                                <option>นอกเขต</option>
+                            </select>
+                        </div>
+                        <div id="edit-pcu-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุนอกเขต</label><input type="text" id="edit-pcu-other" class="glass-input w-full p-2 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลทางการแพทย์ -->
+                <div class="glass-panel p-6 border-t-4 border-t-pink-500">
+                    <h3 class="text-xl text-pink-400 mb-4 border-b border-white/10 pb-2">ข้อมูลทางการแพทย์และกลุ่มโรค</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">กลุ่มโรคประคับประคองหลัก</label>
+                            <select id="edit-disease" onchange="toggleInput('edit-disease', 'edit-disease-other', 'อื่นๆ')" class="glass-input w-full p-2 rounded">
+                                <option>Cancer</option><option>ESRD</option><option>CVA</option><option>COPD</option><option>Cirrhosis</option><option>Geriatric care</option><option>อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div id="edit-disease-other-container" class="hidden"><label class="block text-sm text-starlight-gold mb-1">ระบุกลุ่มโรคอื่น ๆ</label><input type="text" id="edit-disease-other" class="glass-input w-full p-2 rounded"></div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">PPS Score (ประเมินกิจวัตร)</label>
+                            <select id="edit-pps" class="glass-input w-full p-2 rounded text-starlight-gold font-bold">
+                                <option value="100">100%</option><option value="90">90%</option><option value="80">80%</option>
+                                <option value="70">70%</option><option value="60">60%</option><option value="50">50%</option>
+                                <option value="40">40%</option><option value="30">30%</option><option value="20">20%</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm text-gray-400 mb-1">การวินิจฉัยโรคอย่างละเอียด (Primary Diagnosis)</label>
+                            <textarea id="edit-diagnosis" rows="2" class="glass-input w-full p-2 rounded"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- โรคประจำตัวปรับปรุงแบบ List -->
+                    <div class="bg-space-950/40 p-4 rounded-lg border border-white/10">
+                        <label class="block text-sm text-starlight-cyan mb-2 font-medium">โรคประจำตัวอื่น ๆ (Underlying Diseases)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="edit-udx-input" class="glass-input flex-1 p-2 rounded text-sm" placeholder="พิมพ์ชื่อโรคประจำตัวแล้วกดบวก">
+                            <button type="button" onclick="addEditUdxItem()" class="bg-starlight-cyan text-space-950 font-bold px-4 rounded-lg"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <ul id="edit-udx-list" class="mt-3 space-y-2"></ul>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 border-t-4 border-t-green-400">
+                    <h3 class="text-xl text-green-400 mb-4 border-b border-white/10 pb-2">แผนและข้อมูลการติดต่อญาติ</h3>
+                    <div id="edit-contact-wrapper" class="space-y-3">
+                        <!-- dynamic row -->
+                    </div>
+                    <button type="button" onclick="addEditContactRow()" class="mt-3 text-xs text-starlight-cyan hover:underline"><i class="fa-solid fa-plus mr-1"></i> เพิ่มญาติเพิ่มเติม</button>
+
+                    <div class="p-4 rounded-lg bg-[#107c41]/10 border border-[#107c41]/30 mt-4">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" id="edit-insurance" class="space-radio w-5 h-5">
+                            <span class="text-white font-medium">ส่งงานประกัน รพ.ทับคล้อ เรียบร้อยแล้ว</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="switchView('patient-record')" class="px-6 py-2 rounded-lg bg-white/5 text-gray-400 hover:text-white transition">ยกเลิก</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-starlight-gold text-space-950 font-bold hover:bg-white transition">บันทึกความเปลี่ยนแปลง</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= STREAMING_CHUNK: Designing Consolidated Document Center... ================= -->
+        <!-- UMBRELLA DOCUMENT CENTER -->
         <section id="document-center" class="view-section h-full max-w-7xl mx-auto pb-12">
-            <h2 class="text-3xl font-bold text-white mb-2"><i class="fa-solid fa-folder-open text-starlight-gold mr-2"></i> คลังเอกสารแบบฟอร์ม (Document Center)</h2>
-            <p class="text-gray-400 mb-6">รวมแบบฟอร์มและบันทึกทางการแพทย์</p>
+            <h2 class="text-3xl font-extrabold text-white mb-2"><i class="fa-solid fa-folder-open text-starlight-gold mr-2"></i> คลังเอกสาร & สารเสพติด</h2>
+            <p class="text-gray-400 mb-6">คลังแบบฟอร์มเวชระเบียน พินัยกรรมชีวิต สารเสพติดประเภทยากลุ่ม 2 และกัญชาประเภท 5</p>
 
             <div class="glass-panel p-1">
-                <!-- Tab Headers -->
-                <div class="flex flex-wrap border-b border-white/10 bg-space-900/50 rounded-t-lg">
-                    <button id="btn-doc-livingwill" onclick="switchDocTab('livingwill')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-starlight-cyan text-starlight-cyan bg-starlight-cyan/10 transition"><i class="fa-solid fa-file-signature mr-2"></i> Living Will</button>
-                    <button id="btn-doc-mo" onclick="switchDocTab('mo')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-syringe mr-2"></i> บันทึก MO PRN</button>
-                    <button id="btn-doc-narcotic" onclick="switchDocTab('narcotic')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-file-prescription mr-2"></i> อนุมัติยาเสพติด</button>
-                    <button id="btn-doc-syringe" onclick="switchDocTab('syringe')" class="doc-tab-btn flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white transition"><i class="fa-solid fa-pump-medical mr-2"></i> บันทึก Syringe Driver</button>
+                <!-- Navigation Tab headers inside doc center -->
+                <div class="flex flex-wrap border-b border-white/10 bg-space-950/40 rounded-t-lg">
+                    <button onclick="switchDocTab('livingwill')" id="btn-doc-livingwill" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-starlight-cyan border-b-2 border-starlight-cyan bg-white/5 transition"><i class="fa-solid fa-signature mr-1"></i> Living Will</button>
+                    <button onclick="switchDocTab('morphine')" id="btn-doc-morphine" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-syringe mr-1"></i> บันทึก MO PRN</button>
+                    <button onclick="switchDocTab('narcotic2')" id="btn-doc-narcotic2" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-file-prescription mr-1"></i> ยาเสพติด ป.2 (Morphine)</button>
+                    <button onclick="switchDocTab('narcotic5')" id="btn-doc-narcotic5" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-cannabis mr-1"></i> ยาเสพติด ป.5 (กัญชา)</button>
+                    <button onclick="switchDocTab('syringe')" id="btn-doc-syringe" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-pump-medical mr-1"></i> Syringe Driver</button>
                 </div>
 
-                <!-- Tab Contents -->
-                <div class="p-6 min-h-[500px]">
-                    
-                    <!-- 1. Living Will -->
-                    <div id="doc-livingwill" class="doc-tab-content block animate-[fadeIn_0.3s_ease-in-out]">
-                        <h3 class="text-xl text-white mb-4">หนังสือแสดงเจตนา (Living Will)</h3>
-                        <p class="text-gray-400 mb-4 text-sm">อัปโหลดไฟล์แสกน หรือลิงก์ไปยังสมุดเบาใจ (PDF)</p>
-                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-10 text-center hover:border-starlight-cyan hover:bg-starlight-cyan/5 transition cursor-pointer">
-                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
-                            <p class="text-white">คลิกเพื่ออัปโหลดไฟล์ PDF/รูปภาพ</p>
+                <div class="p-6">
+                    <!-- Doc 1: Living Will Template -->
+                    <div id="doc-sub-livingwill" class="doc-sub-content block">
+                        <h3 class="text-lg font-bold text-starlight-cyan mb-2">หนังสือแสดงเจตนาเลือกวิธีรักษาพยาบาลในช่วงวาระสุดท้าย</h3>
+                        <p class="text-xs text-gray-400 mb-6">ผู้ป่วยสามารถบันทึกและดาวน์โหลดแบบฟอร์มเปล่าเพื่อนำไปยื่นพยานและลงลายมือชื่อ</p>
+                        <div class="p-6 bg-white/5 rounded border border-white/10 max-w-xl mx-auto text-center">
+                            <i class="fa-solid fa-print text-4xl text-starlight-gold mb-3"></i>
+                            <h4 class="text-white font-medium mb-2">ดาวน์โหลดแบบฟอร์ม Living Will ฉบับพกพา</h4>
+                            <button onclick="window.print()" class="bg-starlight-cyan text-space-950 font-bold px-4 py-2 rounded-lg transition hover:bg-white text-sm">พิมพ์พินัยกรรมชีวิตเปล่า (PDF)</button>
                         </div>
                     </div>
 
-                    <!-- 2. Morphine PRN -->
-                    <div id="doc-mo" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
-                        <h3 class="text-xl text-white mb-4">ใบบันทึกการใช้ Morphine PRN ที่บ้าน</h3>
-                        <div class="overflow-x-auto bg-space-900/50 rounded border border-white/5">
-                            <table class="w-full text-sm text-left">
-                                <thead class="text-starlight-cyan border-b border-white/10 bg-black/20">
-                                    <tr><th class="p-3">วันที่/เวลา</th><th class="p-3">Pain Score</th><th class="p-3">Dose ที่ใช้ (mg)</th><th class="p-3">ผู้บริหารยา</th><th class="p-3">หมายเหตุ</th></tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b border-white/5"><td class="p-3 text-gray-300">10 ต.ค. 08:00</td><td class="p-3 text-pink-400 font-bold">8</td><td class="p-3">3 mg</td><td class="p-3">ญาติ</td><td class="p-3 text-gray-500">ปวดขยับตัว</td></tr>
-                                    <tr class="border-b border-white/5"><td class="p-3"><input type="datetime-local" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><input type="number" class="glass-input p-1 rounded w-16 text-xs"></td><td class="p-3"><input type="text" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><input type="text" class="glass-input p-1 rounded w-full text-xs"></td><td class="p-3"><button class="bg-starlight-cyan text-space-900 px-3 py-1 rounded text-xs font-bold w-full">บันทึก</button></td></tr>
-                                </tbody>
-                            </table>
+                    <!-- Doc 2: Morphine PRN Logs template -->
+                    <div id="doc-sub-morphine" class="doc-sub-content hidden">
+                        <h3 class="text-lg font-bold text-pink-400 mb-2">ประวัติและใบบันทึกการใช้ยา Morphine PRN</h3>
+                        <p class="text-xs text-gray-400 mb-6">ติดตามการบริหารยาระงับปวดฉุกเฉินและระดับคะแนนความเจ็บปวดหลังบริหารยา</p>
+                        <div class="bg-white/5 p-4 rounded-lg border border-white/10 text-center mb-6">
+                            <i class="fa-solid fa-circle-info text-starlight-gold text-2xl mb-2"></i>
+                            <p class="text-sm text-gray-300">ประวัติและแบบบันทึกการบริหารยา Morphine สำหรับคนไข้แต่ละราย สามารถดูและบันทึกข้อมูลแบบเฉพาะเจาะจงได้ในหน้าประวัติผู้ป่วยรายบุคคล (แท็บย่อยที่ 2)</p>
                         </div>
                     </div>
 
-                    <!-- 3. Narcotic Approval -->
-                    <div id="doc-narcotic" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
-                        <h3 class="text-xl text-white mb-4">ใบขออนุมัติการใช้ยาเสพติดให้โทษประเภท 2/5</h3>
-                        <div class="grid grid-cols-2 gap-4 max-w-2xl">
-                            <div><label class="block text-sm text-gray-400 mb-1">ประเภท</label><select class="glass-input w-full p-2 rounded"><option>แบบ ย.ส.2 (Morphine)</option><option>ยาเสพติดประเภท 5 (กัญชา)</option></select></div>
-                            <div><label class="block text-sm text-gray-400 mb-1">จำนวนที่เบิก (Dose/ขวด)</label><input type="text" class="glass-input w-full p-2 rounded"></div>
-                            <div class="col-span-2"><label class="block text-sm text-gray-400 mb-1">เหตุผลทางการแพทย์</label><textarea rows="2" class="glass-input w-full p-2 rounded">Palliative Care / Pain Control</textarea></div>
-                            <div class="col-span-2"><button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded w-full transition">สร้างฟอร์มอนุมัติสำหรับพิมพ์ (PDF)</button></div>
+                    <!-- Doc 3: Narcotic Category 2 Approval -->
+                    <div id="doc-sub-narcotic2" class="doc-sub-content hidden">
+                        <h3 class="text-lg font-bold text-pink-400 mb-4">ใบขออนุมัติสั่งใช้ยาเสพติดให้โทษประเภทที่ 2 (กลุ่มฝิ่นและอนุพันธ์)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white/5 p-4 rounded border border-white/10">
+                            <div><label class="block text-xs text-gray-400 mb-1">ตำรับที่สั่งจ่าย</label><select class="glass-input w-full p-2 rounded text-sm"><option>Morphine Sulphate Capsule (SR)</option><option>Morphine Hydrochloride Injection</option><option>Morphine Syrup (IR)</option></select></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">ปริมาณสุทธิ / จำนวนที่ขอเบิก</label><input type="text" class="glass-input w-full p-2 rounded text-sm" placeholder="เช่น 30 เม็ด, 10 แอมพูล"></div>
+                            <div class="col-span-2"><label class="block text-xs text-gray-400 mb-1">เหตุผลทางการแพทย์ (Clinical Indication)</label><textarea rows="2" class="glass-input w-full p-2 rounded text-sm">เพื่อระงับความปวดรุนแรงในผู้ป่วยระยะสุดท้าย (Severe Palliative Cancer Pain)</textarea></div>
+                            <div class="col-span-2 text-right"><button onclick="showToast('สร้างแบบบันทึกอนุมัติ ป.2 เรียบร้อย')" class="bg-pink-500 text-white font-bold px-4 py-2 rounded hover:bg-pink-400 text-sm">บันทึกสั่งจ่ายยา ป.2</button></div>
                         </div>
                     </div>
 
-                    <!-- 4. Syringe Driver -->
-                    <div id="doc-syringe" class="doc-tab-content hidden animate-[fadeIn_0.3s_ease-in-out]">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl text-white">ใบบันทึกการใช้ Syringe Driver ที่บ้าน</h3>
-                            <button class="bg-starlight-cyan/20 text-starlight-cyan px-3 py-1.5 rounded text-sm hover:bg-starlight-cyan hover:text-space-900 transition"><i class="fa-solid fa-print mr-1"></i> พิมพ์แบบฟอร์มเปล่า</button>
+                    <!-- Doc 4: Narcotic Category 5 Approval -->
+                    <div id="doc-sub-narcotic5" class="doc-sub-content hidden">
+                        <h3 class="text-lg font-bold text-green-400 mb-4">ใบขออนุมัติสั่งใช้ยาเสพติดให้โทษประเภทที่ 5 (กลุ่มสารสกัดกัญชาทางการแพทย์)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white/5 p-4 rounded border border-white/10">
+                            <div><label class="block text-xs text-gray-400 mb-1">สารสกัดตำรับ</label><select class="glass-input w-full p-2 rounded text-sm"><option>THC : CBD 1:1 Drop</option><option>THC Extract Drop</option></select></div>
+                            <div><label class="block text-xs text-gray-400 mb-1">ข้อบ่งชี้</label><select class="glass-input w-full p-2 rounded text-sm"><option>ความเจ็บปวดที่ดื้อต่อยามาตรฐาน</option><option>บรรเทาอาการคลื่นไส้เจียน</option></select></div>
+                            <div class="col-span-2 text-right"><button onclick="showToast('บันทึกอนุมัติกัญชา ป.5 เรียบร้อย')" class="bg-green-500 text-white font-bold px-4 py-2 rounded hover:bg-green-400 text-sm">อนุมัติกัญชา ป.5</button></div>
                         </div>
-                        
-                        <!-- Syringe Info Card -->
-                        <div class="bg-space-800/80 p-4 rounded-lg border border-starlight-cyan/30 mb-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div><label class="block text-xs text-gray-400">สูตรยาผสม (Drug Mixture)</label><div class="text-sm text-white font-medium">MO 30mg + Midazolam 5mg</div></div>
-                            <div><label class="block text-xs text-gray-400">ปริมาตรรวม (Total Vol)</label><div class="text-sm text-white font-medium">24 ml</div></div>
-                            <div><label class="block text-xs text-gray-400">อัตราการให้ (Rate)</label><div class="text-sm text-starlight-cyan font-bold">1 ml / hr</div></div>
-                            <div><label class="block text-xs text-gray-400">เปลี่ยน Syringe ล่าสุด</label><div class="text-sm text-gray-300">10 ต.ค. (โดย พยบ.เยี่ยมบ้าน)</div></div>
-                        </div>
+                    </div>
 
-                        <div class="overflow-x-auto bg-space-900/50 rounded border border-white/5">
-                            <table class="w-full text-sm text-left whitespace-nowrap">
-                                <thead class="text-gray-400 border-b border-white/10 bg-black/20">
-                                    <tr><th class="p-2">วันที่/เวลา</th><th class="p-2">ปริมาตรยาที่เหลือ (ml)</th><th class="p-2">ตำแหน่งแทงเข็ม (แดง/บวม)</th><th class="p-2">อาการผู้ป่วย/หมายเหตุ</th><th class="p-2">ผู้ประเมิน</th><th class="p-2">บันทึก</th></tr>
+                    <!-- Doc 5: Syringe Driver -->
+                    <div id="doc-sub-syringe" class="doc-sub-content hidden">
+                        <h3 class="text-lg font-bold text-starlight-cyan mb-2">แบบฟอร์มการติดตามเครื่องบริหารยาต่อเนื่องใต้ผิวหนัง (Syringe Driver ที่บ้าน)</h3>
+                        <p class="text-xs text-gray-400 mb-6">บันทึกปริมาตรคงเหลือในกระบอกสูบและตรวจสอบความผิดปกติบริเวณผิวหนังที่แทงเข็ม</p>
+                        <div class="overflow-x-auto bg-white/5 p-4 rounded border border-white/10 mb-6">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="text-gray-400 border-b border-white/10">
+                                        <th class="p-2">วันที่ตรวจ</th>
+                                        <th class="p-2">สูตรยาผสม</th>
+                                        <th class="p-2">ความเร็ว (ml/hr)</th>
+                                        <th class="p-2">ผิวหนังรอบรอยแทงเข็ม</th>
+                                        <th class="p-2">ปริมาตรคงเหลือ</th>
+                                        <th class="p-2">ผู้ประเมิน</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="border-b border-white/5">
-                                        <td class="p-2"><input type="datetime-local" class="glass-input p-1 rounded w-32 text-xs"></td>
-                                        <td class="p-2"><input type="number" step="0.5" class="glass-input p-1 rounded w-20 text-xs" placeholder="ml"></td>
-                                        <td class="p-2"><select class="glass-input p-1 rounded w-24 text-xs"><option>ปกติ</option><option class="text-red-400">บวมแดง</option><option class="text-yellow-400">ซึม</option></select></td>
-                                        <td class="p-2"><input type="text" class="glass-input p-1 rounded w-full text-xs" placeholder="หลับพักได้..."></td>
-                                        <td class="p-2"><input type="text" class="glass-input p-1 rounded w-20 text-xs" placeholder="ชื่อ..."></td>
-                                        <td class="p-2"><button class="bg-green-500 text-white px-2 py-1 rounded text-xs">เพิ่ม</button></td>
+                                        <td class="p-2">10/06/26</td>
+                                        <td class="p-2 text-pink-300">Morphine 15mg + Midazolam 5mg</td>
+                                        <td class="p-2 font-bold text-starlight-cyan">1 ml/hr</td>
+                                        <td class="p-2 text-green-400">ปกติ (ไม่มีบวมแดง)</td>
+                                        <td class="p-2">12 ml / 24 ml</td>
+                                        <td class="p-2 text-starlight-gold">พยบ. เยี่ยมบ้าน</td>
                                     </tr>
-                                    <tr class="border-b border-white/5"><td class="p-2 text-gray-300">10 ต.ค. 16:00</td><td class="p-2 text-white">16 ml</td><td class="p-2 text-green-400">ปกติ</td><td class="p-2 text-gray-400">ผู้ป่วยหลับดี ไม่กระสับกระส่าย</td><td class="p-2">พยบ. เอ</td><td class="p-2"></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -795,284 +863,1014 @@
 
     </main>
 
-    <div id="toast">แจ้งเตือนระบบ</div>
+    <!-- Custom Discharge Modal Dialog (No alerts) -->
+    <div id="discharge-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden no-print">
+        <div class="glass-panel p-6 max-w-md w-full m-4 border border-[#FF4C4C]/40 bg-space-950">
+            <h3 class="text-xl font-bold text-[#FF4C4C] mb-4"><i class="fa-solid fa-user-minus mr-2"></i> จำหน่ายผู้ป่วยประคับประคอง</h3>
+            <form onsubmit="handlePatientDischarge(event)">
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">วันที่จำหน่าย</label>
+                    <input type="date" required id="dc-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">สถานะเมื่อจำหน่าย</label>
+                    <select id="dc-status" class="glass-input w-full p-2 rounded text-sm">
+                        <option value="Discharged">Discharged - อาการคงที่กลับบ้าน</option>
+                        <option value="Death">Death - เสียชีวิตอย่างสงบ</option>
+                        <option value="Referred">Referred - ส่งต่อรพ.ขนาดใหญ่</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs text-gray-400 mb-1">รายละเอียดเพิ่มเติม / แผนการดูแลหลังจำหน่าย</label>
+                    <textarea id="dc-note" rows="3" class="glass-input w-full p-2 rounded text-sm"></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeDischargeModal()" class="px-4 py-2 rounded-lg bg-white/5 text-gray-400 hover:text-white transition text-sm">ยกเลิก</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-[#FF4C4C] text-white font-bold hover:bg-red-500 transition text-sm">ยืนยันจำหน่าย</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Off-screen Container strictly for Beautiful Full-Report Printing (PDF Export) -->
+    <div id="print-container">
+        <!-- filled dynamically when printable PDF is generated -->
+    </div>
+
+    <div id="toast">ข้อความแจ้งเตือนระบบ</div>
 
     <script>
-        // --- NAVIGATION & VIEW LOGIC ---
+        // In-memory Database of Patients mirroring Hospital Ward with dynamic stats
+        let patients = [
+            {
+                id: 1, name: 'นาย สมหมาย ใจดี', age: 68, cid: '3120199023812', hn: '1234567',
+                right: 'UC ผู้สูงอายุ', rightOther: '',
+                address: { no: '12/4', moo: '3', road: 'ทับคล้อร่วมใจ', sub: 'ทับคล้อ', dist: 'ทับคล้อ', prov: 'พิจิตร', zip: '66230' },
+                pcu: 'PCU ทับคล้อ', pcuOther: '', disease: 'Cancer', diseaseOther: '',
+                diagnosis: 'CA Colon Stage IV with Lung metastasis',
+                udx: ['DM Type 2', 'Hypertension'], status: 'Active',
+                pps: 40, isPinned: true, insuranceSent: true,
+                acp: 'No CPR, No Tube, No Inotropes, Comfort Care at Home preferred',
+                statusLogs: [
+                    { date: '2026-06-01', status: 'Active', note: 'ลงทะเบียนเริ่มต้น' }
+                ],
+                acpLogs: [
+                    { date: '2026-06-01', goal: 'Comfort Care', cpr: true, tube: true, note: 'คนไข้และญาติ (ลูกสาว) เห็นพ้องงดทำหัตถการยื้อชีวิต', author: 'นพ.ยตนา มาพันธ์สุ' }
+                ],
+                contacts: [
+                    { name: 'นาง นารี ใจดี', relation: 'บุตรสาว', phone: '0812345678', line: 'naree_jd' }
+                ],
+                dailyRecords: [
+                    { date: '2026-06-06', bp: '110/70', hr: 78, rr: 18, temp: 36.8, spo2: 98, pain: 2, tiredness: 4, drowsiness: 3, sob: 1, wellbeing: 2, note: 'ปวดบรรเทาลงหลัง SC Morphine 3mg prn' }
+                ],
+                dischargeInfo: null
+            },
+            {
+                id: 2, name: 'นาง สมศรี รักสงบ', age: 75, cid: '3120599024855', hn: '9876543',
+                right: 'กรมบัญชีกลาง', rightOther: '',
+                address: { no: '99', moo: '2', road: 'เขาทรายทอง', sub: 'เขาทราย', dist: 'ทับคล้อ', prov: 'พิจิตร', zip: '66230' },
+                pcu: 'รพ.สต. เขาทราย', pcuOther: '', disease: 'ESRD', diseaseOther: '',
+                diagnosis: 'End Stage Renal Disease (Refused dialysis)',
+                udx: ['Ischemic Heart Disease'], status: 'Active',
+                pps: 20, isPinned: true, insuranceSent: false,
+                acp: 'No Intubation, No Resuscitation, Peaceful exit at home',
+                statusLogs: [
+                    { date: '2026-06-02', status: 'Active', note: 'ส่งต่อจากคลินิกโรคไต' }
+                ],
+                acpLogs: [
+                    { date: '2026-06-02', goal: 'Palliative Care', cpr: true, tube: true, note: 'ลงนามสมุดเบาใจเรียบร้อยแล้ว', author: 'นพ.ยตนา มาพันธ์สุ' }
+                ],
+                contacts: [
+                    { name: 'นาย ทนง รักสงบ', relation: 'สามี', phone: '0898765432', line: 'tanong_s' }
+                ],
+                dailyRecords: [
+                    { date: '2026-06-05', bp: '100/60', hr: 85, rr: 20, temp: 36.5, spo2: 95, pain: 4, tiredness: 6, drowsiness: 5, sob: 3, wellbeing: 5, note: 'มีภาวะหอบเหนื่อยเป็นระยะ' }
+                ],
+                dischargeInfo: null
+            },
+            {
+                id: 3, name: 'นาย ประสิทธิ์ สุขสม', age: 82, cid: '3120512014859', hn: '5566778',
+                right: 'UC ผู้สูงอายุ', rightOther: '',
+                address: { no: '5/2', moo: '1', road: '-', sub: 'ท้ายทุ่ง', dist: 'ทับคล้อ', prov: 'พิจิตร', zip: '66230' },
+                pcu: 'รพ.สต. บ้านท้ายทุ่งหมู่2', pcuOther: '', disease: 'COPD', diseaseOther: '',
+                diagnosis: 'Chronic Obstructive Pulmonary Disease with respiratory failure',
+                udx: ['Hypertension'], status: 'Death',
+                pps: 10, isPinned: false, insuranceSent: true,
+                acp: 'No CPR, Comfort Care only',
+                statusLogs: [
+                    { date: '2026-05-10', status: 'Active', note: 'ขึ้นทะเบียนดูแลระยะสุดท้าย' }
+                ],
+                acpLogs: [
+                    { date: '2026-05-10', goal: 'Comfort Care', cpr: true, tube: true, note: 'เซ็นหนังสือ Living Will เรียบร้อย', author: 'นพ.ยตนา มาพันธ์สุ' }
+                ],
+                contacts: [
+                    { name: 'นาง ประณีต สุขสม', relation: 'ภรรยา', phone: '0845566778', line: 'praneet_s' }
+                ],
+                dailyRecords: [
+                    { date: '2026-05-15', bp: '90/50', hr: 90, rr: 24, temp: 37.2, spo2: 88, pain: 5, tiredness: 8, drowsiness: 7, sob: 6, wellbeing: 7, note: 'มีเสมหะครืดคราด มีแผลกดทับบวมแดง' }
+                ],
+                dischargeInfo: { date: '2026-05-20', status: 'Death', note: 'เสียชีวิตอย่างสงบที่บ้านท่ามกลางญาติมิตร', destination: 'บ้านพักอาศัย' }
+            }
+        ];
+
+        let selectedPatientId = null;
+        let regUdxList = [];
+        let editUdxList = [];
+        let diseaseChartInstance = null;
+        let pcuChartInstance = null;
+
+        // Visual Layout Controllers
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-white/10', 'text-white', 'text-starlight-cyan');
-                if(!el.classList.contains('text-starlight-gold') && !el.classList.contains('text-pink-400') && !el.classList.contains('text-green-400')) {
-                    el.classList.add('text-gray-400');
-                }
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-white/5', 'text-starlight-cyan');
+                btn.classList.add('text-gray-400');
             });
 
             const activeBtn = document.getElementById(`nav-${viewId}`);
             if(activeBtn) {
-                activeBtn.classList.add('bg-white/10', 'text-starlight-cyan');
+                activeBtn.classList.add('bg-white/5', 'text-starlight-cyan');
                 activeBtn.classList.remove('text-gray-400');
             }
 
-            // Force resize charts when tab is visible to prevent layout bugs
-            if(viewId === 'daily-record') {
-                setTimeout(() => {
-                    if(window.esasChart) window.esasChart.resize();
-                    if(window.vitalChart) window.vitalChart.resize();
-                }, 100);
+            if(viewId === 'dashboard') {
+                updateDashboard();
+            } else if(viewId === 'patient-record') {
+                renderWardGrid();
             }
         }
 
-        // Document Center Tab Switcher
-        function switchDocTab(tabId) {
-            document.querySelectorAll('.doc-tab-content').forEach(el => el.classList.remove('block'));
-            document.querySelectorAll('.doc-tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('doc-' + tabId).classList.remove('hidden');
-            document.getElementById('doc-' + tabId).classList.add('block');
-            
-            document.querySelectorAll('.doc-tab-btn').forEach(el => {
-                el.classList.remove('border-starlight-cyan', 'text-starlight-cyan', 'bg-starlight-cyan/10');
-                el.classList.add('border-transparent', 'text-gray-400');
-            });
-            
-            const activeBtn = document.getElementById('btn-doc-' + tabId);
-            activeBtn.classList.remove('border-transparent', 'text-gray-400');
-            activeBtn.classList.add('border-starlight-cyan', 'text-starlight-cyan', 'bg-starlight-cyan/10');
-        }
-
-        function togglePatientView(viewType) {
-            const listView = document.getElementById('patient-list-view');
-            const detailView = document.getElementById('patient-detail-view');
-            
-            if(viewType === 'form') {
-                listView.classList.add('hidden');
-                detailView.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+        function togglePatientView(view) {
+            if(view === 'list') {
+                switchView('patient-record');
             } else {
-                detailView.classList.add('hidden');
-                listView.classList.remove('hidden');
+                document.getElementById('patient-list-view').classList.add('hidden');
+                document.getElementById('patient-detail-view').classList.remove('hidden');
             }
         }
 
-        // --- FORM LOGIC (DYNAMIC INPUTS) ---
-        function toggleInput(selectId, inputId, triggerValue) {
+        // Sub-tabs in Patient Profile View
+        function switchProfileTab(tabName) {
+            document.querySelectorAll('.profile-sub-tab').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.classList.remove('text-starlight-cyan', 'border-starlight-cyan');
+                el.classList.add('text-gray-400', 'border-transparent');
+            });
+
+            document.getElementById(`prof-sub-${tabName}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.remove('text-gray-400', 'border-transparent');
+            activeTab.classList.add('text-starlight-cyan', 'border-starlight-cyan');
+
+            if(tabName === 'daily') {
+                renderSpecificPatientCharts();
+            }
+        }
+
+        // Document tabs switcher inside doc center
+        function switchDocTab(tabName) {
+            document.querySelectorAll('.doc-sub-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.doc-tab-btn').forEach(el => {
+                el.classList.remove('text-starlight-cyan', 'border-starlight-cyan', 'bg-white/5');
+                el.classList.add('text-gray-400', 'border-transparent');
+            });
+
+            document.getElementById(`doc-sub-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-doc-${tabName}`);
+            activeBtn.classList.remove('text-gray-400', 'border-transparent');
+            activeBtn.classList.add('text-starlight-cyan', 'border-starlight-cyan', 'bg-white/5');
+        }
+
+        // Filter and Render Patients in simulated Ward Grid
+        function filterWard() {
+            renderWardGrid();
+        }
+
+        function renderWardGrid() {
+            const search = document.getElementById('ward-search').value.toLowerCase();
+            const diseaseFilter = document.getElementById('ward-filter-disease').value;
+            const pcuFilter = document.getElementById('ward-filter-pcu').value;
+            const statusFilter = document.getElementById('ward-filter-status').value;
+            const grid = document.getElementById('ward-grid');
+            grid.innerHTML = '';
+
+            // Sorting logic: Pinned patients first, followed by Active, then others
+            let filtered = patients.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(search) || p.hn.includes(search) || p.cid.includes(search);
+                const matchDisease = (diseaseFilter === 'All') || p.disease === diseaseFilter;
+                const matchPCU = (pcuFilter === 'All') || p.pcu === pcuFilter;
+                
+                let matchStatus = true;
+                if(statusFilter === 'Active') {
+                    matchStatus = p.status === 'Active' || p.status === 'Admit';
+                } else if(statusFilter === 'Discharged') {
+                    matchStatus = p.status === 'Discharged' || p.status === 'Referred';
+                } else if(statusFilter === 'Death') {
+                    matchStatus = p.status === 'Death';
+                }
+
+                return matchSearch && matchDisease && matchPCU && matchStatus;
+            });
+
+            // Put pinned cases at the very top of the list
+            filtered.sort((a,b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500"><i class="fa-solid fa-face-frown text-4xl mb-3"></i><p>ไม่พบรายชื่อผู้ป่วยที่ตรงตามเงื่อนไขค้นหา</p></div>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                let statusColor = 'bg-green-500/20 text-green-400 border-green-500/30';
+                if(p.status === 'Death') statusColor = 'bg-red-500/20 text-red-400 border-red-500/30';
+                if(p.status === 'Admit') statusColor = 'bg-pink-500/20 text-pink-400 border-pink-500/30 animate-pulse';
+                if(p.status === 'Discharged' || p.status === 'Referred') statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+
+                const card = document.createElement('div');
+                card.className = `glass-panel p-5 border-t-4 ${p.isPinned ? 'border-t-starlight-gold shadow-[0_0_15px_rgba(244,208,63,0.15)]' : 'border-t-starlight-cyan'} hover:bg-white/5 transition duration-300 cursor-pointer relative group`;
+                card.innerHTML = `
+                    <div class="absolute top-3 right-3 flex items-center gap-1.5">
+                        ${p.isPinned ? '<span class="text-starlight-gold text-sm" title="เคสดูแลพิเศษ"><i class="fa-solid fa-thumbtack animate-bounce"></i></span>' : ''}
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${statusColor}">${p.status}</span>
+                    </div>
+                    <div onclick="openPatientProfile(${p.id})">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-full bg-space-950 flex items-center justify-center text-starlight-cyan text-xl border border-white/10 group-hover:border-starlight-cyan transition">
+                                <i class="fa-solid fa-user-injured"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-bold group-hover:text-starlight-cyan transition truncate w-44">${p.name}</h3>
+                                <p class="text-xs text-gray-400">HN: ${p.hn} | อายุ: ${p.age} ปี</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300 bg-space-950/40 p-3 rounded-lg border border-white/5">
+                            <p class="flex justify-between"><span class="text-gray-500">กลุ่มโรค:</span> <span class="text-pink-400 font-bold">${p.disease}</span></p>
+                            <p class="flex justify-between"><span class="text-gray-500">PPS:</span> <span class="text-starlight-gold font-bold">${p.pps}%</span></p>
+                            <p class="flex justify-between"><span class="text-gray-500">เขตรพ.สต:</span> <span class="truncate max-w-[120px]">${p.pcu}</span></p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Pin/Unpin focus target patient
+        function togglePinProfile() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(p) {
+                p.isPinned = !p.isPinned;
+                showToast(p.isPinned ? 'ปักหมุดเคสโฟกัสเรียบร้อย' : 'ถอนหมุดเคสนี้แล้ว');
+                const btn = document.getElementById('p-prof-pin-btn');
+                if(p.isPinned) {
+                    btn.className = "text-starlight-gold hover:text-white text-xl transition";
+                } else {
+                    btn.className = "text-gray-400 hover:text-starlight-gold text-xl transition";
+                }
+                updateDashboard();
+                renderWardGrid();
+            }
+        }
+
+        // Open patient extended sub-sections
+        function openPatientProfile(id) {
+            selectedPatientId = id;
+            const p = patients.find(pat => pat.id === id);
+            if(!p) return;
+
+            // Fill Header details
+            document.getElementById('p-prof-name').innerText = p.name;
+            document.getElementById('p-prof-hn').innerText = p.hn;
+            document.getElementById('p-prof-age').innerText = p.age;
+            document.getElementById('p-prof-cid').innerText = p.cid;
+
+            const pinBtn = document.getElementById('p-prof-pin-btn');
+            pinBtn.className = p.isPinned ? "text-starlight-gold hover:text-white text-xl transition" : "text-gray-400 hover:text-starlight-gold text-xl transition";
+
+            // Tab 1 (General Record) Data mapping
+            document.getElementById('p-v-right').innerText = p.right + (p.rightOther ? ` (${p.rightOther})` : '');
+            document.getElementById('p-v-address').innerText = `${p.address.no} ม.${p.address.moo} ถ.${p.address.road || '-'} ต.${p.address.sub} อ.${p.address.dist} จ.${p.address.prov} ${p.address.zip}`;
+            document.getElementById('p-v-pcu').innerText = p.pcu + (p.pcuOther ? ` (${p.pcuOther})` : '');
+            document.getElementById('p-v-insurance').innerText = p.insuranceSent ? 'ส่งเรื่องแล้วเรียบร้อย' : 'ยังไม่จัดส่ง / รอตรวจรับ';
+            document.getElementById('p-v-insurance').className = p.insuranceSent ? 'text-green-400 font-bold' : 'text-starlight-gold font-bold';
+            document.getElementById('p-v-disease').innerText = p.disease + (p.diseaseOther ? ` (${p.diseaseOther})` : '');
+            document.getElementById('p-v-diagnosis').innerText = p.diagnosis;
+            document.getElementById('p-v-pps').innerText = `${p.pps}%`;
+            document.getElementById('p-v-udx').innerText = p.udx && p.udx.length > 0 ? p.udx.join(', ') : 'ไม่มี';
+
+            // Caregiver/contacts mapping
+            const contactsBody = document.getElementById('p-v-contacts');
+            contactsBody.innerHTML = '';
+            p.contacts.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5';
+                tr.innerHTML = `<td class="p-2 text-white font-medium">${c.name}</td><td class="p-2 text-gray-400">${c.relation}</td><td class="p-2 text-starlight-cyan">${c.phone}</td><td class="p-2 text-green-400">${c.line || '-'}</td>`;
+                contactsBody.appendChild(tr);
+            });
+
+            // Discharge display check
+            const dcBlock = document.getElementById('discharge-summary-block');
+            if(p.status === 'Discharged' || p.status === 'Death' || p.status === 'Referred') {
+                dcBlock.classList.remove('hidden');
+                document.getElementById('p-v-dc-date').innerText = p.dischargeInfo?.date || '-';
+                document.getElementById('p-v-dc-status').innerText = p.dischargeInfo?.status || '-';
+                document.getElementById('p-v-dc-note').innerText = p.dischargeInfo?.note || '-';
+            } else {
+                dcBlock.classList.add('hidden');
+            }
+
+            // Tab 2 (Daily records) render
+            renderDailyLogsList(p);
+
+            // Tab 3 (ACP Timeline) render
+            renderPatientACPTimeline(p);
+
+            // Default tab
+            switchProfileTab('general');
+            switchView('patient-profile');
+        }
+
+        // Render Vitals & Symptom record list
+        function renderDailyLogsList(p) {
+            const list = document.getElementById('p-v-daily-list');
+            list.innerHTML = '';
+            p.dailyRecords.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5';
+                tr.innerHTML = `
+                    <td class="p-2 text-starlight-cyan">${r.date}</td>
+                    <td class="p-2">${r.bp || '-'}</td>
+                    <td class="p-2">${r.hr || '-'}</td>
+                    <td class="p-2">${r.spo2 || '-'}%</td>
+                    <td class="p-2 text-center text-[#FF4C4C] font-bold">${r.pain}</td>
+                    <td class="p-2 text-center text-starlight-cyan font-bold">${r.sob || '0'}</td>
+                    <td class="p-2 text-center text-starlight-gold font-bold">${r.wellbeing || '0'}</td>
+                    <td class="p-2 text-gray-400">${r.note || '-'}</td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // Render ACP summary details & vertical history timeline
+        function renderPatientACPTimeline(p) {
+            const summary = document.getElementById('p-v-acp-summary');
+            summary.innerHTML = `
+                <div class="bg-space-950/40 p-4 rounded-lg border border-white/5 space-y-2">
+                    <p class="text-sm"><span class="text-gray-500 font-medium">เจตจำนงล่าสุด:</span> <span class="text-starlight-gold font-extrabold text-lg">${p.acpLogs[p.acpLogs.length-1]?.goal || 'ไม่ได้กำหนด'}</span></p>
+                    <p class="text-sm"><span class="text-gray-500 font-medium">งดปั๊มหัวใจ (CPR):</span> <span class="${p.acpLogs[p.acpLogs.length-1]?.cpr ? 'text-red-400 font-bold' : 'text-green-400'}">${p.acpLogs[p.acpLogs.length-1]?.cpr ? 'No CPR' : 'ต้องการ CPR'}</span></p>
+                    <p class="text-sm"><span class="text-gray-500 font-medium">งดใส่ท่อช่วยหายใจ:</span> <span class="${p.acpLogs[p.acpLogs.length-1]?.tube ? 'text-red-400 font-bold' : 'text-green-400'}">${p.acpLogs[p.acpLogs.length-1]?.tube ? 'No Intubation' : 'ต้องการใส่ท่อช่วยหายใจ'}</span></p>
+                    <p class="text-sm mt-3 border-t border-white/10 pt-2"><span class="text-gray-500 font-medium">ข้อกำหนดอื่น ๆ :</span> <span class="text-gray-300 block italic">${p.acp}</span></p>
+                </div>
+            `;
+
+            const timeline = document.getElementById('p-v-acp-timeline-list');
+            timeline.innerHTML = '';
+            p.acpLogs.forEach(log => {
+                const item = document.createElement('div');
+                item.className = 'relative pl-6 pb-2';
+                item.innerHTML = `
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-starlight-cyan shadow-[0_0_10px_#66FCF1]"></div>
+                    <div class="text-xs text-starlight-cyan font-bold mb-1">${log.date}</div>
+                    <div class="bg-space-850 p-4 rounded-lg border border-white/5">
+                        <h4 class="text-white font-medium mb-1">ปรับเป้าหมายเป็น: <span class="text-starlight-gold">${log.goal}</span></h4>
+                        <p class="text-xs text-gray-400">หัตถการยื้อชีพ: ${log.cpr ? '<span class="text-[#FF4C4C] font-semibold">No CPR</span>' : 'ต้องการ CPR'}, ${log.tube ? '<span class="text-[#FF4C4C] font-semibold">No Intubation</span>' : 'ต้องการใส่ท่อ'}</p>
+                        <p class="text-sm text-gray-300 mt-2">${log.note || 'ไม่มีระบุบันทึกรายละเอียดเพิ่มเติม'}</p>
+                        <p class="text-[10px] text-gray-500 text-right mt-1">- ${log.author}</p>
+                    </div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        // Patient Vitals Trend Line Chart
+        let trendPainChartInstance = null;
+        let trendVitalsChartInstance = null;
+
+        function renderSpecificPatientCharts() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const dates = p.dailyRecords.map(r => r.date);
+            const pains = p.dailyRecords.map(r => r.pain);
+            const spo2s = p.dailyRecords.map(r => r.spo2);
+            const pulses = p.dailyRecords.map(r => r.hr);
+
+            // Destroy previous instances to avoid rendering issues
+            if(trendPainChartInstance) trendPainChartInstance.destroy();
+            if(trendVitalsChartInstance) trendVitalsChartInstance.destroy();
+
+            const ctxPain = document.getElementById('patPainTrend').getContext('2d');
+            trendPainChartInstance = new Chart(ctxPain, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        { label: 'Pain Score', data: pains, borderColor: '#FF4C4C', backgroundColor: 'rgba(255,76,76,0.1)', fill: true, tension: 0.3 },
+                        { label: 'SpO2 (%)', data: spo2s, borderColor: '#66FCF1', backgroundColor: 'transparent', tension: 0.3 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+            });
+
+            const ctxVitals = document.getElementById('patVitalsTrend').getContext('2d');
+            trendVitalsChartInstance = new Chart(ctxVitals, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        { label: 'Pulse Rate (bpm)', data: pulses, borderColor: '#F4D03F', tension: 0.3, fill: false }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // Add daily vital check
+        function handlePatientDailySubmit(e) {
+            e.preventDefault();
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const newRec = {
+                date: document.getElementById('rec-date').value,
+                bp: document.getElementById('rec-bp').value,
+                hr: parseInt(document.getElementById('rec-pulse').value) || 0,
+                spo2: parseInt(document.getElementById('rec-spo2').value) || 0,
+                pain: parseInt(document.getElementById('rec-esas-pain').value) || 0,
+                sob: parseInt(document.getElementById('rec-esas-sob').value) || 0,
+                wellbeing: parseInt(document.getElementById('rec-esas-wellbeing').value) || 0,
+                note: document.getElementById('rec-note').value
+            };
+
+            p.dailyRecords.push(newRec);
+            showToast('บันทึกสัญญาณชีพและอาการประจำวันเรียบร้อย');
+            renderDailyLogsList(p);
+            renderSpecificPatientCharts();
+            e.target.reset();
+        }
+
+        // ACP Log Update
+        function handlePatientACPLogSubmit(e) {
+            e.preventDefault();
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const newLog = {
+                date: document.getElementById('acp-log-date').value,
+                goal: document.getElementById('acp-log-goal').value,
+                cpr: document.getElementById('acp-log-cpr').checked,
+                tube: document.getElementById('acp-log-tube').checked,
+                note: document.getElementById('acp-log-note').value,
+                author: 'นพ.ยตนา มาพันธ์สุ'
+            };
+
+            p.acpLogs.push(newLog);
+            showToast('อัปเดต Timeline ACP สำเร็จ');
+            renderPatientACPTimeline(p);
+            e.target.reset();
+        }
+
+        // Toggle input display
+        function toggleInput(selectId, inputId, valueTrigger) {
             const select = document.getElementById(selectId);
-            const container = document.getElementById(inputId + '-container');
+            const inputContainer = document.getElementById(`${inputId}-container`);
             const input = document.getElementById(inputId);
             
-            if (select.value === triggerValue) {
-                container.classList.remove('hidden');
+            if(select.value === valueTrigger) {
+                inputContainer.classList.remove('hidden');
                 input.setAttribute('required', 'true');
             } else {
-                container.classList.add('hidden');
+                inputContainer.classList.add('hidden');
                 input.removeAttribute('required');
                 input.value = '';
             }
         }
 
-        function addUdx() {
-            const input = document.getElementById('udx-input');
-            const list = document.getElementById('udx-list');
-            if(input.value.trim()) {
-                const li = document.createElement('li');
-                li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/10';
-                li.innerHTML = `<span><i class="fa-solid fa-virus text-gray-500 mr-2"></i> ${input.value}</span><button type="button" onclick="this.parentElement.remove()" class="text-gray-500 hover:text-red-400"><i class="fa-solid fa-times"></i></button>`;
-                list.appendChild(li);
-                input.value = '';
-            }
+        // Add/Remove dynamic items in registration list
+        function addRegisterUdxItem() {
+            const input = document.getElementById('reg-udx-input');
+            const list = document.getElementById('reg-udx-list');
+            if(input.value.trim() === '') return;
+
+            const val = input.value.trim();
+            regUdxList.push(val);
+
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
+            li.innerHTML = `<span>${val}</span><button type="button" onclick="removeRegUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
+            list.appendChild(li);
+            input.value = '';
         }
 
-        function addStatusHistory() {
-            const status = document.getElementById('status-select').value;
-            const note = document.getElementById('status-note').value;
-            const list = document.getElementById('status-history-list');
-            const d = new Date();
-            const dateStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
-            
-            let color = status === 'Active' ? 'text-green-400 bg-green-500/20' : (status === 'Death' ? 'text-red-400 bg-red-500/20' : 'text-pink-400 bg-pink-500/20');
-
-            const tr = document.createElement('tr');
-            tr.className = 'border-b border-white/5 hover:bg-white/5';
-            tr.innerHTML = `<td class="p-2 text-gray-300">${dateStr}</td><td class="p-2"><span class="${color} px-2 py-1 rounded text-xs">${status}</span></td><td class="p-2 text-gray-400">${note||'-'}</td><td class="p-2 text-right"><button type="button" onclick="this.closest('tr').remove()" class="text-gray-500 hover:text-red-400"><i class="fa-solid fa-trash"></i></button></td>`;
-            list.insertBefore(tr, list.firstChild);
-            document.getElementById('status-note').value = '';
+        function removeRegUdx(el, val) {
+            regUdxList = regUdxList.filter(item => item !== val);
+            el.closest('li').remove();
         }
 
-        function addContact() {
-            const list = document.getElementById('contact-list');
+        let contactRowId = 1;
+        function addRegisterContactRow() {
+            const wrapper = document.getElementById('reg-contact-wrapper');
             const div = document.createElement('div');
-            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-3 bg-space-800/60 p-3 rounded border border-white/5 relative group mt-2';
-            div.innerHTML = `<button type="button" onclick="this.parentElement.remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition"><i class="fa-solid fa-times text-[10px]"></i></button>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-sm" placeholder="ชื่อ-นามสกุล ญาติ"></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-sm" placeholder="ความสัมพันธ์"></div>
-                <div><input type="tel" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan" placeholder="เบอร์โทร"></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-sm text-green-400" placeholder="Line ID"></div>`;
-            list.appendChild(div);
+            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
+            div.innerHTML = `
+                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-rel" placeholder="ความสัมพันธ์" required></div>
+                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs reg-contact-phone" placeholder="เบอร์โทร" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-line" placeholder="Line ID (ถ้ามี)"></div>
+            `;
+            wrapper.appendChild(div);
         }
 
-        // --- SUBMIT & TOAST ---
-        function handleFormSubmit(event, name) {
-            event.preventDefault();
-            const toast = document.getElementById("toast");
-            toast.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> บันทึกข้อมูล ${name} สำเร็จ!`;
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-            event.target.reset();
+        function openRegisterForm() {
+            regUdxList = [];
+            document.getElementById('reg-udx-list').innerHTML = '';
+            const wrapper = document.getElementById('reg-contact-wrapper');
+            wrapper.innerHTML = '';
+            contactRowId = 1;
+            addRegisterContactRow(); // default row
+            switchView('patient-register');
         }
 
-        // --- EXPORT DATA (SheetJS) ---
-        function exportData(format, scope) {
-            const toast = document.getElementById("toast");
-            toast.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลัง Export ${format.toUpperCase()}...`;
-            toast.className = "show";
+        // Submit newly created patient to local array
+        function handlePatientRegistrationSubmit(e) {
+            e.preventDefault();
             
-            setTimeout(() => {
-                if(format === 'excel') {
-                    // Create dummy data for Excel using SheetJS
-                    const data = [
-                        ["ลำดับ", "HN", "ชื่อ-นามสกุล", "อายุ", "รหัสบัตรประชาชน", "สิทธิ์การรักษา", "กลุ่มโรค", "รพ.สต. รับผิดชอบ", "สถานะ"],
-                        [1, "1234567", "นาย สมหมาย ใจดี", 68, "1234567890123", "UC ผู้สูงอายุ", "Cancer", "PCU ทับคล้อ", "Active"],
-                        [2, "9876543", "นาง สมศรี รักสงบ", 75, "9876543210987", "กรมบัญชีกลาง", "ESRD", "รพ.สต. เขาทราย", "Admit"]
-                    ];
-                    const ws = XLSX.utils.aoa_to_sheet(data);
-                    const wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, ws, "Patient_Data");
-                    XLSX.writeFile(wb, "Palliative_Patients.xlsx");
-                } 
-                else if (format === 'pdf') {
-                    // Use Browser Print to PDF for simplicity and layout preservation in one-file setup
-                    window.print();
+            const hn = document.getElementById('reg-hn').value;
+            if(patients.some(p => p.hn === hn)) {
+                showToast('HN นี้ถูกใช้ลงทะเบียนแล้วในระบบประคับประคอง');
+                return;
+            }
+
+            // Extract contact rows
+            const contacts = [];
+            const contactNames = document.querySelectorAll('.reg-contact-name');
+            const contactRels = document.querySelectorAll('.reg-contact-rel');
+            const contactPhones = document.querySelectorAll('.reg-contact-phone');
+            const contactLines = document.querySelectorAll('.reg-contact-line');
+
+            for(let i=0; i<contactNames.length; i++) {
+                contacts.push({
+                    name: contactNames[i].value,
+                    relation: contactRels[i].value,
+                    phone: contactPhones[i].value,
+                    line: contactLines[i].value
+                });
+            }
+
+            const newPatient = {
+                id: patients.length + 1,
+                name: document.getElementById('reg-name').value,
+                age: parseInt(document.getElementById('reg-age').value),
+                cid: document.getElementById('reg-cid').value,
+                hn: hn,
+                right: document.getElementById('reg-right').value,
+                rightOther: document.getElementById('reg-right-other').value,
+                address: {
+                    no: document.getElementById('reg-addr-no').value,
+                    moo: document.getElementById('reg-addr-moo').value,
+                    road: document.getElementById('reg-addr-road').value,
+                    sub: document.getElementById('reg-addr-sub').value,
+                    dist: document.getElementById('reg-addr-dist').value,
+                    prov: document.getElementById('reg-addr-prov').value,
+                    zip: document.getElementById('reg-addr-zip').value
+                },
+                pcu: document.getElementById('reg-pcu').value,
+                pcuOther: document.getElementById('reg-pcu-other').value,
+                disease: document.getElementById('reg-disease').value,
+                diseaseOther: document.getElementById('reg-disease-other').value,
+                pps: parseInt(document.getElementById('reg-pps').value),
+                diagnosis: document.getElementById('reg-diagnosis').value,
+                udx: [...regUdxList],
+                status: 'Active',
+                isPinned: false,
+                insuranceSent: document.getElementById('reg-insurance').checked,
+                acp: document.getElementById('reg-acp').value,
+                statusLogs: [{ date: new Date().toISOString().split('T')[0], status: 'Active', note: 'ลงทะเบียนผู้ป่วยระยะประคับประคองสำเร็จ' }],
+                acpLogs: [{ date: new Date().toISOString().split('T')[0], goal: 'Comfort Care', cpr: true, tube: true, note: 'บันทึกความประสงค์เบื้องต้น', author: 'นพ.ยตนา มาพันธ์สุ' }],
+                contacts: contacts,
+                dailyRecords: [
+                    { date: new Date().toISOString().split('T')[0], bp: '120/80', hr: 80, rr: 20, temp: 36.5, spo2: 98, pain: 0, tiredness: 0, drowsiness: 0, sob: 0, wellbeing: 0, note: 'บันทึกแรกจากการขึ้นทะเบียนประวัติ' }
+                ],
+                dischargeInfo: null
+            };
+
+            patients.push(newPatient);
+            showToast('ลงทะเบียนประวัติผู้ป่วยเสร็จสมบูรณ์');
+            switchView('patient-record');
+        }
+
+        // Edit Patient logic
+        function openEditForm() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            document.getElementById('edit-hn').value = p.hn;
+            document.getElementById('edit-cid').value = p.cid;
+            document.getElementById('edit-right').value = p.right;
+            if(p.right === 'อื่นๆ') {
+                document.getElementById('edit-right-other-container').classList.remove('hidden');
+                document.getElementById('edit-right-other').value = p.rightOther;
+            } else {
+                document.getElementById('edit-right-other-container').classList.add('hidden');
+            }
+
+            document.getElementById('edit-name').value = p.name;
+            document.getElementById('edit-age').value = p.age;
+
+            document.getElementById('edit-addr-no').value = p.address.no;
+            document.getElementById('edit-addr-moo').value = p.address.moo;
+            document.getElementById('edit-addr-road').value = p.address.road;
+            document.getElementById('edit-addr-sub').value = p.address.sub;
+            document.getElementById('edit-addr-dist').value = p.address.dist;
+            document.getElementById('edit-addr-prov').value = p.address.prov;
+            document.getElementById('edit-addr-zip').value = p.address.zip;
+
+            document.getElementById('edit-pcu').value = p.pcu;
+            if(p.pcu === 'นอกเขต') {
+                document.getElementById('edit-pcu-other-container').classList.remove('hidden');
+                document.getElementById('edit-pcu-other').value = p.pcuOther;
+            } else {
+                document.getElementById('edit-pcu-other-container').classList.add('hidden');
+            }
+
+            document.getElementById('edit-disease').value = p.disease;
+            if(p.disease === 'อื่นๆ') {
+                document.getElementById('edit-disease-other-container').classList.remove('hidden');
+                document.getElementById('edit-disease-other').value = p.diseaseOther;
+            } else {
+                document.getElementById('edit-disease-other-container').classList.add('hidden');
+            }
+
+            document.getElementById('edit-pps').value = p.pps;
+            document.getElementById('edit-diagnosis').value = p.diagnosis;
+
+            // Load Underlying diseases lists
+            editUdxList = [...p.udx];
+            renderEditUdxList();
+
+            // Contacts mapping
+            const wrapper = document.getElementById('edit-contact-wrapper');
+            wrapper.innerHTML = '';
+            p.contacts.forEach((c, index) => {
+                const div = document.createElement('div');
+                div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
+                div.innerHTML = `
+                    <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
+                    <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" value="${c.name}" required></div>
+                    <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-rel" placeholder="ความสัมพันธ์" value="${c.relation}" required></div>
+                    <div><input type="tel" class="glass-input w-full p-2 rounded text-xs edit-contact-phone" placeholder="เบอร์โทร" value="${c.phone}" required></div>
+                    <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-line" placeholder="Line ID" value="${c.line || ''}"></div>
+                `;
+                wrapper.appendChild(div);
+            });
+
+            document.getElementById('edit-insurance').checked = p.insuranceSent;
+            switchView('patient-edit');
+        }
+
+        function renderEditUdxList() {
+            const list = document.getElementById('edit-udx-list');
+            list.innerHTML = '';
+            editUdxList.forEach(val => {
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
+                li.innerHTML = `<span>${val}</span><button type="button" onclick="removeEditUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
+                list.appendChild(li);
+            });
+        }
+
+        function addEditUdxItem() {
+            const input = document.getElementById('edit-udx-input');
+            if(input.value.trim() === '') return;
+            const val = input.value.trim();
+            editUdxList.push(val);
+            renderEditUdxList();
+            input.value = '';
+        }
+
+        function removeEditUdx(el, val) {
+            editUdxList = editUdxList.filter(item => item !== val);
+            el.closest('li').remove();
+        }
+
+        function addEditContactRow() {
+            const wrapper = document.getElementById('edit-contact-wrapper');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
+            div.innerHTML = `
+                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-rel" placeholder="ความสัมพันธ์" required></div>
+                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs edit-contact-phone" placeholder="เบอร์โทร" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-line" placeholder="Line ID"></div>
+            `;
+            wrapper.appendChild(div);
+        }
+
+        function handlePatientEditSubmit(e) {
+            e.preventDefault();
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            // Extract contact rows
+            const contacts = [];
+            const contactNames = document.querySelectorAll('.edit-contact-name');
+            const contactRels = document.querySelectorAll('.edit-contact-rel');
+            const contactPhones = document.querySelectorAll('.edit-contact-phone');
+            const contactLines = document.querySelectorAll('.edit-contact-line');
+
+            for(let i=0; i<contactNames.length; i++) {
+                contacts.push({
+                    name: contactNames[i].value,
+                    relation: contactRels[i].value,
+                    phone: contactPhones[i].value,
+                    line: contactLines[i].value
+                });
+            }
+
+            p.cid = document.getElementById('edit-cid').value;
+            p.right = document.getElementById('edit-right').value;
+            p.rightOther = document.getElementById('edit-right-other').value;
+            p.name = document.getElementById('edit-name').value;
+            p.age = parseInt(document.getElementById('edit-age').value);
+
+            p.address.no = document.getElementById('edit-addr-no').value;
+            p.address.moo = document.getElementById('edit-addr-moo').value;
+            p.address.road = document.getElementById('edit-addr-road').value;
+            p.address.sub = document.getElementById('edit-addr-sub').value;
+            p.address.dist = document.getElementById('edit-addr-dist').value;
+            p.address.prov = document.getElementById('edit-addr-prov').value;
+            p.address.zip = document.getElementById('edit-addr-zip').value;
+
+            p.pcu = document.getElementById('edit-pcu').value;
+            p.pcuOther = document.getElementById('edit-pcu-other').value;
+            p.disease = document.getElementById('edit-disease').value;
+            p.diseaseOther = document.getElementById('edit-disease-other').value;
+            p.pps = parseInt(document.getElementById('edit-pps').value);
+            p.diagnosis = document.getElementById('edit-diagnosis').value;
+
+            p.udx = [...editUdxList];
+            p.contacts = contacts;
+            p.insuranceSent = document.getElementById('edit-insurance').checked;
+
+            showToast('ปรับปรุงข้อมูลประวัติผู้ป่วยเรียบร้อย');
+            openPatientProfile(p.id);
+        }
+
+        // Patient Discharge Controls
+        function openDischargeModal() {
+            document.getElementById('discharge-modal').classList.remove('hidden');
+        }
+
+        function closeDischargeModal() {
+            document.getElementById('discharge-modal').classList.add('hidden');
+        }
+
+        function handlePatientDischarge(e) {
+            e.preventDefault();
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const dcStatus = document.getElementById('dc-status').value;
+            const dcDate = document.getElementById('dc-date').value;
+            const dcNote = document.getElementById('dc-note').value;
+
+            p.status = dcStatus;
+            p.dischargeInfo = {
+                date: dcDate,
+                status: dcStatus === 'Death' ? 'เสียชีวิตอย่างสงบ (Peaceful Death)' : (dcStatus === 'Referred' ? 'ส่งต่อรักษา' : 'อาการคงที่จำหน่ายดูแลต่อที่บ้าน'),
+                note: dcNote,
+                destination: dcStatus === 'Death' ? 'เชิงตะกอน/ฌาปนสถาน' : 'บ้านพักอาศัย'
+            };
+
+            p.statusLogs.push({
+                date: dcDate,
+                status: dcStatus,
+                note: `ทำการ Discharge สรุป: ${dcNote}`
+            });
+
+            closeDischargeModal();
+            showToast(`จำหน่ายคนไข้ HN ${p.hn} ออกจาก Ward เรียบร้อย`);
+            openPatientProfile(p.id);
+            updateDashboard();
+            renderWardGrid();
+        }
+
+        // Comprehensive patient medical file pdf printing
+        function exportSinglePatientPDF() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const printContainer = document.getElementById('print-container');
+            printContainer.innerHTML = `
+                <div class="print-title">โรงพยาบาลทับคล้อ : รายงานสรุปเวชระเบียนผู้ป่วยประคับประคองรอบด้าน</div>
+                
+                <div class="print-card">
+                    <h2>1. ข้อมูลประวัติผู้ป่วย (16 ข้อพื้นฐาน)</h2>
+                    <p><b>ชื่อ-สกุล:</b> ${p.name} | <b>HN:</b> ${p.hn} | <b>อายุ:</b> ${p.age} ปี</p>
+                    <p><b>รหัสประจำตัวประชาชน:</b> ${p.cid}</p>
+                    <p><b>สิทธิ์การรักษา:</b> ${p.right} ${p.rightOther ? `(${p.rightOther})` : ''}</p>
+                    <p><b>ที่อยู่ปัจจุบัน:</b> ${p.address.no} ม.${p.address.moo} ถ.${p.address.road || '-'} ต.${p.address.sub} อ.${p.address.dist} จ.${p.address.prov} ${p.address.zip}</p>
+                    <p><b>พื้นที่ รพ.สต.:</b> ${p.pcu}</p>
+                    <p><b>กลุ่มโรคประคับประคองหลัก:</b> ${p.disease} | <b>PPS Score:</b> ${p.pps}%</p>
+                    <p><b>การวินิจฉัย (Diagnosis):</b> ${p.diagnosis}</p>
+                    <p><b>โรคประจำตัว:</b> ${p.udx.join(', ') || 'ไม่มี'}</p>
+                    <p><b>การส่งเรื่องประกันภัยสุขภาพ รพ.ทับคล้อ:</b> ${p.insuranceSent ? 'เรียบร้อย' : 'ยังไม่ส่ง'}</p>
+                </div>
+
+                <div class="print-card">
+                    <h2>2. ข้อมูลการประเมินอาการและสัญญาณชีพประจำวันล่าสุด</h2>
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 10pt;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid black;">
+                                <th>วัน-เวลา</th>
+                                <th>BP</th>
+                                <th>Pulse</th>
+                                <th>SpO2</th>
+                                <th>Pain</th>
+                                <th>SOB</th>
+                                <th>Wellbeing</th>
+                                <th>หมายเหตุเพิ่มเติม</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${p.dailyRecords.map(r => `
+                                <tr style="border-bottom: 1px solid #ccc;">
+                                    <td>${r.date}</td>
+                                    <td>${r.bp || '-'}</td>
+                                    <td>${r.hr || '-'}</td>
+                                    <td>${r.spo2 || '-'}%</td>
+                                    <td>${r.pain}</td>
+                                    <td>${r.sob || '0'}</td>
+                                    <td>${r.wellbeing || '0'}</td>
+                                    <td>${r.note || '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="print-card">
+                    <h2>3. แผนการดูแลเจตจำนงล่วงหน้า (Advanced Care Plan & Living Will)</h2>
+                    <p><b>แผนการดูแลที่สรุป:</b> ${p.acp || 'ไม่มีข้อมูลเพิ่มเติม'}</p>
+                    <h3>Timeline บันทึกปรับเปลี่ยนเป้าหมายรักษาล่วงหน้า</h3>
+                    <ul style="padding-left: 20px;">
+                        ${p.acpLogs.map(log => `
+                            <li><b>${log.date}:</b> ปรับเป็น ${log.goal} (No CPR: ${log.cpr ? 'ใช่' : 'ไม่ใช่'}, No Intubate: ${log.tube ? 'ใช่' : 'ไม่ใช่'}) - <i>บันทึกโดย ${log.author}</i></li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                ${p.dischargeInfo ? `
+                <div class="print-card" style="border: 2px solid red !important;">
+                    <h2>4. เอกสารสรุปการจำหน่าย (Discharge Summary)</h2>
+                    <p><b>วันที่จำหน่าย:</b> ${p.dischargeInfo.date}</p>
+                    <p><b>สถานะสิ้นสุด:</b> ${p.dischargeInfo.status}</p>
+                    <p><b>หมายเหตุและรายละเอียดเพิ่มเติม:</b> ${p.dischargeInfo.note}</p>
+                </div>
+                ` : ''}
+            `;
+
+            window.print();
+        }
+
+        // Generate full Excel Database with SheetJS
+        function exportAllToExcel() {
+            const data = [
+                ["ID", "HN", "ชื่อ-นามสกุล", "อายุ", "เลขบัตร ปชช.", "สิทธิ์การรักษา", "รพ.สต.ที่ดูแล", "กลุ่มโรคประคับประคอง", "Primary Diagnosis", "PPS Score", "ปักหมุด Focus", "ส่งเรื่องประกันรพ.แล้ว", "เจตจำนงล่วงหน้า", "สถานะเคสล่าสุด"]
+            ];
+
+            patients.forEach(p => {
+                data.push([
+                    p.id,
+                    p.hn,
+                    p.name,
+                    p.age,
+                    p.cid,
+                    p.right + (p.rightOther ? ` (${p.rightOther})` : ''),
+                    p.pcu + (p.pcuOther ? ` (${p.pcuOther})` : ''),
+                    p.disease + (p.diseaseOther ? ` (${p.diseaseOther})` : ''),
+                    p.diagnosis,
+                    p.pps,
+                    p.isPinned ? "ใช่" : "ไม่ใช่",
+                    p.insuranceSent ? "ใช่" : "ไม่ใช่",
+                    p.acp,
+                    p.status
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "PalliativeCareDatabase");
+            XLSX.writeFile(wb, "Starlight_Palliative_Database_Tapkhlo.xlsx");
+            showToast('ดาวน์โหลดฐานข้อมูล Excel สำเร็จ');
+        }
+
+        // Dynamic dashboard metrics processing
+        function updateDashboard() {
+            // Stats counts
+            const total = patients.length;
+            const pinned = patients.filter(p => p.isPinned).length;
+            const active = patients.filter(p => p.status === 'Active' || p.status === 'Admit').length;
+            
+            const sentInsurance = patients.filter(p => p.insuranceSent).length;
+            const insurancePercentage = total > 0 ? Math.round((sentInsurance / total) * 100) : 0;
+
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-pinned').innerText = pinned;
+            document.getElementById('kpi-active').innerText = active;
+            document.getElementById('kpi-insurance').innerText = `${insurancePercentage}%`;
+
+            // Prepare chart data - Diseases
+            const diseases = {};
+            const pcus = {};
+            patients.forEach(p => {
+                diseases[p.disease] = (diseases[p.disease] || 0) + 1;
+                pcus[p.pcu] = (pcus[p.pcu] || 0) + 1;
+            });
+
+            // Update Disease Doughnut Chart
+            if(diseaseChartInstance) diseaseChartInstance.destroy();
+            const ctxDisease = document.getElementById('diseaseChart').getContext('2d');
+            diseaseChartInstance = new Chart(ctxDisease, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(diseases),
+                    datasets: [{
+                        data: Object.values(diseases),
+                        backgroundColor: ['#66FCF1', '#45A29E', '#F4D03F', '#FF4C4C', '#A855F7', '#E2E8F0'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Update PCU bar chart
+            if(pcuChartInstance) pcuChartInstance.destroy();
+            const ctxPcu = document.getElementById('pcuChart').getContext('2d');
+            pcuChartInstance = new Chart(ctxPcu, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(pcus),
+                    datasets: [{
+                        label: 'จำนวนผู้ป่วย',
+                        data: Object.values(pcus),
+                        backgroundColor: '#45A29E',
+                        borderColor: '#66FCF1',
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // Setup starry skies and meteor shower animations
+        function initSpaceBackground() {
+            const starsContainer = document.getElementById('stars-container');
+            const meteorContainer = document.getElementById('meteor-container');
+
+            for (let i = 0; i < 180; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                let size = Math.random() * 2.8 + 0.6;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDuration = (Math.random() * 3.5 + 1.5) + 's';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(star);
+            }
+
+            function createSlantedMeteor() {
+                let meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                // Slanted meteor falls from top left to bottom right diagonally
+                meteor.style.left = (Math.random() * 130 - 30) + 'vw'; 
+                meteor.style.top = (Math.random() * -150 - 50) + 'px';
+                meteor.style.animationDuration = (Math.random() * 1.6 + 0.8) + 's'; 
+                meteorContainer.appendChild(meteor);
+                setTimeout(() => { meteor.remove(); }, 3000);
+            }
+
+            function scheduleNextMeteor() {
+                let batchCount = Math.floor(Math.random() * 2) + 1;
+                for(let i=0; i<batchCount; i++) {
+                    setTimeout(createSlantedMeteor, Math.random() * 400);
                 }
-                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 1000);
-            }, 800);
-        }
-
-        // --- BACKGROUND ANIMATION: STARS & METEORS (Optimized for Diagonal) ---
-        const starsContainer = document.getElementById('stars-container');
-        const meteorContainer = document.getElementById('meteor-container');
-
-        // 1. Generate Twinkling Stars
-        for (let i = 0; i < 200; i++) {
-            let star = document.createElement('div');
-            star.className = 'star';
-            let size = Math.random() * 2.5 + 0.5; // Size 0.5 to 3px
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.animationDuration = (Math.random() * 3 + 1.5) + 's';
-            star.style.animationDelay = Math.random() * 5 + 's';
-            starsContainer.appendChild(star);
-        }
-
-        // 2. Generate Slanted Meteors
-        function createMeteor() {
-            let meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            // Start positions: X can be anywhere from far left (-50vw) to far right (100vw)
-            // Y is always above the screen
-            meteor.style.left = (Math.random() * 150 - 50) + 'vw'; 
-            meteor.style.top = (Math.random() * -200 - 50) + 'px';
-            
-            // Speed of fall
-            meteor.style.animationDuration = (Math.random() * 1.5 + 1) + 's'; 
-            
-            meteorContainer.appendChild(meteor);
-            
-            // Remove from DOM after animation
-            setTimeout(() => { meteor.remove(); }, 2500);
-        }
-
-        // Keep shooting meteors continuously
-        function scheduleNextMeteor() {
-            // Spawn 1-3 meteors at a time for "shower" effect
-            let batch = Math.floor(Math.random() * 3) + 1;
-            for(let i=0; i<batch; i++) {
-                setTimeout(createMeteor, Math.random() * 500);
+                setTimeout(scheduleNextMeteor, Math.random() * 1800 + 1200);
             }
-            // Next wave in 1-2 seconds
-            setTimeout(scheduleNextMeteor, Math.random() * 1500 + 1000);
+            scheduleNextMeteor();
         }
-        scheduleNextMeteor();
 
-        // --- CHART JS INIT ---
         window.onload = function() {
-            Chart.defaults.color = '#a1a1aa';
-            Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
-            if(document.getElementById('patientTypeChart')){
-                new Chart(document.getElementById('patientTypeChart').getContext('2d'), {
-                    type: 'doughnut', data: { labels: ['Home Care', 'OPD', 'IPD'], datasets: [{ data: [67, 42, 15], backgroundColor: ['#F4D03F', '#45A29E', '#ec4899'], borderWidth: 0 }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins:{legend:{position:'bottom'}} }
-                });
-                new Chart(document.getElementById('painTrendChart').getContext('2d'), {
-                    type: 'line', data: { labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'], datasets: [{ label: 'Pain Score', data: [6.5, 5.8, 5.2, 4.5, 3.8, 3.2], borderColor: '#66FCF1', backgroundColor: 'rgba(102, 252, 241, 0.2)', fill: true, tension: 0.4 }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 10 } }, plugins:{legend:{display:false}} }
-                });
-            }
+            initSpaceBackground();
+            updateDashboard();
+            renderWardGrid();
+        }
 
-            // Init ESAS Radar Chart
-            if(document.getElementById('esasChart')) {
-                window.esasChart = new Chart(document.getElementById('esasChart').getContext('2d'), {
-                    type: 'radar',
-                    data: {
-                        labels: ['Pain', 'Tiredness', 'Nausea', 'Depression', 'Anxiety', 'Drowsiness', 'Appetite', 'Wellbeing', 'SOB'],
-                        datasets: [{
-                            label: 'ประเมินล่าสุด',
-                            data: [8, 6, 2, 4, 5, 7, 3, 4, 5],
-                            backgroundColor: 'rgba(244, 208, 63, 0.3)',
-                            borderColor: '#F4D03F',
-                            pointBackgroundColor: '#F4D03F',
-                            pointBorderColor: '#fff',
-                            borderWidth: 2
-                        }, {
-                            label: 'ครั้งก่อนหน้า',
-                            data: [5, 4, 1, 3, 4, 3, 5, 7, 2],
-                            backgroundColor: 'rgba(102, 252, 241, 0.1)',
-                            borderColor: '#66FCF1',
-                            pointBackgroundColor: '#66FCF1',
-                            pointBorderColor: '#fff',
-                            borderDash: [5, 5]
-                        }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        scales: { 
-                            r: { 
-                                angleLines: { color: 'rgba(255,255,255,0.1)' }, 
-                                grid: { color: 'rgba(255,255,255,0.1)' }, 
-                                pointLabels: { color: '#e2e8f0', font: { size: 10, family: 'Kanit' } }, 
-                                ticks: { display: false, max: 10, min: 0 } 
-                            } 
-                        },
-                        plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: {family: 'Kanit'} } } }
-                    }
-                });
-            }
-
-            // Init Vital Signs Line Chart
-            if(document.getElementById('vitalChart')) {
-                window.vitalChart = new Chart(document.getElementById('vitalChart').getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: ['08:00', '12:00', '16:00', '20:00', '00:00', '04:00'],
-                        datasets: [
-                            { label: 'Heart Rate', data: [85, 88, 92, 85, 80, 78], borderColor: '#FF4C4C', backgroundColor: 'rgba(255,76,76,0.1)', fill: true, tension: 0.3 },
-                            { label: 'BP Systolic', data: [120, 118, 125, 110, 105, 100], borderColor: '#66FCF1', backgroundColor: 'transparent', tension: 0.3 }
-                        ]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        scales: { 
-                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a1a1aa' } }, 
-                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a1a1aa' } } 
-                        },
-                        plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: {family: 'Kanit'} } } }
-                    }
-                });
-            }
-        };
     </script>
 </body>
 </html>
