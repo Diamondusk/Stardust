@@ -291,7 +291,7 @@
                     <h3 class="text-4xl font-extrabold text-pink-400 mt-2" id="kpi-active">0</h3>
                 </div>
                 <div class="glass-panel p-6 border-l-4 border-l-green-400">
-                    <p class="text-gray-400 text-sm">ส่งงานประกัน รพ. เรียบร้อย</p>
+                    <p class="text-gray-400 text-sm">อัตราเยี่ยมบ้านผ่านเกณฑ์ (>=6 ครั้ง)</p>
                     <h3 class="text-4xl font-extrabold text-green-400 mt-2" id="kpi-insurance">0%</h3>
                 </div>
             </div>
@@ -398,10 +398,11 @@
             <div class="flex flex-wrap border-b border-white/10 mb-6 bg-space-800/40 rounded-t-lg">
                 <button onclick="switchProfileTab('general')" id="tab-general" class="p-4 flex-1 min-w-[150px] text-center font-bold text-starlight-cyan border-b-2 border-starlight-cyan transition-all"><i class="fa-solid fa-id-card-clip mr-1"></i> 1. ข้อมูลทั่วไป</button>
                 <button onclick="switchProfileTab('daily')" id="tab-daily" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-clipboard-list mr-1"></i> 2. สัญญาณชีพ & ESAS</button>
-                <button onclick="switchProfileTab('morphine')" id="tab-morphine" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-syringe mr-1"></i> 3. บันทึกยา Morphine</button>
-                <button onclick="switchProfileTab('mdnotes')" id="tab-mdnotes" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-users-medical mr-1"></i> 4. บันทึกสหวิชาชีพ</button>
-                <button onclick="switchProfileTab('acp-timeline')" id="tab-acp-timeline" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-timeline-loop mr-1"></i> 5. Timeline ACP</button>
-                <button onclick="switchProfileTab('hospital-history')" id="tab-hospital-history" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-hospital mr-1"></i> 6. ประวัติรักษาต่าง รพ.</button>
+                <button onclick="switchProfileTab('homevisit')" id="tab-homevisit" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-house-medical mr-1"></i> 3. Checklist เยี่ยมบ้าน</button>
+                <button onclick="switchProfileTab('morphine')" id="tab-morphine" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-syringe mr-1"></i> 4. บันทึกยา Morphine</button>
+                <button onclick="switchProfileTab('mdnotes')" id="tab-mdnotes" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-users-medical mr-1"></i> 5. บันทึกสหวิชาชีพ</button>
+                <button onclick="switchProfileTab('acp-timeline')" id="tab-acp-timeline" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-timeline-loop mr-1"></i> 6. Timeline ACP</button>
+                <button onclick="switchProfileTab('hospital-history')" id="tab-hospital-history" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-hospital mr-1"></i> 7. ประวัติรักษาต่าง รพ.</button>
             </div>
 
             <!-- Tab 1: General Info -->
@@ -462,6 +463,14 @@
                         </div>
                         
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">รูปแบบการรักษาบันทึก</label>
+                                <select id="rec-mode" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan font-semibold">
+                                    <option value="OPD">ผู้ป่วยนอก (OPD)</option>
+                                    <option value="IPD">ผู้ป่วยใน (IPD)</option>
+                                    <option value="Visit">เยี่ยมบ้าน (Home Visit)</option>
+                                </select>
+                            </div>
                             <div><label class="block text-xs text-gray-400 mb-1">วันที่ประเมิน</label><input type="date" required id="rec-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
                             <div><label class="block text-xs text-gray-400 mb-1">BP (mmHg)</label><input type="text" id="rec-bp" placeholder="120/80" class="glass-input w-full p-2 rounded text-sm"></div>
                             <div><label class="block text-xs text-gray-400 mb-1">Pulse (bpm)</label><input type="number" id="rec-pulse" placeholder="80" class="glass-input w-full p-2 rounded text-sm"></div>
@@ -539,6 +548,7 @@
                         <table class="w-full text-left text-sm">
                             <thead>
                                 <tr class="text-gray-400 border-b border-white/10">
+                                    <th class="p-2">ประเภท</th>
                                     <th class="p-2">วันที่-เวลา</th>
                                     <th class="p-2">BP (mmHg)</th>
                                     <th class="p-2">Pulse (bpm)</th>
@@ -559,7 +569,26 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Morphine Management -->
+            <!-- Tab 3: Home Visit Checklist -->
+            <div id="prof-sub-homevisit" class="profile-sub-tab space-y-6 hidden">
+                <div class="glass-panel p-6">
+                    <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-starlight-cyan"><i class="fa-solid fa-house-chimney-medical mr-2"></i> บันทึกและ Checklist แผนการเยี่ยมบ้าน (อย่างน้อย 6 ครั้ง)</h3>
+                            <p class="text-xs text-gray-400 mt-1">ผู้ป่วยควรได้รับการดูแลเชิงรุกที่บ้านอย่างสม่ำเสมอครบตามเกณฑ์</p>
+                        </div>
+                        <div id="visit-completion-badge" class="px-4 py-2 rounded-full font-bold text-sm bg-red-500/20 text-red-400 border border-red-500/30">
+                            เยี่ยมบ้านแล้ว 0/6 ครั้ง
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4" id="home-visit-grid">
+                        <!-- Generates 6 visit cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Morphine Management -->
             <div id="prof-sub-morphine" class="profile-sub-tab space-y-6 hidden">
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     <form onsubmit="handleMorphineRecordSubmit(event)" id="morphine-log-form" class="glass-panel p-6">
@@ -593,8 +622,8 @@
                             <div>
                                 <label class="block text-xs text-gray-400 mb-1">ข้อบ่งชี้การรักษา</label>
                                 <select id="mo-indication" class="glass-input w-full p-2 rounded text-sm">
-                                    <option>Palliative care</option>
-                                    <option>Symptomatic Management</option>
+                                    <option value="Palliative care">Palliative care</option>
+                                    <option value="Symptomatic Management">Symptomatic Management</option>
                                 </select>
                             </div>
                             <div><label class="block text-xs text-gray-400 mb-1">ขนาดยาเดี่ยวต่อครั้ง (mg หรือ mcg)</label><input type="number" step="0.01" required id="mo-dose" class="glass-input w-full p-2 rounded text-sm text-white font-bold"></div>
@@ -646,7 +675,7 @@
                 </div>
             </div>
 
-            <!-- Tab 4: MD Notes -->
+            <!-- Tab 5: MD Notes -->
             <div id="prof-sub-mdnotes" class="profile-sub-tab space-y-6 hidden">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                     <div class="xl:col-span-1">
@@ -666,7 +695,15 @@
                                     </select>
                                 </div>
                                 <div><label class="block text-xs text-gray-400 mb-1">ชื่อผู้บันทึก</label><input type="text" required id="md-author" class="glass-input w-full p-2 rounded text-sm"></div>
-                                <div><label class="block text-xs text-gray-400 mb-1">ข้อความบันทึกความก้าวหน้าอาการ (SOAP Note)</label><textarea id="md-content" required rows="6" class="glass-input w-full p-2 rounded text-sm"></textarea></div>
+                                
+                                <div class="bg-space-950/40 p-3 rounded-lg border border-white/5 space-y-3">
+                                    <p class="text-xs text-starlight-cyan font-bold"><i class="fa-solid fa-notes"></i> โครงสร้าง SOAP Note ละเอียด</p>
+                                    <div><label class="block text-[11px] text-gray-400">S (Subjective) - อาการแจ้งเตือนจากคนไข้/ญาติ</label><textarea id="md-s" class="glass-input w-full p-1.5 rounded text-xs" rows="2"></textarea></div>
+                                    <div><label class="block text-[11px] text-gray-400">O (Objective) - สิ่งตรวจพบ ผลทดสอบ Vital Signs</label><textarea id="md-o" class="glass-input w-full p-1.5 rounded text-xs" rows="2"></textarea></div>
+                                    <div><label class="block text-[11px] text-gray-400">A (Assessment) - วิเคราะห์ วินิจฉัย พยาธิสภาพ</label><textarea id="md-a" class="glass-input w-full p-1.5 rounded text-xs" rows="2"></textarea></div>
+                                    <div><label class="block text-[11px] text-gray-400">P (Plan) - แผนการตรวจติดตามและการจ่ายยารักษา</label><textarea id="md-p" class="glass-input w-full p-1.5 rounded text-xs" rows="2"></textarea></div>
+                                </div>
+                                
                                 <button type="submit" id="md-submit-btn" class="w-full bg-starlight-cyan text-space-950 font-bold py-2.5 rounded-lg hover:bg-white transition"><i class="fa-solid fa-save mr-2"></i> ลงบันทึกเวชระเบียนย่อย</button>
                             </div>
                         </form>
@@ -680,7 +717,7 @@
                 </div>
             </div>
 
-            <!-- Tab 5: ACP Timeline -->
+            <!-- Tab 6: ACP Timeline -->
             <div id="prof-sub-acp-timeline" class="profile-sub-tab space-y-6 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-panel p-6">
@@ -689,20 +726,36 @@
                     </div>
                     <form onsubmit="handlePatientACPLogSubmit(event)" class="glass-panel p-6">
                         <h3 class="text-xl font-bold text-starlight-gold mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-clock-rotate-left mr-2"></i> ปรับเป้าหมายการรักษาล่วงหน้า (Update ACP)</h3>
-                        <div class="mb-4"><label class="block text-xs text-gray-400 mb-1">วันที่ปรับเป้าหมาย</label><input type="date" required id="acp-log-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
-                        <div class="mb-4">
-                            <label class="block text-xs text-gray-400 mb-1">เป้าหมายหลัก (Goal of Care)</label>
-                            <select id="acp-log-goal" class="glass-input w-full p-2 rounded text-sm">
-                                <option value="Comfort Care">Comfort Care (มุ่งเน้นความสุขสบายสูงสุด ปฏิเสธการรักษายืดชีพ)</option>
-                                <option value="Palliative Care">Palliative Care (ประคับประคองตามแนวทางและขั้นตอน)</option>
-                                <option value="Life-prolonging">Life-prolonging (ยืดชีวิตตามความประสงค์ญาติ)</option>
-                            </select>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-xs text-gray-400 mb-1">วันที่ปรับเป้าหมาย</label><input type="date" required id="acp-log-date" class="glass-input w-full p-2 rounded text-sm text-starlight-cyan"></div>
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">เป้าหมายหลัก (Goal of Care)</label>
+                                <select id="acp-log-goal" class="glass-input w-full p-2 rounded text-sm">
+                                    <option value="Comfort Care">Comfort Care (มุ่งเน้นความสุขสบายสูงสุด ปฏิเสธการรักษายืดชีพ)</option>
+                                    <option value="Palliative Care">Palliative Care (ประคับประคองตามแนวทางและขั้นตอน)</option>
+                                    <option value="Life-prolonging">Life-prolonging (ยืดชีวิตตามความประสงค์ญาติ)</option>
+                                </select>
+                            </div>
                         </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 bg-white/5 p-4 rounded border border-white/5">
+                            <div>
+                                <label class="block text-xs text-gray-400 mb-1">สถานที่พึงประสงค์สำหรับวาระสุดท้าย</label>
+                                <select id="acp-log-death-place" class="glass-input w-full p-2 rounded text-sm text-white">
+                                    <option value="Home">บ้านพักตนเอง / ที่อยู่ปัจจุบัน</option>
+                                    <option value="Hospital-Palliative">หอผู้ป่วยประคับประคอง (รพ.ทับคล้อ)</option>
+                                    <option value="Hospital-Refer">โรงพยาบาลระดับจังหวัด (รพ.พิจิตร)</option>
+                                    <option value="No-Preference">ไม่ได้เลือก/แล้วแต่ญาติสายตรง</option>
+                                </select>
+                            </div>
+                            <div><label class="block text-xs text-gray-400 mb-1">ผู้นำตัดสินใจแทน (Surrogate Decision Maker)</label><input type="text" id="acp-log-surrogate" placeholder="ชื่อ-สกุล และความสัมพันธ์" class="glass-input w-full p-2 rounded text-sm"></div>
+                        </div>
+
                         <div class="space-y-2 mb-4 bg-white/5 p-3 rounded">
-                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-cpr" class="space-radio"> <span>No CPR</span></label>
-                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-tube" class="space-radio"> <span>No Intubation</span></label>
+                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-cpr" class="space-radio"> <span>No CPR (งดนวดหัวใจกระตุ้นชีพ)</span></label>
+                            <label class="flex items-center space-x-2 text-sm"><input type="checkbox" id="acp-log-tube" class="space-radio"> <span>No Intubation (งดการสอดท่อช่วยหายใจ)</span></label>
                         </div>
-                        <div class="mb-4"><label class="block text-xs text-gray-400 mb-1">หมายเหตุและผู้ร่วมตัดสินใจ</label><textarea id="acp-log-note" rows="2" class="glass-input w-full p-2 rounded text-sm"></textarea></div>
+                        <div class="mb-4"><label class="block text-xs text-gray-400 mb-1">หมายเหตุและเป้าหมายทางจิตวิญญาณ/ศาสนา</label><textarea id="acp-log-note" rows="2" class="glass-input w-full p-2 rounded text-sm" placeholder="เช่น ขอฟังเทศน์ช่วงสุดท้าย, งดยาทรมาน..."></textarea></div>
                         <button type="submit" class="w-full bg-starlight-cyan text-space-950 font-bold py-2 rounded-lg hover:bg-white transition"><i class="fa-solid fa-save mr-2"></i> อัปเดต ACP Log</button>
                     </form>
                 </div>
@@ -712,7 +765,7 @@
                 </div>
             </div>
 
-            <!-- Tab 6: Hospital History -->
+            <!-- Tab 7: Hospital History -->
             <div id="prof-sub-hospital-history" class="profile-sub-tab space-y-6 hidden">
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                     <div class="xl:col-span-1">
@@ -970,7 +1023,7 @@
                 <div class="flex flex-wrap border-b border-white/10 bg-space-950/40 rounded-t-lg">
                     <button onclick="switchDocTab('livingwill')" id="btn-doc-livingwill" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-starlight-cyan border-b-2 border-starlight-cyan bg-white/5 transition"><i class="fa-solid fa-signature mr-1"></i> Living Will</button>
                     <button onclick="switchDocTab('morphine')" id="btn-doc-morphine" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-syringe mr-1"></i> บันทึก MO PRN</button>
-                    <button onclick="switchDocTab('narcotic2')" id="btn-doc-narcotic2" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-file-prescription mr-1"></i> ยาเสพติด ป.2 (Morphine/Fentanyl)</button>
+                    <button onclick="switchDocTab('narcotic2')" id="btn-doc-narcotic2" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-file-prescription mr-1"></i> ยาเสพติด ป.2 (Morphine)</button>
                     <button onclick="switchDocTab('syringe')" id="btn-doc-syringe" class="doc-tab-btn flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition"><i class="fa-solid fa-pump-medical mr-1"></i> Syringe Driver</button>
                 </div>
 
@@ -996,7 +1049,7 @@
                         </div>
                     </div>
 
-                    <!-- Narcotic Category 2 Approval (With duplicated medication item) -->
+                    <!-- Narcotic Category 2 Approval -->
                     <div id="doc-sub-narcotic2" class="doc-sub-content hidden">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-bold text-pink-400"><i class="fa-solid fa-file-prescription mr-2"></i> แบบคำขออนุมัติสั่งใช้ยาเสพติดให้โทษประเภทที่ 2</h3>
@@ -1013,7 +1066,6 @@
                                 <div><label class="block text-xs text-gray-400 mb-1">ชื่อแพทย์ผู้สั่งการรักษา</label><input type="text" id="narc2-doc-name" value="นพ.ยตนา มาพันธ์สุ" class="glass-input w-full p-2.5 rounded text-sm"></div>
                                 <div><label class="block text-xs text-gray-400 mb-1">เลขที่ใบประกอบวิชาชีพ (เลข ว.)</label><input type="text" id="narc2-doc-license" value="67650" class="glass-input w-full p-2.5 rounded text-sm"></div>
                             </div>
-                            
                             <div class="bg-space-950/40 p-4 rounded-lg border border-white/5 space-y-3">
                                 <h4 class="text-xs font-bold text-starlight-gold">ตรวจสอบข้อมูลผู้ป่วยสำหรับการเบิกจ่าย</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -1029,63 +1081,30 @@
                                 <input type="date" id="narc2-date" class="glass-input w-36 p-2.5 rounded text-sm text-starlight-cyan">
                             </div>
 
-                            <!-- MEDICATION ITEM 1 -->
-                            <div class="p-4 bg-white/5 rounded-lg border border-pink-400/20 space-y-4">
-                                <h4 class="text-sm font-bold text-pink-400"><i class="fa-solid fa-pills mr-1"></i> รายการยาเสพติด ป.2 (รายการที่ 1)</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-xs text-gray-400 mb-1">ชื่อรายการยา</label>
-                                        <select id="narc2-med-name" class="glass-input w-full p-2.5 rounded text-sm text-pink-400 font-semibold">
-                                            <option>Morphine injection 10 mg/ml</option>
-                                            <option>Morphine syrup 2 mg/ml (60ml)</option>
-                                            <option>MOIR (10)</option>
-                                            <option>MST (10)</option>
-                                            <option>Kapanol (20)</option>
-                                            <option>Fentanyl patch (25mcg/hr)</option>
-                                            <option>Fentanyl patch (50mcg/hr)</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs text-gray-400 mb-1">ข้อบ่งชี้ (Indication)</label>
-                                        <select id="narc2-indication" class="glass-input w-full p-2.5 rounded text-sm">
-                                            <option>Palliative care</option><option>Symptomatic Management</option>
-                                        </select>
-                                    </div>
-                                    <div><label class="block text-xs text-gray-400 mb-1">ขนาดยาเดี่ยวต่อครั้ง (mg/mcg)</label><input type="number" step="0.01" id="narc2-dose-detail" class="glass-input w-full p-2.5 rounded text-sm text-white font-bold" value="2.5"></div>
-                                    <div class="md:col-span-2"><label class="block text-xs text-gray-400 mb-1">วิธีการบริหารและสั่งใช้ยาอย่างละเอียด (Sig.)</label><input type="text" id="narc2-sig" value="ฉีดเข้าชั้นใต้ผิวหนัง 2.5 mg ทุก ๆ 4 ชั่วโมง เวลาปวดรุนแรง" class="glass-input w-full p-2.5 rounded text-sm"></div>
-                                    <div><label class="block text-xs text-gray-400 mb-1">จำนวนที่เบิกจ่าย (เช่น 10 แอมพูล / 20 เม็ด)</label><input type="text" id="narc2-quantity" placeholder="เช่น 10 แอมพูล" class="glass-input w-full p-2.5 rounded text-sm" value="10 แอมพูล"></div>
-                                </div>
-                            </div>
-
-                            <!-- MEDICATION ITEM 2 (Identical details layout) -->
-                            <div class="p-4 bg-white/5 rounded-lg border border-pink-400/20 space-y-4">
+                            <!-- MEDICATION LIST CONTAINER -->
+                            <div class="bg-white/5 p-4 rounded-lg border border-white/10 space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <h4 class="text-sm font-bold text-pink-400"><i class="fa-solid fa-pills mr-1"></i> รายการยาเสพติด ป.2 (รายการที่ 2)</h4>
-                                    <span class="text-xs text-gray-500">ใส่เว้นว่างหากมีเบิกรายการเดียว</span>
+                                    <h4 class="text-sm font-bold text-starlight-cyan">รายการยาเสพติด ป.2 ในแผนคำขอเบิก</h4>
+                                    <button type="button" onclick="openAddNarc2MedModal()" class="bg-starlight-cyan text-space-950 text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-white transition">
+                                        <i class="fa-solid fa-plus-circle"></i> เพิ่มรายการยาเสพติด
+                                    </button>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-xs text-gray-400 mb-1">ชื่อรายการยา</label>
-                                        <select id="narc2-med-name-2" class="glass-input w-full p-2.5 rounded text-sm text-pink-400 font-semibold">
-                                            <option value="">-- ไม่มีการเบิกรายการที่ 2 --</option>
-                                            <option>Morphine injection 10 mg/ml</option>
-                                            <option>Morphine syrup 2 mg/ml (60ml)</option>
-                                            <option>MOIR (10)</option>
-                                            <option>MST (10)</option>
-                                            <option>Kapanol (20)</option>
-                                            <option>Fentanyl patch (25mcg/hr)</option>
-                                            <option>Fentanyl patch (50mcg/hr)</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs text-gray-400 mb-1">ข้อบ่งชี้ (Indication)</label>
-                                        <select id="narc2-indication-2" class="glass-input w-full p-2.5 rounded text-sm">
-                                            <option>Palliative care</option><option>Symptomatic Management</option>
-                                        </select>
-                                    </div>
-                                    <div><label class="block text-xs text-gray-400 mb-1">ขนาดยาเดี่ยวต่อครั้ง (mg/mcg)</label><input type="number" step="0.01" id="narc2-dose-detail-2" class="glass-input w-full p-2.5 rounded text-sm text-white font-bold" placeholder="เช่น 10"></div>
-                                    <div class="md:col-span-2"><label class="block text-xs text-gray-400 mb-1">วิธีการบริหารและสั่งใช้ยาอย่างละเอียด (Sig.)</label><input type="text" id="narc2-sig-2" placeholder="เช่น รับประทานครั้งละ 1 เม็ด ทุกๆ 12 ชั่วโมง เวลา 8.00 น. และ 20.00 น." class="glass-input w-full p-2.5 rounded text-sm"></div>
-                                    <div><label class="block text-xs text-gray-400 mb-1">จำนวนที่เบิกจ่าย</label><input type="text" id="narc2-quantity-2" placeholder="เช่น 20 เม็ด" class="glass-input w-full p-2.5 rounded text-sm"></div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-left text-xs">
+                                        <thead>
+                                            <tr class="text-gray-400 border-b border-white/10">
+                                                <th class="p-2">ชื่อยา</th>
+                                                <th class="p-2">Indication</th>
+                                                <th class="p-2">ขนาดยาเดี่ยว</th>
+                                                <th class="p-2">วิธีบริหาร (Sig.)</th>
+                                                <th class="p-2">จำนวนสั่งจ่าย</th>
+                                                <th class="p-2 text-center">จัดการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="narc2-meds-list-body">
+                                            <tr><td colspan="6" class="p-4 text-center text-gray-500">กรุณากดเพิ่มรายการยาอย่างน้อย 1 รายการเพื่อพิมพ์ออกเอกสาร</td></tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -1103,6 +1122,43 @@
         </section>
 
     </main>
+
+    <!-- Modal for Adding Medication to Narcotic 2 Form -->
+    <div id="narc2-add-med-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden no-print">
+        <div class="glass-panel p-6 max-w-lg w-full m-4 border border-pink-500/40 bg-space-950">
+            <h3 class="text-xl font-bold text-pink-400 mb-4"><i class="fa-solid fa-pills mr-2"></i> เพิ่มรายการยาเสพติดประเภทที่ 2</h3>
+            <form onsubmit="handleNarc2AddMedSubmit(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">รายการยาเสพติดให้โทษ ป.2</label>
+                        <select id="narc-modal-med-name" class="glass-input w-full p-2 rounded text-xs text-pink-400 font-bold">
+                            <option>Morphine injection 10 mg/ml</option>
+                            <option>Morphine syrup 2 mg/ml (60ml)</option>
+                            <option>MOIR (10)</option>
+                            <option>MST (10)</option>
+                            <option>Kapanol (20)</option>
+                            <option>Fentanyl patch (25mcg/hr)</option>
+                            <option>Fentanyl patch (50mcg/hr)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Indication</label>
+                        <select id="narc-modal-indication" class="glass-input w-full p-2 rounded text-xs">
+                            <option>Palliative care</option>
+                            <option>Symptomatic Management</option>
+                        </select>
+                    </div>
+                    <div><label class="block text-xs text-gray-400 mb-1">ขนาดยาเดี่ยวต่อครั้ง (mg/mcg)</label><input type="number" step="0.01" required id="narc-modal-dose" class="glass-input w-full p-2 rounded text-xs"></div>
+                    <div><label class="block text-xs text-gray-400 mb-1">จำนวนสั่งจ่าย (เช่น 10 แอมพูล / 20 เม็ด)</label><input type="text" required id="narc-modal-qty" class="glass-input w-full p-2 rounded text-xs" placeholder="10 แอมพูล"></div>
+                    <div class="md:col-span-2"><label class="block text-xs text-gray-400 mb-1">วิธีการใช้ยาโดยละเอียด (Signature)</label><input type="text" required id="narc-modal-sig" class="glass-input w-full p-2 rounded text-xs" placeholder="เช่น ทานครั้งละ 1 ช้อนชา ทุกๆ 4 ชั่วโมง"></div>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeAddNarc2MedModal()" class="px-4 py-2 rounded-lg bg-white/5 text-gray-400 hover:text-white transition text-xs">ยกเลิก</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-pink-500 text-white font-bold hover:bg-pink-400 transition text-xs">บันทึกเพิ่มลงใบเบิก</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Custom Discharge Modal Dialog -->
     <div id="discharge-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden no-print">
@@ -1139,14 +1195,23 @@
     <div id="toast">ข้อความแจ้งเตือนระบบ</div>
 
     <script>
-        // ==========================================
-        //  SUPABASE CONNECTION CONFIGURATION
-        // ==========================================
         const SUPABASE_URL = "https://hompmaasqrbuwxejswun.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvbXBtYWFzcXJidXd4ZWpzd3VuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMjY5NTAsImV4cCI6MjA5NTkwMjk1MH0.QvnuDBUU5g_EZtE3Vkc_1hc7xXmZlvrIR0eFRGqpaQM";
         
         let supabaseClient = null;
         let isDbConnected = false;
+
+        let patients = [];
+        let selectedPatientId = null;
+        let regUdxList = [];
+        let editUdxList = [];
+        let tempNarc2Meds = []; // For storing drugs dynamically in Narcotic 2 printing form
+        
+        let diseaseChartInstance = null;
+        let pcuChartInstance = null;
+        let patEsasRadarInstance = null;
+        let patVitalsTrendInstance = null;
+        let morphinePainChartInstance = null;
 
         // Fallback Database
         let fallbackPatients = [
@@ -1160,36 +1225,26 @@
                 pps: 40, is_pinned: true, insurance_sent: true,
                 acp: 'No CPR, No Tube, Comfort Care',
                 status_logs: [{ date: '2026-06-01', status: 'Active', note: 'ลงทะเบียนเริ่มต้น' }],
-                acp_logs: [{ date: '2026-06-01', goal: 'Comfort Care', cpr: true, tube: true, note: 'งดยื้อชีวิต', author: 'นพ.ยตนา มาพันธ์สุ' }],
-                past_hospital_treatments: [],
+                acp_logs: [
+                    { date: '2026-06-01', goal: 'Comfort Care', deathPlace: 'Home', surrogate: 'นาง นารี ใจดี (บุตรสาว) 0812345678', cpr: true, tube: true, note: 'ขอกลับไปนอนตึกประคับประคองวาระสุดท้าย', author: 'นพ.ยตนา มาพันธ์สุ' }
+                ],
+                past_hospital_treatments: [
+                    { date: '2026-05-15', hospital: 'โรงพยาบาลพิจิตร', department: 'อายุรกรรมโรคมะเร็ง', details: 'ให้ยาเคมีบำบัดเข็มสุดท้ายก่อนประเมินยุติการรักษาเฉพาะทาง', notes: 'ส่งตัวกลับดูแลแบบประคับประคองที่ทับคล้อ' }
+                ],
                 contacts: [{ name: 'นาง นารี ใจดี', relation: 'บุตรสาว', phone: '0812345678', line: 'naree_jd' }],
                 daily_records: [
-                    { date: '2026-06-01', bp: '110/70', pulse: 82, spo2: 97, temp: 36.8, rr: 18, pain: 2, tiredness: 3, drowsiness: 1, nausea: 0, appetite: 4, sob: 1, depression: 2, anxiety: 2, wellbeing: 3, other: 1, otherLabel: 'ปากแห้ง', note: 'ปกติดี' }
+                    { mode: 'OPD', date: '2026-06-01', bp: '110/70', pulse: 82, spo2: 97, temp: 36.8, rr: 18, pain: 2, tiredness: 3, drowsiness: 1, nausea: 0, appetite: 4, sob: 1, depression: 2, anxiety: 2, wellbeing: 3, other: 1, otherLabel: 'ปากแห้ง', note: 'ปกติดี' }
                 ], 
                 multidisciplinary_notes: [
-                    { date: '2026-06-02 10:30', role: 'Physician', author: 'นพ.ยตนา มาพันธ์สุ', content: 'อาการปวดทั่วไปควบคุมได้ดีเยี่ยม แนะนำให้ควบคุมการให้ Morphine PRN ต่อเนื่องเมื่อปวดรุนแรง' }
+                    { date: '2026-06-02 10:30', role: 'Physician', author: 'นพ.ยตนา มาพันธ์สุ', content: 'S: ปวดท้องแปรปรวนสลับหน่วง\nO: BP 110/70 mmHg, ท้องมานตึงเล็กน้อย\nA: Cancer pain Controlled\nP: สั่งปรับเพิ่ม Morphine syrup เป็น 2.5 ml ทุก 4 ชม.' }
                 ], 
                 morphine_records: [
-                    { datetime: '2026-06-02 08:00', type: 'Breakthrough dose', med: 'Morphine injection 10 mg/ml', dose: 2.5, qty: '1 amp', route: 'Subcutaneous injection', pain_before: 6, pain_after: 2, notes: 'ตอบสนองต่อยาได้เป็นอย่างดี' }
+                    { datetime: '2026-06-02T08:00', type: 'Breakthrough dose / Incidental pain dose', med: 'Morphine syrup 2 mg/ml (60ml)', dose: 2.5, qty: '1 amp', route: 'Subcutaneous injection', pain_before: 6, pain_after: 2, notes: 'ตอบสนองต่อยาได้เป็นอย่างดี' }
                 ], 
                 discharge_info: null
             }
         ];
 
-        let patients = [];
-        let selectedPatientId = null;
-        let regUdxList = [];
-        let editUdxList = [];
-        
-        let diseaseChartInstance = null;
-        let pcuChartInstance = null;
-        let patEsasRadarInstance = null;
-        let patVitalsTrendInstance = null;
-        let morphinePainChartInstance = null;
-
-        // ==========================================
-        //  INITIALIZATION
-        // ==========================================
         async function initSupabase() {
             try {
                 if (typeof supabase === 'undefined') {
@@ -1233,7 +1288,7 @@
             } else {
                 patients = [...fallbackPatients];
             }
-            // Standardize format for local usage
+            // Mapping fields cleanly
             patients = patients.map(p => ({
                 id: p.id, name: p.name, age: p.age, cid: p.cid || '', hn: p.hn,
                 right: p.right_care || 'UC ผู้สูงอายุ', rightOther: p.right_care_other || '',
@@ -1264,16 +1319,13 @@
                     };
                     const { error } = await supabaseClient.from('pallipatients').update(dbPayload).eq('id', p.id);
                     if (error) throw error;
-                    showToast('อัปเดตข้อมูลขึ้นระบบคลาวด์สำเร็จ');
+                    showToast('อัปเดตข้อมูลขึ้นคลาวด์สำเร็จ');
                 } catch (err) { showToast("อัปเดตข้อมูลล้มเหลว: " + err.message); }
             } else {
                 showToast('อัปเดตข้อมูลสำเร็จ (ระบบออฟไลน์)');
             }
         }
 
-        // ==========================================
-        //  CORE CONTROLLERS
-        // ==========================================
         window.onload = async function() {
             initSpaceBackground();
             await initSupabase();
@@ -1309,7 +1361,10 @@
 
             if(viewId === 'dashboard') updateDashboard();
             else if(viewId === 'patient-record') renderWardGrid();
-            else if(viewId === 'document-center') populatePatientDocSelects();
+            else if(viewId === 'document-center') {
+                populatePatientDocSelects();
+                renderNarc2MedsList();
+            }
         }
 
         function filterWard() { renderWardGrid(); }
@@ -1346,6 +1401,9 @@
                 if(p.status === 'Admit') statusColor = 'bg-pink-500/20 text-pink-400 border-pink-500/30 animate-pulse';
                 if(p.status === 'Discharged' || p.status === 'Referred') statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
 
+                // Calculate completed visits
+                const visits = (p.dailyRecords || []).filter(r => r.mode === 'Visit').length;
+
                 const card = document.createElement('div');
                 card.className = `glass-panel p-5 border-t-4 ${p.isPinned ? 'border-t-starlight-gold shadow-[0_0_15px_rgba(244,208,63,0.15)]' : 'border-t-starlight-cyan'} hover:bg-white/5 transition duration-300 cursor-pointer relative group`;
                 card.innerHTML = `
@@ -1366,7 +1424,7 @@
                         <div class="space-y-2 text-xs text-gray-300 bg-space-950/40 p-3 rounded-lg border border-white/5">
                             <p class="flex justify-between"><span class="text-gray-500">กลุ่มโรค:</span> <span class="text-pink-400 font-bold">${p.disease}</span></p>
                             <p class="flex justify-between"><span class="text-gray-500">PPS:</span> <span class="text-starlight-gold font-bold">${p.pps}%</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">เขตรพ.สต:</span> <span class="truncate max-w-[120px]">${p.pcu}</span></p>
+                            <p class="flex justify-between"><span class="text-gray-500">เยี่ยมบ้าน:</span> <span class="font-bold ${visits >= 6 ? 'text-green-400' : 'text-orange-400'}">${visits}/6 ครั้ง</span></p>
                         </div>
                     </div>
                 `;
@@ -1374,77 +1432,160 @@
             });
         }
 
-        // ==========================================
-        //  PATIENT REGISTRATION & EDIT HELPER METHODS
-        // ==========================================
-        function addRegisterUdxItem() {
-            const input = document.getElementById('reg-udx-input');
-            const list = document.getElementById('reg-udx-list');
-            if(input.value.trim() === '') return;
-            const val = input.value.trim();
-            regUdxList.push(val);
-            const li = document.createElement('li');
-            li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
-            li.innerHTML = `<span>${val}</span><button type="button" onclick="removeRegUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
-            list.appendChild(li);
-            input.value = '';
-        }
-        function removeRegUdx(el, val) { regUdxList = regUdxList.filter(item => item !== val); el.closest('li').remove(); }
+        function updateDashboard() {
+            const total = patients.length;
+            const pinned = patients.filter(p => p.isPinned).length;
+            const active = patients.filter(p => p.status === 'Active' || p.status === 'Admit').length;
+            
+            // Percentage of active cases with at least 6 home visits completed
+            const completedVisitsCount = patients.filter(p => (p.dailyRecords || []).filter(r => r.mode === 'Visit').length >= 6).length;
+            const visitCompletionPercentage = total > 0 ? Math.round((completedVisitsCount / total) * 100) : 0;
 
-        function addEditUdxItem() {
-            const input = document.getElementById('edit-udx-input');
-            const list = document.getElementById('edit-udx-list');
-            if(input.value.trim() === '') return;
-            const val = input.value.trim();
-            editUdxList.push(val);
-            const li = document.createElement('li');
-            li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
-            li.innerHTML = `<span>${val}</span><button type="button" onclick="removeEditUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
-            list.appendChild(li);
-            input.value = '';
-        }
-        function removeEditUdx(el, val) { editUdxList = editUdxList.filter(item => item !== val); el.closest('li').remove(); }
+            document.getElementById('kpi-total').innerText = total;
+            document.getElementById('kpi-pinned').innerText = pinned;
+            document.getElementById('kpi-active').innerText = active;
+            document.getElementById('kpi-insurance').innerText = `${visitCompletionPercentage}%`;
 
-        function addRegisterContactRow() {
-            const wrapper = document.getElementById('reg-contact-wrapper');
-            const div = document.createElement('div');
-            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
-            div.innerHTML = `
-                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-rel" placeholder="ความสัมพันธ์" required></div>
-                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs reg-contact-phone" placeholder="เบอร์โทร" required></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-line" placeholder="Line ID"></div>
-            `;
-            wrapper.appendChild(div);
+            const diseases = {};
+            const pcus = {};
+            patients.forEach(p => {
+                diseases[p.disease] = (diseases[p.disease] || 0) + 1;
+                pcus[p.pcu] = (pcus[p.pcu] || 0) + 1;
+            });
+
+            if(diseaseChartInstance) diseaseChartInstance.destroy();
+            const ctxDisease = document.getElementById('diseaseChart');
+            if(ctxDisease) {
+                diseaseChartInstance = new Chart(ctxDisease.getContext('2d'), {
+                    type: 'doughnut',
+                    data: { labels: Object.keys(diseases), datasets: [{ data: Object.values(diseases), backgroundColor: ['#66FCF1', '#45A29E', '#F4D03F', '#FF4C4C', '#A855F7', '#E2E8F0'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+
+            if(pcuChartInstance) pcuChartInstance.destroy();
+            const ctxPcu = document.getElementById('pcuChart');
+            if(ctxPcu) {
+                pcuChartInstance = new Chart(ctxPcu.getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: Object.keys(pcus), datasets: [{ label: 'จำนวนผู้ป่วย', data: Object.values(pcus), backgroundColor: '#45A29E', borderColor: '#66FCF1', borderWidth: 1 }] },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                });
+            }
         }
 
-        function addEditContactRow() {
-            const wrapper = document.getElementById('edit-contact-wrapper');
-            const div = document.createElement('div');
-            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
-            div.innerHTML = `
-                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-rel" placeholder="ความสัมพันธ์" required></div>
-                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs edit-contact-phone" placeholder="เบอร์โทร" required></div>
-                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-line" placeholder="Line ID"></div>
-            `;
-            wrapper.appendChild(div);
+        function renderHomeVisitsTracker(p) {
+            const grid = document.getElementById('home-visit-grid');
+            grid.innerHTML = '';
+            
+            // Home visit checklist points
+            const checklistMilestones = [
+                "ประเมินสัญญาณชีพ & ESAS",
+                "ตรวจสอบการปฏิบัติตามแผนยา",
+                "ประเมินจิตสังคมและภาระผู้ดูแล",
+                "จัดเตรียมและดูแลสิ่งแวดล้อม/อุปกรณ์ตึก",
+                "ทบทวนเจตจำนงล่วงหน้า (ACP/Living Will)",
+                "มิติจิตวิญญาณและพิธีกรรมทางศาสนา"
+            ];
+
+            const visitsLogs = (p.dailyRecords || []).filter(r => r.mode === 'Visit');
+            
+            // Set visit count badge
+            const badge = document.getElementById('visit-completion-badge');
+            badge.innerText = `เยี่ยมบ้านแล้ว ${visitsLogs.length}/6 ครั้ง`;
+            if (visitsLogs.length >= 6) {
+                badge.className = "px-4 py-2 rounded-full font-bold text-sm bg-green-500/20 text-green-400 border border-green-500/30";
+            } else {
+                badge.className = "px-4 py-2 rounded-full font-bold text-sm bg-orange-500/20 text-orange-400 border border-orange-500/30";
+            }
+
+            // Create 6 static visit cards representing progression milestones
+            for (let i = 1; i <= 6; i++) {
+                const visitRecord = visitsLogs[i - 1]; // matching index
+                const isCompleted = !!visitRecord;
+
+                const card = document.createElement('div');
+                card.className = `glass-panel p-4 flex flex-col justify-between border-t-2 ${isCompleted ? 'border-t-green-400 bg-green-500/5' : 'border-t-gray-600 bg-white/5 opacity-60'}`;
+                
+                let checkItemsHTML = '';
+                checklistMilestones.forEach((item, itemIdx) => {
+                    const isChecked = isCompleted && (visitRecord.pain !== undefined); // Simplified check off based on log completion
+                    checkItemsHTML += `
+                        <label class="flex items-start space-x-1.5 text-[11px] text-gray-300 mt-1 cursor-not-allowed">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} disabled class="space-radio mt-0.5 w-3.5 h-3.5">
+                            <span>${item}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="text-xs font-bold text-starlight-cyan">การเยี่ยมครั้งที่ ${i}</h4>
+                            <span class="text-[10px] font-bold ${isCompleted ? 'text-green-400 bg-green-400/10' : 'text-gray-500'} px-1.5 py-0.5 rounded">
+                                ${isCompleted ? 'Completed' : 'Pending'}
+                            </span>
+                        </div>
+                        ${isCompleted ? `
+                            <p class="text-[10px] text-gray-400 mb-2"><i class="fa-solid fa-calendar mr-1"></i> ${visitRecord.date}</p>
+                            <p class="text-xs text-white italic truncate" title="${visitRecord.note || 'ไม่มีหมายเหตุ'}">"${visitRecord.note || 'ไม่มีหมายเหตุ'}"</p>
+                        ` : `
+                            <p class="text-[10px] text-gray-500 mb-2 italic">ยังไม่มีการประเมินประเภทเยี่ยมบ้าน</p>
+                        `}
+                        <div class="border-t border-white/5 mt-3 pt-2">
+                            <p class="text-[10px] font-bold text-starlight-gold mb-1">Checklist มิติการดูแล</p>
+                            ${checkItemsHTML}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
         }
 
-        // ==========================================
-        //  PROFILE VIEWER & TAB RENDERING (The critical part!)
-        // ==========================================
+        function toggleInput(selectId, inputId, valueTrigger) {
+            const select = document.getElementById(selectId);
+            const inputContainer = document.getElementById(`${inputId}-container`);
+            const input = document.getElementById(inputId);
+            if(select && select.value === valueTrigger) {
+                if(inputContainer) inputContainer.classList.remove('hidden');
+                if(input) input.setAttribute('required', 'true');
+            } else {
+                if(inputContainer) inputContainer.classList.add('hidden');
+                if(input) { input.removeAttribute('required'); input.value = ''; }
+            }
+        }
+
+        function switchProfileTab(tabName) {
+            document.querySelectorAll('.profile-sub-tab').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.classList.remove('text-starlight-cyan', 'border-starlight-cyan');
+                el.classList.add('text-gray-400', 'border-transparent');
+            });
+
+            const sec = document.getElementById(`prof-sub-${tabName}`);
+            if(sec) sec.classList.remove('hidden');
+
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            if(activeTab) {
+                activeTab.classList.remove('text-gray-400', 'border-transparent');
+                activeTab.classList.add('text-starlight-cyan', 'border-starlight-cyan');
+            }
+
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            if(tabName === 'daily') renderSpecificPatientCharts();
+            else if (tabName === 'morphine') renderMorphineLogsAndChart();
+            else if (tabName === 'mdnotes') renderMDNotesFeed();
+            else if (tabName === 'hospital-history') renderHospitalHistoryList(p);
+            else if (tabName === 'homevisit') renderHomeVisitsTracker(p);
+        }
+
         function openPatientProfile(id) {
             selectedPatientId = id;
             const p = patients.find(pat => pat.id === id);
-            if(!p) {
-                showToast("ไม่พบข้อมูลผู้ป่วยท่านนี้");
-                return;
-            }
+            if(!p) return;
 
-            // Set Primary Header Values
             document.getElementById('p-prof-name').innerText = p.name;
             document.getElementById('p-prof-hn').innerText = p.hn;
             document.getElementById('p-prof-cid').innerText = p.cid || '-';
@@ -1453,7 +1594,6 @@
             const pinBtn = document.getElementById('p-prof-pin-btn');
             pinBtn.className = p.isPinned ? "text-starlight-gold hover:text-white text-xl transition" : "text-gray-400 hover:text-starlight-gold text-xl transition";
 
-            // Tab 1 (General Info)
             document.getElementById('p-v-right').innerText = p.right + (p.rightOther ? ` (${p.rightOther})` : '');
             let addrStr = p.address ? `${p.address.no || ''} ม.${p.address.moo || ''} ถ.${p.address.road || '-'} ต.${p.address.sub || ''} อ.${p.address.dist || 'ทับคล้อ'} จ.${p.address.prov || 'พิจิตร'} ${p.address.zip || '66230'}` : '-';
             document.getElementById('p-v-address').innerText = addrStr;
@@ -1477,7 +1617,6 @@
                 contBody.appendChild(tr);
             });
 
-            // Status blocks
             const dcBlock = document.getElementById('discharge-summary-block');
             if(p.status === 'Discharged' || p.status === 'Death' || p.status === 'Referred') {
                 dcBlock.classList.remove('hidden');
@@ -1488,262 +1627,119 @@
                 dcBlock.classList.add('hidden');
             }
 
-            // Fill log list views
             renderDailyLogsList(p);
-            renderMorphineLogsList(p);
+            renderMorphineLogsAndChart();
             renderMDNotesFeed();
             renderHospitalHistoryList(p);
             renderPatientACPTimeline(p);
+            renderHomeVisitsTracker(p);
 
-            // Display Profile section
             switchView('patient-profile');
             switchProfileTab('general');
         }
 
-        function renderDailyLogsList(p) {
-            const list = document.getElementById('p-v-daily-list');
-            list.innerHTML = '';
-            if(!p.dailyRecords || p.dailyRecords.length === 0) {
-                list.innerHTML = `<tr><td colspan="12" class="p-4 text-center text-gray-500">ยังไม่มีการบันทึกอาการและ Vital Signs</td></tr>`;
-                return;
-            }
-            p.dailyRecords.forEach((r, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-white/5 hover:bg-space-950/20 text-xs';
-                tr.innerHTML = `
-                    <td class="p-2 text-starlight-cyan font-semibold">${r.date}</td>
-                    <td class="p-2">${r.bp || '-'}</td>
-                    <td class="p-2">${r.pulse || '-'}</td>
-                    <td class="p-2">${r.spo2 || '-'}%</td>
-                    <td class="p-2">${r.temp || '-'}°C</td>
-                    <td class="p-2">${r.rr || '-'}</td>
-                    <td class="p-2 text-center text-pink-400 font-bold">${r.pain}</td>
-                    <td class="p-2 text-center text-starlight-cyan font-bold">${r.sob}</td>
-                    <td class="p-2 text-center text-orange-400 font-bold">${r.tiredness}</td>
-                    <td class="p-2 text-center text-starlight-gold font-bold">${r.wellbeing}</td>
-                    <td class="p-2 truncate max-w-[120px]" title="${r.note || ''}">${r.note || '-'}</td>
-                    <td class="p-2 text-center space-x-1">
-                        <button onclick="editDailyRecord(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
-                        <button onclick="deleteDailyRecord(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                list.appendChild(tr);
-            });
+        function openRegisterForm() {
+            regUdxList = [];
+            document.getElementById('reg-udx-list').innerHTML = '';
+            document.getElementById('reg-contact-wrapper').innerHTML = '';
+            addRegisterContactRow(); 
+            switchView('patient-register');
         }
 
-        function renderMorphineLogsList(p) {
-            const list = document.getElementById('p-v-morphine-list');
-            list.innerHTML = '';
-            if(!p.morphineRecords || p.morphineRecords.length === 0) {
-                list.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-gray-500">ยังไม่มีการบันทึกประวัติการใช้ยา Morphine</td></tr>`;
-                return;
-            }
-            p.morphineRecords.forEach((r, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-white/5 hover:bg-space-950/20 text-xs';
-                tr.innerHTML = `
-                    <td class="p-2 text-starlight-cyan font-semibold">${r.datetime.replace('T', ' ')}</td>
-                    <td class="p-2 text-starlight-gold">${r.type}</td>
-                    <td class="p-2 text-pink-400 font-medium">${r.med}</td>
-                    <td class="p-2 text-center">${r.dose} mg</td>
-                    <td class="p-2 text-center">${r.qty}</td>
-                    <td class="p-2">${r.route}</td>
-                    <td class="p-2 text-center text-[#FF4C4C] font-semibold">${r.pain_before} ➜ <span class="text-green-400 font-bold">${r.pain_after}</span></td>
-                    <td class="p-2 truncate max-w-[150px]" title="${r.notes || ''}">${r.notes || '-'}</td>
-                    <td class="p-2 text-center space-x-1">
-                        <button onclick="editMorphineRecord(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
-                        <button onclick="deleteMorphineRecord(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                list.appendChild(tr);
-            });
+        function addRegisterUdxItem() {
+            const input = document.getElementById('reg-udx-input');
+            const list = document.getElementById('reg-udx-list');
+            if(input.value.trim() === '') return;
+            const val = input.value.trim();
+            regUdxList.push(val);
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
+            li.innerHTML = `<span>${val}</span><button type="button" onclick="removeRegUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
+            list.appendChild(li);
+            input.value = '';
         }
+        function removeRegUdx(el, val) { regUdxList = regUdxList.filter(item => item !== val); el.closest('li').remove(); }
 
-        function renderMDNotesFeed() {
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p) return;
-            const container = document.getElementById('md-timeline-feed');
-            container.innerHTML = '';
-            if(!p.multidisciplinaryNotes || p.multidisciplinaryNotes.length === 0) {
-                container.innerHTML = `<p class="p-4 text-center text-gray-500">ยังไม่มีการบันทึก SOAP Note จากสหวิชาชีพ</p>`;
-                return;
-            }
-            p.multidisciplinaryNotes.forEach((n, idx) => {
-                let badgeColor = 'bg-starlight-cyan/20 text-starlight-cyan';
-                if(n.role === 'Nurse') badgeColor = 'bg-pink-500/20 text-pink-400';
-                if(n.role === 'Pharmacist') badgeColor = 'bg-starlight-gold/20 text-starlight-gold';
-                
-                const card = document.createElement('div');
-                card.className = 'bg-white/5 p-4 rounded-lg border border-white/5 relative group mb-4';
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 text-xs rounded font-bold ${badgeColor}">${n.role}</span>
-                            <span class="text-sm font-semibold text-white">${n.author}</span>
-                        </div>
-                        <div class="text-xs text-gray-400">${n.date}</div>
-                    </div>
-                    <p class="text-sm text-gray-200 mt-2 whitespace-pre-line">${n.content}</p>
-                    <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition space-x-2">
-                        <button onclick="editMDNote(${idx})" class="text-xs text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i> แก้ไข</button>
-                        <button onclick="deleteMDNote(${idx})" class="text-xs text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i> ลบ</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderHospitalHistoryList(p) {
-            const list = document.getElementById('p-v-hosp-list');
-            list.innerHTML = '';
-            if(!p.pastHospitalTreatments || p.pastHospitalTreatments.length === 0) {
-                list.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">ไม่มีบันทึกประวัติการส่งตัว / การรักษานอก รพ.ทับคล้อ</td></tr>`;
-                return;
-            }
-            p.pastHospitalTreatments.forEach((h, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-white/5 text-xs';
-                tr.innerHTML = `
-                    <td class="p-2 font-medium text-white">${h.date}</td>
-                    <td class="p-2 text-starlight-cyan font-semibold">${h.hospital}</td>
-                    <td class="p-2 text-starlight-gold">${h.department || '-'}</td>
-                    <td class="p-2 whitespace-pre-line">${h.details}</td>
-                    <td class="p-2">${h.notes || '-'}</td>
-                    <td class="p-2 text-center space-x-2">
-                        <button onclick="editHospitalHistory(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
-                        <button onclick="deleteHospitalHistory(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                list.appendChild(tr);
-            });
-        }
-
-        function renderPatientACPTimeline(p) {
-            const summary = document.getElementById('p-v-acp-summary');
-            const timeline = document.getElementById('p-v-acp-timeline-list');
-            summary.innerHTML = '';
-            timeline.innerHTML = '';
-
-            if(!p.acpLogs || p.acpLogs.length === 0) {
-                summary.innerHTML = `<p class="text-gray-500">ไม่มีข้อมูลบันทึกแผนล่วงหน้า</p>`;
-                timeline.innerHTML = `<p class="p-4 text-center text-gray-500">ยังไม่มีประวัติการปรับเปลี่ยนแผนความประสงค์</p>`;
-                return;
-            }
-
-            const latest = p.acpLogs[p.acpLogs.length - 1];
-            summary.innerHTML = `
-                <div class="bg-space-950/60 p-4 rounded-lg border border-white/5 space-y-3">
-                    <p class="text-sm"><span class="text-gray-500">เป้าหมายหลัก:</span> <span class="text-starlight-gold font-bold">${latest.goal}</span></p>
-                    <p class="text-sm"><span class="text-gray-500">No CPR:</span> <span class="${latest.cpr ? 'text-green-400 font-bold' : 'text-red-400'}">${latest.cpr ? 'ใช่ (ปฏิเสธกู้ชีพรุนแรง)' : 'ไม่'}</span></p>
-                    <p class="text-sm"><span class="text-gray-500">No Intubation:</span> <span class="${latest.tube ? 'text-green-400 font-bold' : 'text-red-400'}">${latest.tube ? 'ใช่ (ปฏิเสธใส่ท่อช่วยหายใจ)' : 'ไม่'}</span></p>
-                    <p class="text-sm"><span class="text-gray-500">ความความจำนง:</span> <span class="text-white">${latest.note || '-'}</span></p>
-                    <p class="text-xs text-gray-400 mt-2">อัปเดตล่าสุดโดย: ${latest.author} (เมื่อ ${latest.date})</p>
-                </div>
+        function addRegisterContactRow() {
+            const wrapper = document.getElementById('reg-contact-wrapper');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
+            div.innerHTML = `
+                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-rel" placeholder="ความสัมพันธ์" required></div>
+                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs reg-contact-phone" placeholder="เบอร์โทร" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs reg-contact-line" placeholder="Line ID"></div>
             `;
-
-            p.acpLogs.forEach(l => {
-                const item = document.createElement('div');
-                item.className = 'relative pl-6 pb-4';
-                item.innerHTML = `
-                    <span class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-starlight-cyan rounded-full border border-space-950"></span>
-                    <p class="text-xs text-gray-400">${l.date} - ปรับปรุงโดย ${l.author}</p>
-                    <p class="text-sm text-white font-semibold mt-1">เป้าหมาย: ${l.goal}</p>
-                    <p class="text-xs text-gray-300">CPR: ${l.cpr ? 'ปฏิเสธ' : 'ยินยอม'} | ท่อช่วยหายใจ: ${l.tube ? 'ปฏิเสธ' : 'ยินยอม'}</p>
-                    <p class="text-xs text-gray-400 mt-1 italic">"${l.note || 'ไม่มีระบุบันทึกความจำนงเพิ่มเติม'}"</p>
-                `;
-                timeline.appendChild(item);
-            });
+            wrapper.appendChild(div);
         }
 
-        function renderSpecificPatientCharts() {
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p || !p.dailyRecords || p.dailyRecords.length === 0) return;
+        async function handlePatientRegistrationSubmit(e) {
+            e.preventDefault();
+            const hn = document.getElementById('reg-hn').value;
+            if(patients.some(p => p.hn === hn)) { showToast('HN นี้ถูกใช้ลงทะเบียนแล้วในระบบประคับประคอง'); return; }
 
-            const latest = p.dailyRecords[p.dailyRecords.length - 1];
-            
-            // ESAS radar
-            if(patEsasRadarInstance) patEsasRadarInstance.destroy();
-            const ctxEsas = document.getElementById('patEsasRadar');
-            if(ctxEsas) {
-                patEsasRadarInstance = new Chart(ctxEsas.getContext('2d'), {
-                    type: 'radar',
-                    data: {
-                        labels: ['ปวด', 'เหนื่อยล้า', 'ง่วงซึม', 'คลื่นไส้', 'เบื่ออาหาร', 'หอบเหนื่อย', 'ซึมเศร้า', 'วิตกกังวล', 'สุขสบาย', 'อื่น ๆ'],
-                        datasets: [{
-                            label: 'คะแนนระดับความรุนแรง (0-10)',
-                            data: [
-                                latest.pain, latest.tiredness, latest.drowsiness, latest.nausea, 
-                                latest.appetite, latest.sob, latest.depression, latest.anxiety, 
-                                latest.wellbeing, latest.other
-                            ],
-                            backgroundColor: 'rgba(102, 252, 241, 0.2)',
-                            borderColor: '#66FCF1',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#F4D03F'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            r: { min: 0, max: 10, ticks: { stepSize: 2 } }
-                        }
-                    }
-                });
+            const contacts = [];
+            const names = document.querySelectorAll('.reg-contact-name');
+            const rels = document.querySelectorAll('.reg-contact-rel');
+            const phones = document.querySelectorAll('.reg-contact-phone');
+            const lines = document.querySelectorAll('.reg-contact-line');
+            for(let i=0; i<names.length; i++) {
+                contacts.push({ name: names[i].value, relation: rels[i].value, phone: phones[i].value, line: lines[i].value });
             }
 
-            // Vitals trend line
-            if(patVitalsTrendInstance) patVitalsTrendInstance.destroy();
-            const ctxTrend = document.getElementById('patVitalsTrend');
-            if(ctxTrend) {
-                const dates = p.dailyRecords.map(r => r.date);
-                const pulseData = p.dailyRecords.map(r => r.pulse);
-                const spo2Data = p.dailyRecords.map(r => r.spo2);
-                const tempData = p.dailyRecords.map(r => r.temp);
+            const dbPayload = {
+                name: document.getElementById('reg-name').value,
+                age: parseInt(document.getElementById('reg-age').value),
+                cid: document.getElementById('reg-cid').value,
+                hn: hn,
+                right_care: document.getElementById('reg-right').value,
+                right_care_other: document.getElementById('reg-right-other').value,
+                address: {
+                    no: document.getElementById('reg-addr-no').value, moo: document.getElementById('reg-addr-moo').value,
+                    road: document.getElementById('reg-addr-road').value, sub: document.getElementById('reg-addr-sub').value,
+                    dist: document.getElementById('reg-addr-dist').value, prov: document.getElementById('reg-addr-prov').value,
+                    zip: document.getElementById('reg-addr-zip').value
+                },
+                pcu: document.getElementById('reg-pcu').value,
+                pcu_other: document.getElementById('reg-pcu-other').value,
+                disease: document.getElementById('reg-disease').value,
+                disease_other: document.getElementById('reg-disease-other').value,
+                pps: parseInt(document.getElementById('reg-pps').value),
+                diagnosis: document.getElementById('reg-diagnosis').value,
+                udx: [...regUdxList],
+                status: 'Active', is_pinned: false,
+                insurance_sent: document.getElementById('reg-insurance').checked,
+                acp: document.getElementById('reg-acp').value,
+                status_logs: [{ date: new Date().toISOString().split('T')[0], status: 'Active', note: 'ลงทะเบียนเริ่มต้น' }],
+                acp_logs: [{ date: new Date().toISOString().split('T')[0], goal: 'Comfort Care', deathPlace: 'Home', surrogate: '', cpr: true, tube: true, note: 'บันทึกแรกรับ', author: 'นพ.ยตนา มาพันธ์สุ' }],
+                past_hospital_treatments: [], contacts: contacts, daily_records: [],
+                multidisciplinary_notes: [], morphine_records: [], discharge_info: null
+            };
 
-                patVitalsTrendInstance = new Chart(ctxTrend.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: dates,
-                        datasets: [
-                            { label: 'Pulse (bpm)', data: pulseData, borderColor: '#FF4C4C', borderWidth: 2, fill: false },
-                            { label: 'SpO2 (%)', data: spo2Data, borderColor: '#66FCF1', borderWidth: 2, fill: false },
-                            { label: 'Temp (°C)', data: tempData, borderColor: '#F4D03F', borderWidth: 2, fill: false }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: { y: { beginAtZero: false } }
-                    }
-                });
+            if (isDbConnected && supabaseClient) {
+                try {
+                    const { error } = await supabaseClient.from('pallipatients').insert([dbPayload]);
+                    if (error) throw error;
+                    showToast('บันทึกข้อมูลผู้ป่วยใหม่ขึ้น Supabase สำเร็จ');
+                } catch (err) {
+                    showToast('เกิดข้อผิดพลาดในการลงทะเบียน: ' + err.message);
+                    return;
+                }
+            } else {
+                // local fallback mapping keys
+                dbPayload.id = patients.length + 1;
+                dbPayload.right = dbPayload.right_care; dbPayload.rightOther = dbPayload.right_care_other;
+                dbPayload.pcuOther = dbPayload.pcu_other; dbPayload.diseaseOther = dbPayload.disease_other;
+                dbPayload.isPinned = dbPayload.is_pinned; dbPayload.insuranceSent = dbPayload.insurance_sent;
+                dbPayload.statusLogs = dbPayload.status_logs; dbPayload.acpLogs = dbPayload.acp_logs;
+                dbPayload.pastHospitalTreatments = dbPayload.past_hospital_treatments;
+                dbPayload.dailyRecords = dbPayload.daily_records; dbPayload.multidisciplinaryNotes = dbPayload.multidisciplinary_notes;
+                dbPayload.morphineRecords = dbPayload.morphine_records; dbPayload.dischargeInfo = dbPayload.discharge_info;
+                patients.push(dbPayload);
+                showToast('ลงทะเบียนประวัติผู้ป่วยสำเร็จ (ระบบออฟไลน์)');
             }
-        }
-
-        function renderMorphineLogsAndChart() {
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p) return;
-            renderMorphineLogsList(p);
-
-            if(morphinePainChartInstance) morphinePainChartInstance.destroy();
-            const ctxMo = document.getElementById('morphinePainChart');
-            if(ctxMo && p.morphineRecords && p.morphineRecords.length > 0) {
-                const labels = p.morphineRecords.map(r => r.datetime.split('T')[0]);
-                const before = p.morphineRecords.map(r => r.pain_before);
-                const after = p.morphineRecords.map(r => r.pain_after);
-
-                morphinePainChartInstance = new Chart(ctxMo.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            { label: 'Pain Score ก่อนให้ยา', data: before, borderColor: '#FF4C4C', borderWidth: 2, borderDash: [5, 5], fill: false },
-                            { label: 'Pain Score หลังรับยา', data: after, borderColor: '#22C55E', borderWidth: 2, fill: false }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
+            switchView('patient-record');
         }
 
         function openEditForm() {
@@ -1771,7 +1767,6 @@
             document.getElementById('edit-diagnosis').value = p.diagnosis || '';
             document.getElementById('edit-insurance').checked = p.insuranceSent;
 
-            // Render list edits
             editUdxList = [...p.udx];
             const list = document.getElementById('edit-udx-list');
             list.innerHTML = '';
@@ -1799,6 +1794,34 @@
             if(p.contacts.length === 0) addEditContactRow();
 
             switchView('patient-edit');
+        }
+
+        function addEditUdxItem() {
+            const input = document.getElementById('edit-udx-input');
+            const list = document.getElementById('edit-udx-list');
+            if(input.value.trim() === '') return;
+            const val = input.value.trim();
+            editUdxList.push(val);
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center bg-space-900/50 p-2 rounded text-sm text-starlight-cyan border border-white/5';
+            li.innerHTML = `<span>${val}</span><button type="button" onclick="removeEditUdx(this, '${val}')" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>`;
+            list.appendChild(li);
+            input.value = '';
+        }
+        function removeEditUdx(el, val) { editUdxList = editUdxList.filter(item => item !== val); el.closest('li').remove(); }
+
+        function addEditContactRow() {
+            const wrapper = document.getElementById('edit-contact-wrapper');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-1 md:grid-cols-4 gap-2 bg-space-950/60 p-3 rounded border border-white/5 relative group';
+            div.innerHTML = `
+                <button type="button" onclick="this.closest('div').remove()" class="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-times"></i></button>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-name" placeholder="ชื่อ-นามสกุล ญาติ" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-rel" placeholder="ความสัมพันธ์" required></div>
+                <div><input type="tel" class="glass-input w-full p-2 rounded text-xs edit-contact-phone" placeholder="เบอร์โทร" required></div>
+                <div><input type="text" class="glass-input w-full p-2 rounded text-xs edit-contact-line" placeholder="Line ID"></div>
+            `;
+            wrapper.appendChild(div);
         }
 
         async function handlePatientEditSubmit(e) {
@@ -1840,9 +1863,6 @@
             openPatientProfile(p.id);
         }
 
-        // ==========================================
-        //  VITAL RECORD SUB-ACTIONS (ADD/EDIT/DELETE)
-        // ==========================================
         async function handlePatientDailySubmit(e) {
             e.preventDefault();
             const p = patients.find(pat => pat.id === selectedPatientId);
@@ -1850,6 +1870,7 @@
 
             const idx = parseInt(document.getElementById('edit-record-index').value);
             const record = {
+                mode: document.getElementById('rec-mode').value,
                 date: document.getElementById('rec-date').value,
                 bp: document.getElementById('rec-bp').value,
                 pulse: parseInt(document.getElementById('rec-pulse').value) || null,
@@ -1872,16 +1893,49 @@
 
             if(idx === -1) {
                 p.dailyRecords.push(record);
-                showToast("เพิ่มรายงานอาการประจำตัวเรียบร้อยแล้ว");
+                showToast("เพิ่มรายงานอาการประจำวันเรียบร้อยแล้ว");
             } else {
                 p.dailyRecords[idx] = record;
-                showToast("แก้ไขรายงานสัญญาณชีพเรียบร้อยแล้ว");
+                showToast("แก้ไขรายงานสัญญาณชีพและอาการเรียบร้อยแล้ว");
             }
 
             await updatePatientOnCloud(p);
             cancelRecordEdit();
             renderDailyLogsList(p);
             renderSpecificPatientCharts();
+            renderHomeVisitsTracker(p); // Dynamic checklist badge refresh
+        }
+
+        function renderDailyLogsList(p) {
+            const list = document.getElementById('p-v-daily-list');
+            list.innerHTML = '';
+            if(!p.dailyRecords || p.dailyRecords.length === 0) {
+                list.innerHTML = `<tr><td colspan="13" class="p-4 text-center text-gray-500">ยังไม่มีการบันทึกอาการและ Vital Signs</td></tr>`;
+                return;
+            }
+            p.dailyRecords.forEach((r, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5 hover:bg-space-950/20 text-xs';
+                tr.innerHTML = `
+                    <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-starlight-cyan/25 text-starlight-cyan">${r.mode || 'OPD'}</span></td>
+                    <td class="p-2 text-white font-semibold">${r.date}</td>
+                    <td class="p-2">${r.bp || '-'}</td>
+                    <td class="p-2">${r.pulse || '-'}</td>
+                    <td class="p-2">${r.spo2 || '-'}%</td>
+                    <td class="p-2">${r.temp || '-'}°C</td>
+                    <td class="p-2">${r.rr || '-'}</td>
+                    <td class="p-2 text-center text-pink-400 font-bold">${r.pain}</td>
+                    <td class="p-2 text-center text-starlight-cyan font-bold">${r.sob}</td>
+                    <td class="p-2 text-center text-orange-400 font-bold">${r.tiredness}</td>
+                    <td class="p-2 text-center text-starlight-gold font-bold">${r.wellbeing}</td>
+                    <td class="p-2 truncate max-w-[120px]" title="${r.note || ''}">${r.note || '-'}</td>
+                    <td class="p-2 text-center space-x-2">
+                        <button onclick="editDailyRecord(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
+                        <button onclick="deleteDailyRecord(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
         }
 
         function editDailyRecord(idx) {
@@ -1889,6 +1943,7 @@
             if(!p || !p.dailyRecords[idx]) return;
             const r = p.dailyRecords[idx];
             document.getElementById('edit-record-index').value = idx;
+            document.getElementById('rec-mode').value = r.mode || 'OPD';
             document.getElementById('rec-date').value = r.date;
             document.getElementById('rec-bp').value = r.bp || '';
             document.getElementById('rec-pulse').value = r.pulse || '';
@@ -1927,11 +1982,72 @@
             await updatePatientOnCloud(p);
             renderDailyLogsList(p);
             renderSpecificPatientCharts();
+            renderHomeVisitsTracker(p);
         }
 
-        // ==========================================
-        //  MORPHINE RECORD SUB-ACTIONS
-        // ==========================================
+        function renderSpecificPatientCharts() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p || !p.dailyRecords || p.dailyRecords.length === 0) return;
+
+            const latest = p.dailyRecords[p.dailyRecords.length - 1];
+            
+            // ESAS Radar Chart
+            if(patEsasRadarInstance) patEsasRadarInstance.destroy();
+            const ctxEsas = document.getElementById('patEsasRadar');
+            if(ctxEsas) {
+                patEsasRadarInstance = new Chart(ctxEsas.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['ปวด', 'เหนื่อยล้า', 'ง่วงซึม', 'คลื่นไส้', 'เบื่ออาหาร', 'หอบเหนื่อย', 'ซึมเศร้า', 'วิตกกังวล', 'สุขสบาย', 'อื่น ๆ'],
+                        datasets: [{
+                            label: 'ระดับความรุนแรง (0-10)',
+                            data: [
+                                latest.pain, latest.tiredness, latest.drowsiness, latest.nausea, 
+                                latest.appetite, latest.sob, latest.depression, latest.anxiety, 
+                                latest.wellbeing, latest.other
+                            ],
+                            backgroundColor: 'rgba(102, 252, 241, 0.2)',
+                            borderColor: '#66FCF1',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#F4D03F'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } }
+                    }
+                });
+            }
+
+            // Vitals trends
+            if(patVitalsTrendInstance) patVitalsTrendInstance.destroy();
+            const ctxTrend = document.getElementById('patVitalsTrend');
+            if(ctxTrend) {
+                const dates = p.dailyRecords.map(r => r.date);
+                const pulseData = p.dailyRecords.map(r => r.pulse);
+                const spo2Data = p.dailyRecords.map(r => r.spo2);
+                const tempData = p.dailyRecords.map(r => r.temp);
+
+                patVitalsTrendInstance = new Chart(ctxTrend.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            { label: 'Pulse (bpm)', data: pulseData, borderColor: '#FF4C4C', borderWidth: 2, fill: false },
+                            { label: 'SpO2 (%)', data: spo2Data, borderColor: '#66FCF1', borderWidth: 2, fill: false },
+                            { label: 'Temp (°C)', data: tempData, borderColor: '#F4D03F', borderWidth: 2, fill: false }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false } }
+                    }
+                });
+            }
+        }
+
         async function handleMorphineRecordSubmit(e) {
             e.preventDefault();
             const p = patients.find(pat => pat.id === selectedPatientId);
@@ -1952,15 +2068,69 @@
 
             if(idx === -1) {
                 p.morphineRecords.push(record);
-                showToast("บันทึกประวัติใช้ยา Morphine สำเร็จ");
+                showToast("บันทึกประวัติการบริหารยาฝิ่นสำเร็จ");
             } else {
                 p.morphineRecords[idx] = record;
-                showToast("แก้ไขประวัติยา Morphine สำเร็จ");
+                showToast("แก้ไขประวัติการสั่งใช้ยา Morphine เรียบร้อย");
             }
 
             await updatePatientOnCloud(p);
             cancelMorphineEdit();
             renderMorphineLogsAndChart();
+        }
+
+        function renderMorphineLogsAndChart() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+            renderMorphineLogsList(p);
+
+            if(morphinePainChartInstance) morphinePainChartInstance.destroy();
+            const ctxMo = document.getElementById('morphinePainChart');
+            if(ctxMo && p.morphineRecords && p.morphineRecords.length > 0) {
+                const labels = p.morphineRecords.map(r => r.datetime.replace('T', ' '));
+                const before = p.morphineRecords.map(r => r.pain_before);
+                const after = p.morphineRecords.map(r => r.pain_after);
+
+                morphinePainChartInstance = new Chart(ctxMo.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Pain Score ก่อนระงับปวด', data: before, borderColor: '#FF4C4C', borderWidth: 2, borderDash: [5, 5], fill: false },
+                            { label: 'Pain Score หลังระงับปวด', data: after, borderColor: '#22C55E', borderWidth: 2, fill: false }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        function renderMorphineLogsList(p) {
+            const list = document.getElementById('p-v-morphine-list');
+            list.innerHTML = '';
+            if(!p.morphineRecords || p.morphineRecords.length === 0) {
+                list.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-gray-500">ยังไม่มีการบันทึกประวัติการใช้ยา Morphine</td></tr>`;
+                return;
+            }
+            p.morphineRecords.forEach((r, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5 hover:bg-space-950/20 text-xs';
+                tr.innerHTML = `
+                    <td class="p-2 text-starlight-cyan font-semibold">${r.datetime.replace('T', ' ')}</td>
+                    <td class="p-2 text-starlight-gold">${r.type}</td>
+                    <td class="p-2 text-pink-400 font-medium">${r.med}</td>
+                    <td class="p-2 text-center">${r.dose} mg</td>
+                    <td class="p-2 text-center">${r.qty}</td>
+                    <td class="p-2">${r.route}</td>
+                    <td class="p-2 text-center text-[#FF4C4C] font-semibold">${r.pain_before} ➜ <span class="text-green-400 font-bold">${r.pain_after}</span></td>
+                    <td class="p-2 truncate max-w-[150px]" title="${r.notes || ''}">${r.notes || '-'}</td>
+                    <td class="p-2 text-center space-x-1">
+                        <button onclick="editMorphineRecord(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
+                        <button onclick="deleteMorphineRecord(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
         }
 
         function editMorphineRecord(idx) {
@@ -1998,20 +2168,19 @@
             renderMorphineLogsAndChart();
         }
 
-        // ==========================================
-        //  MULTIDISCIPLINARY SOAP NOTES ACTIONS
-        // ==========================================
         async function handleMDNoteSubmit(e) {
             e.preventDefault();
             const p = patients.find(pat => pat.id === selectedPatientId);
             if(!p) return;
 
             const idx = parseInt(document.getElementById('edit-md-index').value);
+            const soapCompiled = `S: ${document.getElementById('md-s').value}\nO: ${document.getElementById('md-o').value}\nA: ${document.getElementById('md-a').value}\nP: ${document.getElementById('md-p').value}`;
+
             const record = {
                 date: document.getElementById('md-datetime').value.replace('T', ' '),
                 role: document.getElementById('md-role').value,
                 author: document.getElementById('md-author').value,
-                content: document.getElementById('md-content').value
+                content: soapCompiled
             };
 
             if(idx === -1) {
@@ -2027,6 +2196,40 @@
             renderMDNotesFeed();
         }
 
+        function renderMDNotesFeed() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+            const container = document.getElementById('md-timeline-feed');
+            container.innerHTML = '';
+            if(!p.multidisciplinaryNotes || p.multidisciplinaryNotes.length === 0) {
+                container.innerHTML = `<p class="p-4 text-center text-gray-500">ยังไม่มีการบันทึก SOAP Note จากสหวิชาชีพ</p>`;
+                return;
+            }
+            p.multidisciplinaryNotes.forEach((n, idx) => {
+                let badgeColor = 'bg-starlight-cyan/20 text-starlight-cyan';
+                if(n.role === 'Nurse') badgeColor = 'bg-pink-500/20 text-pink-400';
+                if(n.role === 'Pharmacist') badgeColor = 'bg-starlight-gold/20 text-starlight-gold';
+                
+                const card = document.createElement('div');
+                card.className = 'bg-white/5 p-4 rounded-lg border border-white/5 relative group mb-4';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 text-xs rounded font-bold ${badgeColor}">${n.role}</span>
+                            <span class="text-sm font-semibold text-white">${n.author}</span>
+                        </div>
+                        <div class="text-xs text-gray-400">${n.date}</div>
+                    </div>
+                    <p class="text-sm text-gray-200 mt-2 whitespace-pre-line">${n.content}</p>
+                    <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition space-x-2">
+                        <button onclick="editMDNote(${idx})" class="text-xs text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i> แก้ไข</button>
+                        <button onclick="deleteMDNote(${idx})" class="text-xs text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i> ลบ</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
         function editMDNote(idx) {
             const p = patients.find(pat => pat.id === selectedPatientId);
             if(!p || !p.multidisciplinaryNotes[idx]) return;
@@ -2035,7 +2238,13 @@
             document.getElementById('md-datetime').value = n.date.replace(' ', 'T');
             document.getElementById('md-role').value = n.role;
             document.getElementById('md-author').value = n.author;
-            document.getElementById('md-content').value = n.content;
+
+            // Explode SOAP Note parts
+            const parts = n.content.split('\n');
+            document.getElementById('md-s').value = (parts[0] || '').replace('S: ', '');
+            document.getElementById('md-o').value = (parts[1] || '').replace('O: ', '');
+            document.getElementById('md-a').value = (parts[2] || '').replace('A: ', '');
+            document.getElementById('md-p').value = (parts[3] || '').replace('P: ', '');
 
             document.getElementById('cancel-md-edit-btn').classList.remove('hidden');
             document.getElementById('md-submit-btn').innerText = "แก้ไขบันทึกสหวิชาชีพ";
@@ -2057,9 +2266,6 @@
             renderMDNotesFeed();
         }
 
-        // ==========================================
-        //  HOSPITAL HISTORY SUB-ACTIONS
-        // ==========================================
         async function handleHospitalHistorySubmit(e) {
             e.preventDefault();
             const p = patients.find(pat => pat.id === selectedPatientId);
@@ -2085,6 +2291,31 @@
             await updatePatientOnCloud(p);
             cancelHospitalHistoryEdit();
             renderHospitalHistoryList(p);
+        }
+
+        function renderHospitalHistoryList(p) {
+            const list = document.getElementById('p-v-hosp-list');
+            list.innerHTML = '';
+            if(!p.pastHospitalTreatments || p.pastHospitalTreatments.length === 0) {
+                list.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">ไม่มีบันทึกประวัติการส่งตัว / การรักษานอก รพ.ทับคล้อ</td></tr>`;
+                return;
+            }
+            p.pastHospitalTreatments.forEach((h, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5 text-xs';
+                tr.innerHTML = `
+                    <td class="p-2 font-medium text-white">${h.date}</td>
+                    <td class="p-2 text-starlight-cyan font-semibold">${h.hospital}</td>
+                    <td class="p-2 text-starlight-gold">${h.department || '-'}</td>
+                    <td class="p-2 whitespace-pre-line">${h.details}</td>
+                    <td class="p-2">${h.notes || '-'}</td>
+                    <td class="p-2 text-center space-x-2">
+                        <button onclick="editHospitalHistory(${idx})" class="text-starlight-cyan hover:underline"><i class="fa-solid fa-edit"></i></button>
+                        <button onclick="deleteHospitalHistory(${idx})" class="text-starlight-red hover:underline"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
         }
 
         function editHospitalHistory(idx) {
@@ -2118,9 +2349,6 @@
             renderHospitalHistoryList(p);
         }
 
-        // ==========================================
-        //  ADVANCE CARE PLAN ACTIONS
-        // ==========================================
         async function handlePatientACPLogSubmit(e) {
             e.preventDefault();
             const p = patients.find(pat => pat.id === selectedPatientId);
@@ -2129,6 +2357,8 @@
             const log = {
                 date: document.getElementById('acp-log-date').value,
                 goal: document.getElementById('acp-log-goal').value,
+                deathPlace: document.getElementById('acp-log-death-place').value,
+                surrogate: document.getElementById('acp-log-surrogate').value,
                 cpr: document.getElementById('acp-log-cpr').checked,
                 tube: document.getElementById('acp-log-tube').checked,
                 note: document.getElementById('acp-log-note').value,
@@ -2136,16 +2366,51 @@
             };
 
             p.acpLogs.push(log);
-            p.acp = `เป้าหมาย: ${log.goal} | No CPR: ${log.cpr ? 'ใช่' : 'ไม่ใช่'} | No Tube: ${log.tube ? 'ใช่' : 'ไม่ใช่'} | หมายเหตุ: ${log.note}`;
+            p.acp = `เป้าหมาย: ${log.goal} | ประสงค์เสียชีวิต: ${log.deathPlace} | DNR/CPR: ${log.cpr ? 'ปฏิเสธ' : 'ยินยอม'}`;
             
             await updatePatientOnCloud(p);
             showToast("อัปเดตแผนจำนงล่วงหน้า (ACP) แล้ว");
             renderPatientACPTimeline(p);
         }
 
-        // ==========================================
-        //  DISCHARGE MANAGEMENT
-        // ==========================================
+        function renderPatientACPTimeline(p) {
+            const summary = document.getElementById('p-v-acp-summary');
+            const timeline = document.getElementById('p-v-acp-timeline-list');
+            summary.innerHTML = '';
+            timeline.innerHTML = '';
+
+            if(!p.acpLogs || p.acpLogs.length === 0) {
+                summary.innerHTML = `<p class="text-gray-500">ไม่มีข้อมูลบันทึกแผนล่วงหน้า</p>`;
+                timeline.innerHTML = `<p class="p-4 text-center text-gray-500">ยังไม่มีประวัติการปรับเปลี่ยนแผนความประสงค์</p>`;
+                return;
+            }
+
+            const latest = p.acpLogs[p.acpLogs.length - 1];
+            summary.innerHTML = `
+                <div class="bg-space-950/60 p-4 rounded-lg border border-white/5 space-y-3">
+                    <p class="text-sm"><span class="text-gray-500">เป้าหมายหลัก:</span> <span class="text-starlight-gold font-bold">${latest.goal}</span></p>
+                    <p class="text-sm"><span class="text-gray-500">สถานที่ต้องการลาลับ:</span> <span class="text-starlight-cyan font-semibold">${latest.deathPlace || 'ไม่ได้ระบุ'}</span></p>
+                    <p class="text-sm"><span class="text-gray-500">ผู้ตัดสินใจแทน:</span> <span class="text-white">${latest.surrogate || 'ไม่มี'}</span></p>
+                    <p class="text-sm"><span class="text-gray-500">งดนวดหัวใจกระตุ้นชีพ (No CPR):</span> <span class="${latest.cpr ? 'text-green-400 font-bold' : 'text-red-400'}">${latest.cpr ? 'ใช่ (ปฏิเสธ CPR)' : 'ไม่ใช่'}</span></p>
+                    <p class="text-sm"><span class="text-gray-500">งดท่อช่วยหายใจ (No Tube):</span> <span class="${latest.tube ? 'text-green-400 font-bold' : 'text-red-400'}">${latest.tube ? 'ใช่ (ปฏิเสธการสอดท่อ)' : 'ไม่ใช่'}</span></p>
+                    <p class="text-xs text-gray-400 mt-2">อัปเดตล่าสุดโดย: ${latest.author} (เมื่อ ${latest.date})</p>
+                </div>
+            `;
+
+            p.acpLogs.forEach(l => {
+                const item = document.createElement('div');
+                item.className = 'relative pl-6 pb-4';
+                item.innerHTML = `
+                    <span class="absolute left-[-5px] top-1.5 w-2.5 h-2.5 bg-starlight-cyan rounded-full border border-space-950"></span>
+                    <p class="text-xs text-gray-400">${l.date} - ปรับปรุงโดย ${l.author}</p>
+                    <p class="text-sm text-white font-semibold mt-1">เป้าหมาย: ${l.goal}</p>
+                    <p class="text-xs text-gray-300">CPR: ${l.cpr ? 'ปฏิเสธ' : 'ยินยอม'} | สอดท่อ: ${l.tube ? 'ปฏิเสธ' : 'ยินยอม'} | สถานที่เสียชีวิต: ${l.deathPlace}</p>
+                    <p class="text-xs text-gray-400 mt-1 italic">"${l.note || 'ไม่มีระบุบันทึกความจำนงเพิ่มเติม'}"</p>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
         function openDischargeModal() {
             document.getElementById('discharge-modal').classList.remove('hidden');
         }
@@ -2170,12 +2435,89 @@
             openPatientProfile(p.id);
         }
 
-        // ==========================================
-        //  PRINT RE-GEN FOR MULTIPLE MEDICATIONS (ป.2)
-        // ==========================================
+        function openAddNarc2MedModal() {
+            document.getElementById('narc2-add-med-modal').classList.remove('hidden');
+        }
+        function closeAddNarc2MedModal() {
+            document.getElementById('narc2-add-med-modal').classList.add('hidden');
+        }
+
+        function handleNarc2AddMedSubmit(e) {
+            e.preventDefault();
+            const med = {
+                name: document.getElementById('narc-modal-med-name').value,
+                indication: document.getElementById('narc-modal-indication').value,
+                dose: document.getElementById('narc-modal-dose').value,
+                qty: document.getElementById('narc-modal-qty').value,
+                sig: document.getElementById('narc-modal-sig').value
+            };
+            tempNarc2Meds.push(med);
+            closeAddNarc2MedModal();
+            renderNarc2MedsList();
+            showToast("เพิ่มยาลงแผนเบิกเรียบร้อย");
+        }
+
+        function renderNarc2MedsList() {
+            const body = document.getElementById('narc2-meds-list-body');
+            body.innerHTML = '';
+            if(tempNarc2Meds.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">กรุณากดเพิ่มรายการยาอย่างน้อย 1 รายการเพื่อพิมพ์ออกเอกสาร</td></tr>`;
+                return;
+            }
+            tempNarc2Meds.forEach((m, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-white/5 hover:bg-space-950/20';
+                tr.innerHTML = `
+                    <td class="p-2 font-bold text-white">${m.name}</td>
+                    <td class="p-2">${m.indication}</td>
+                    <td class="p-2 text-starlight-gold">${m.dose} mg/mcg</td>
+                    <td class="p-2 truncate max-w-[150px]" title="${m.sig}">${m.sig}</td>
+                    <td class="p-2 text-center text-green-400 font-bold">${m.qty}</td>
+                    <td class="p-2 text-center">
+                        <button type="button" onclick="removeNarc2MedItem(${idx})" class="text-red-400 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function removeNarc2MedItem(idx) {
+            tempNarc2Meds.splice(idx, 1);
+            renderNarc2MedsList();
+        }
+
+        function populatePatientDocSelects() {
+            const select = document.getElementById('narc2-select-patient');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- กรุณาเลือกคนไข้ --</option>';
+            patients.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id; opt.innerText = `${p.name} (HN: ${p.hn})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function autoFillNarcoticPatient() {
+            const val = document.getElementById('narc2-select-patient').value;
+            if(!val) {
+                document.getElementById('narc2-pat-hn').value = ''; document.getElementById('narc2-pat-cid').value = '';
+                document.getElementById('narc2-pat-name').value = ''; document.getElementById('narc2-pat-address').value = '';
+                return;
+            }
+            const p = patients.find(pat => pat.id == val);
+            if(p) {
+                document.getElementById('narc2-pat-hn').value = p.hn;
+                document.getElementById('narc2-pat-cid').value = p.cid || '';
+                document.getElementById('narc2-pat-name').value = p.name;
+                let addrStr = p.address ? `${p.address.no || ''} ม.${p.address.moo || ''} ถ.${p.address.road || '-'} ต.${p.address.sub || ''} อ.${p.address.dist || 'ทับคล้อ'} จ.${p.address.prov || 'พิจิตร'} ${p.address.zip || '66230'}` : '-';
+                document.getElementById('narc2-pat-address').value = addrStr;
+            }
+        }
+
         function printNarcotic2Form() {
             const val = document.getElementById('narc2-select-patient').value;
             if(!val) { showToast("โปรดเลือกคนไข้ที่ต้องการออกเอกสารก่อนทำการพิมพ์"); return; }
+            if(tempNarc2Meds.length === 0) { showToast("กรุณาเพิ่มรายการยาอย่างน้อย 1 รายการลงแบบเบิกยาก่อนพิมพ์"); return; }
 
             const docName = document.getElementById('narc2-doc-name').value;
             const docLicense = document.getElementById('narc2-doc-license').value;
@@ -2184,34 +2526,20 @@
             const patCid = document.getElementById('narc2-pat-cid').value;
             const patAddress = document.getElementById('narc2-pat-address').value;
             
-            // Medication 1
-            const medName = document.getElementById('narc2-med-name').value;
-            const doseDetail = document.getElementById('narc2-dose-detail').value || '...';
-            const sig = document.getElementById('narc2-sig').value;
-            const quantity = document.getElementById('narc2-quantity').value || '.......';
-            const indication = document.getElementById('narc2-indication').value;
-
-            // Medication 2 (Optional)
-            const medName2 = document.getElementById('narc2-med-name-2').value;
-            const doseDetail2 = document.getElementById('narc2-dose-detail-2').value;
-            const sig2 = document.getElementById('narc2-sig-2').value;
-            const quantity2 = document.getElementById('narc2-quantity-2').value;
-            const indication2 = document.getElementById('narc2-indication-2').value;
-
             const rawDate = document.getElementById('narc2-date').value;
             const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' }) : '..............................';
 
-            let med2HTML = '';
-            if(medName2) {
-                med2HTML = `
-                    <div style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-                        <b>รายการสั่งใช้ยาเสพติดกลุ่มที่ 2 (รายการที่ 2):</b> <span style="font-size: 11pt; font-weight: bold; text-decoration: underline;">${medName2}</span><br>
-                        <b>ขนาดยาเดี่ยวต่อครั้ง:</b> ${doseDetail2} mg/mcg &nbsp;&nbsp;&nbsp;&nbsp; <b>ข้อบ่งชี้ (Indication):</b> ${indication2}<br>
-                        <b>ขนาดและวิธีใช้ (Signature):</b> ${sig2}<br>
-                        <b>จำนวนสุทธิที่ขอเบิกจ่าย:</b> <span style="font-weight: bold;">${quantity2}</span>
+            let medsRows = '';
+            tempNarc2Meds.forEach((m, idx) => {
+                medsRows += `
+                    <div style="margin-top: 15px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;">
+                        <b>รายการสั่งใช้ยาเสพติดกลุ่มที่ 2 (รายการที่ ${idx+1}):</b> <span style="font-size: 11pt; font-weight: bold; text-decoration: underline;">${m.name}</span><br>
+                        <b>ขนาดยาเดี่ยวต่อครั้ง:</b> ${m.dose} mg/mcg &nbsp;&nbsp;&nbsp;&nbsp; <b>ข้อบ่งชี้ (Indication):</b> ${m.indication}<br>
+                        <b>ขนาดและวิธีใช้ (Signature):</b> ${m.sig}<br>
+                        <b>จำนวนสุทธิที่ขอเบิกจ่าย:</b> <span style="font-weight: bold;">${m.qty}</span>
                     </div>
                 `;
-            }
+            });
 
             const printContainer = document.getElementById('print-container');
             printContainer.innerHTML = `
@@ -2231,14 +2559,8 @@
                         <b>ที่อยู่:</b> ${patAddress}
                     </div>
                     <div style="margin-bottom: 20px; border-bottom: 1px solid black; padding-bottom: 15px;">
-                        <h3 style="font-size: 12pt; font-weight: bold; margin-bottom: 10px;">2. ข้อมูลการสั่งจ่ายยา (Medication Order)</h3>
-                        <div>
-                            <b>รายการสั่งใช้ยาเสพติดกลุ่มที่ 2 (รายการที่ 1):</b> <span style="font-size: 11pt; font-weight: bold; text-decoration: underline;">${medName}</span><br>
-                            <b>ขนาดยาเดี่ยวต่อครั้ง:</b> ${doseDetail} mg/mcg &nbsp;&nbsp;&nbsp;&nbsp; <b>ข้อบ่งชี้ (Indication):</b> ${indication}<br>
-                            <b>ขนาดและวิธีใช้ (Signature):</b> ${sig}<br>
-                            <b>จำนวนสุทธิที่ขอเบิกจ่าย:</b> <span style="font-weight: bold;">${quantity}</span>
-                        </div>
-                        ${med2HTML}
+                        <h3 style="font-size: 12pt; font-weight: bold; margin-bottom: 10px;">2. รายการยาเสพติด ป.2 สั่งจ่าย (Medication Orders)</h3>
+                        ${medsRows}
                     </div>
                     <div style="margin-bottom: 40px;">
                         <p style="text-indent: 30px;">ข้าพเจ้าขอรับรองว่า มีความจำเป็นทางการแพทย์ในการอนุมัติจ่ายยากลุ่มฝิ่นและอนุพันธ์เพื่อบรรเทาอาการทุกข์ทรมานข้างต้น และได้ให้คำแนะนำวิธีการเก็บรักษาและการทำลายยาอย่างถูกต้องแก่ตัวแทนหรือคนไข้เรียบร้อยแล้ว</p>
@@ -2260,9 +2582,45 @@
             window.print();
         }
 
-        // ==========================================
-        //  REMAINING METEOR SHOWER & GENERAL BACKGROUNDS
-        // ==========================================
+        function exportSinglePatientPDF() {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if(!p) return;
+
+            const printContainer = document.getElementById('print-container');
+            printContainer.innerHTML = `
+                <div class="print-title">โรงพยาบาลทับคล้อ : รายงานสรุปเวชระเบียนผู้ป่วยประคับประคองรอบด้าน</div>
+                <div class="print-card">
+                    <h2>1. ข้อมูลประวัติผู้ป่วย (16 ข้อพื้นฐาน)</h2>
+                    <p><b>ชื่อ-สกุล:</b> ${p.name} | <b>HN:</b> ${p.hn} | <b>อายุ:</b> ${p.age} ปี</p>
+                    <p><b>รหัสประจำตัวประชาชน:</b> ${p.cid}</p>
+                    <p><b>สิทธิ์การรักษา:</b> ${p.right} ${p.rightOther ? `(${p.rightOther})` : ''}</p>
+                    <p><b>ที่อยู่ปัจจุบัน:</b> ${p.address.no} ม.${p.address.moo} ถ.${p.address.road || '-'} ต.${p.address.sub} อ.${p.address.dist} จ.${p.address.prov} ${p.address.zip}</p>
+                    <p><b>พื้นที่ รพ.สต.:</b> ${p.pcu}</p>
+                    <p><b>กลุ่มโรคประคับประคองหลัก:</b> ${p.disease} | <b>PPS Score:</b> ${p.pps}%</p>
+                    <p><b>การวินิจฉัย (Diagnosis):</b> ${p.diagnosis}</p>
+                    <p><b>โรคประจำตัว:</b> ${p.udx.join(', ') || 'ไม่มี'}</p>
+                    <p><b>การส่งเรื่องประกันภัยสุขภาพ รพ.ทับคล้อ:</b> ${p.insuranceSent ? 'เรียบร้อย' : 'ยังไม่ส่ง'}</p>
+                </div>
+            `;
+            window.print();
+        }
+
+        function exportAllToExcel() {
+            const data = [ ["ID", "HN", "ชื่อ-นามสกุล", "อายุ", "เลขบัตร ปชช.", "สิทธิ์การรักษา", "รพ.สต.ที่ดูแล", "กลุ่มโรคประคับประคอง", "Primary Diagnosis", "PPS Score", "ปักหมุด Focus", "ส่งเรื่องประกันรพ.แล้ว", "เจตจำนงล่วงหน้า", "สถานะเคสล่าสุด"] ];
+            patients.forEach(p => {
+                data.push([
+                    p.id, p.hn, p.name, p.age, p.cid, p.right + (p.rightOther ? ` (${p.rightOther})` : ''),
+                    p.pcu + (p.pcuOther ? ` (${p.pcuOther})` : ''), p.disease + (p.diseaseOther ? ` (${p.diseaseOther})` : ''),
+                    p.diagnosis, p.pps, p.isPinned ? "ใช่" : "ไม่ใช่", p.insuranceSent ? "ใช่" : "ไม่ใช่", p.acp, p.status
+                ]);
+            });
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "PalliativeCareDatabase");
+            XLSX.writeFile(wb, "Starlight_Palliative_Database_Tapkhlo.xlsx");
+            showToast('ดาวน์โหลดฐานข้อมูล Excel สำเร็จ');
+        }
+
         function initSpaceBackground() {
             const starsContainer = document.getElementById('stars-container');
             const meteorContainer = document.getElementById('meteor-container');
@@ -2289,6 +2647,21 @@
                 setTimeout(scheduleNextMeteor, Math.random() * 1800 + 1200);
             }
             scheduleNextMeteor();
+        }
+
+        function switchDocTab(tabName) {
+            document.querySelectorAll('.doc-sub-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.doc-tab-btn').forEach(el => {
+                el.classList.remove('text-starlight-cyan', 'border-starlight-cyan', 'bg-white/5');
+                el.classList.add('text-gray-400', 'border-transparent');
+            });
+            const content = document.getElementById(`doc-sub-${tabName}`);
+            if(content) content.classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-doc-${tabName}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-gray-400', 'border-transparent');
+                activeBtn.classList.add('text-starlight-cyan', 'border-starlight-cyan', 'bg-white/5');
+            }
         }
     </script>
 </body>
