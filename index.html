@@ -324,6 +324,22 @@
                 </div>
             </div>
 
+            <!-- Financial Fund KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+                <div class="glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 border-l-yellow-500 bg-yellow-500/5">
+                    <p class="text-gray-400 text-sm font-light">รายได้สะสมกองทุนเยี่ยมบ้าน</p>
+                    <h3 class="text-4xl font-extrabold text-yellow-400 mt-2 drop-shadow-lg" id="kpi-fund-total">0 บาท</h3>
+                </div>
+                <div class="glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 border-l-starlight-cyan bg-starlight-cyan/5">
+                    <p class="text-gray-400 text-sm font-light">จัดสรรส่วนแบ่งให้ รพ.ทับคล้อ</p>
+                    <h3 class="text-4xl font-extrabold text-starlight-cyan mt-2 drop-shadow-lg" id="kpi-fund-hosp">0 บาท</h3>
+                </div>
+                <div class="glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 border-l-purple-400 bg-purple-500/5">
+                    <p class="text-gray-400 text-sm font-light">จัดสรรให้ รพ.สต. เครือข่าย</p>
+                    <h3 class="text-4xl font-extrabold text-purple-400 mt-2 drop-shadow-lg" id="kpi-fund-pcu">0 บาท</h3>
+                </div>
+            </div>
+
             <!-- Charting Visualizations -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="glass-panel p-6">
@@ -333,6 +349,18 @@
                 <div class="glass-panel p-6">
                     <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-map-location-dot text-starlight-cyan mr-2 drop-shadow-md"></i> จำนวนผู้ป่วยตามรพ.สต.</h3>
                     <div class="h-64"><canvas id="pcuChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Financial Fund Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-bold text-yellow-400 mb-4"><i class="fa-solid fa-coins mr-2 drop-shadow-md"></i> รายได้สะสมรายเดือนจากแผนการเยี่ยมบ้าน</h3>
+                    <div class="h-64"><canvas id="fundMonthlyChart"></canvas></div>
+                </div>
+                <div class="glass-panel p-6">
+                    <h3 class="text-lg font-bold text-starlight-cyan mb-4"><i class="fa-solid fa-chart-bar mr-2 drop-shadow-md"></i> การจัดสรรงบประมาณแยกตามพื้นที่ รพ.สต.</h3>
+                    <div class="h-64"><canvas id="fundPcuChart"></canvas></div>
                 </div>
             </div>
         </section>
@@ -514,10 +542,28 @@
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                             <div>
                                 <label class="block text-xs text-gray-400 mb-1">รูปแบบการบันทึก</label>
-                                <select id="rec-mode" class="glass-input w-full p-2.5 rounded-lg text-sm text-starlight-cyan font-bold">
+                                <select id="rec-mode" onchange="toggleVisitStaffField()" class="glass-input w-full p-2.5 rounded-lg text-sm text-starlight-cyan font-bold">
                                     <option value="ผู้ป่วยใน (IPD)">ผู้ป่วยใน (IPD)</option>
                                     <option value="ผู้ป่วยนอก (OPD)">ผู้ป่วยนอก (OPD)</option>
                                     <option value="เยี่ยมบ้าน (Home Visit)">เยี่ยมบ้าน (Home Visit)</option>
+                                </select>
+                            </div>
+                            <!-- Visiting Staff Field Container (Initially hidden) -->
+                            <div id="vis-staff-container" class="hidden">
+                                <label class="block text-xs text-gray-400 mb-1">เจ้าหน้าที่ที่ลงเยี่ยม <span class="text-red-500">*</span></label>
+                                <select id="rec-vis-staff" class="glass-input w-full p-2.5 rounded-lg text-sm text-starlight-cyan font-bold">
+                                    <option value="รพ.ทับคล้อ">รพ.ทับคล้อ</option>
+                                    <option value="PCU ทับคล้อ">PCU ทับคล้อ</option>
+                                    <option value="รพ.สต. บ้านสายดงยาง">รพ.สต. บ้านสายดงยาง</option>
+                                    <option value="รพ.สต. เขาทราย">รพ.สต. เขาทราย</option>
+                                    <option value="รพ.สต. บ้านวังแดง">รพ.สต. บ้านวังแดง</option>
+                                    <option value="รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)">รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)</option>
+                                    <option value="รพ.สต. ตำบลเขาเจ็ดลูก">รพ.สต. ตำบลเขาเจ็ดลูก</option>
+                                    <option value="รพ.สต.">รพ.สต.</option>
+                                    <option value="รพ.สต. บ้านท้ายทุ่งหมู่2">รพ.สต. บ้านท้ายทุ่งหมู่2</option>
+                                    <option value="รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)">รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)</option>
+                                    <option value="รพ.สต. บ้านไดอีเผือก">รพ.สต. บ้านไดอีเผือก</option>
+                                    <option value="นอกเขต">นอกเขต</option>
                                 </select>
                             </div>
                             <div><label class="block text-xs text-gray-400 mb-1">วันที่ประเมิน</label><input type="date" required id="rec-date" class="glass-input w-full p-2.5 rounded-lg text-sm text-white font-medium"></div>
@@ -526,6 +572,16 @@
                             <div><label class="block text-xs text-gray-400 mb-1">SpO2 (%)</label><input type="number" id="rec-spo2" placeholder="98" class="glass-input w-full p-2.5 rounded-lg text-sm"></div>
                             <div><label class="block text-xs text-gray-400 mb-1">อุณหภูมิ (°C)</label><input type="number" step="0.1" id="rec-temp" placeholder="36.5" class="glass-input w-full p-2.5 rounded-lg text-sm"></div>
                             <div><label class="block text-xs text-gray-400 mb-1">อัตราการหายใจ (bpm)</label><input type="number" id="rec-rr" placeholder="20" class="glass-input w-full p-2.5 rounded-lg text-sm"></div>
+                        </div>
+
+                        <!-- Visit safety checklist in Symptom form to establish seamless integration -->
+                        <div id="visit-checklist-group" class="hidden mb-6 bg-black/40 p-4 rounded-xl border border-white/5 shadow-inner space-y-2">
+                            <label class="block text-[11px] text-starlight-gold font-bold uppercase tracking-wider"><i class="fa-solid fa-clipboard-check mr-1"></i> เช็คลิสต์ตรวจสอบความปลอดภัยการเยี่ยมบ้าน (Safety Checklist):</label>
+                            <div class="grid grid-cols-1 gap-1.5 text-xs text-gray-300">
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="rec-visit-chk-cpr" class="space-radio"> <span>เป้าหมายรักษาตรงกัน (No CPR/No Tube)</span></label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="rec-visit-chk-meds" class="space-radio"> <span>เก็บรักษายากลุ่มฝิ่นอย่างปลอดภัยที่บ้าน</span></label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="rec-visit-chk-skin" class="space-radio"> <span>ไม่มีแผลกดทับบวมแดง/ผิวหนังดี</span></label>
+                            </div>
                         </div>
 
                         <!-- Expanded ESAS 10 -->
@@ -673,7 +729,7 @@
                 <div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-l-4 border-l-starlight-cyan bg-gradient-to-r from-starlight-cyan/10 to-transparent">
                     <div>
                         <h3 class="text-xl font-bold text-starlight-cyan drop-shadow-md"><i class="fa-solid fa-house-chimney-medical mr-2"></i> แผนติดตามการเยี่ยมบ้าน (ขั้นต่ำ 6 ครั้ง)</h3>
-                        <p class="text-sm text-gray-300 mt-1 font-light">บันทึกรายงานพร้อมรายการเช็คลิสต์ตรวจสอบสภาวะคนไข้เพื่อการดูแลที่ปลอดภัยและต่อเนื่องที่บ้าน</p>
+                        <p class="text-sm text-gray-300 mt-1 font-light">ข้อมูลเชื่อมโยงจากบันทึกอาการเยี่ยมบ้านประจำวัน คำนวณเงินปันผลจัดสรรตามสิทธิ์เชิงรุกสูงสุด 6 ครั้งแรก</p>
                     </div>
                     <button type="button" onclick="openOffVisitModal()" class="glass-input border-red-500/30 text-red-400 px-5 py-2.5 rounded-xl transition hover:bg-red-500/20 font-bold text-sm shadow-[0_5px_15px_rgba(220,38,38,0.2)]">
                         <i class="fa-solid fa-circle-stop mr-2"></i> ยุติเยี่ยมบ้าน (Off Visit)
@@ -1272,7 +1328,7 @@
                 ],
                 contacts: [{ name: 'นาง นารี ใจดี', relation: 'บุตรสาว', phone: '0812345678', line: 'naree_jd' }],
                 dailyRecords: [
-                    { date: '2026-06-06', mode: 'ผู้ป่วยใน (IPD)', bp: '110/70', hr: 78, rr: 18, temp: 36.8, spo2: 98, pain: 2, tiredness: 4, drowsiness: 3, nausea: 1, appetite: 2, sob: 1, depress: 2, anxiety: 1, wellbeing: 2, other_symptom: 0, other_symptom_lbl: 'ท้องผูก', note: 'ประเมินเพื่อรายงานแพทย์แรกรับ' }
+                    { date: '2026-06-06', mode: 'เยี่ยมบ้าน (Home Visit)', bp: '110/70', hr: 78, rr: 18, temp: 36.8, spo2: 98, pain: 2, tiredness: 4, drowsiness: 3, nausea: 1, appetite: 2, sob: 1, depress: 2, anxiety: 1, wellbeing: 2, other_symptom: 0, other_symptom_lbl: 'ท้องผูก', note: 'ติดตามดูแลเยี่ยมบ้านประเมินสัญญาณชีพดี', staff: 'รพ.ทับคล้อ', visitNum: 1, visitCpr: true, visitMeds: true, visitSkin: true }
                 ],
                 multidisciplinaryNotes: [{ date: '2026-06-06T14:30', role: 'Nurse', content: 'คนไข้มีอาการปวดตื้อๆ บริเวณแผลช่องท้อง พยาบาลได้ประเมิน ESAS ปวดระดับ 2 ทำแผลแห้งดี', author: 'พยบ. สมศรี รักเรียน', clinFinding: 'ท้องอืด ปวดเล็กน้อย', currentProb: 'ความเจ็บปวดจากการรุกล้ำของโรคมะเร็ง', teamPlan: 'ควบคุมด้วยยากลุ่มฝิ่นอย่างปลอดภัย' }],
                 morphineRecords: [{ date: '2026-06-06T12:00', type: 'Breakthrough dose / Incidental pain dose', medName: 'Morphine injection 10 mg/ml', dose: '3 mg', quantity: '1 Amp', routeMethod: 'SC prn ทุก 4 ชั่วโมง', painBefore: 6, painAfter: 2, indication: 'Symptomatic Management', notes: 'ปวดลดลงชัดเจนหลังให้ยา' }],
@@ -1290,9 +1346,12 @@
         let patEsasRadarInstance = null;
         let patVitalsTrendInstance = null;
         let patPainMorphineTrendInstance = null;
+        
+        let fundMonthlyChartInstance = null;
+        let fundPcuChartInstance = null;
 
         // ==========================================
-        //  INITIALIZATION & REGISTRATION LOGIC FIX
+        //  SUPABASE CONNECTION CONFIGURATION
         // ==========================================
         async function initSupabase() {
             try {
@@ -1324,7 +1383,6 @@
         }
 
         async function fetchPatients() {
-            // Check local storage first for persistence
             const localStored = localStorage.getItem('palli_patients');
             if (localStored) {
                 patients = JSON.parse(localStored);
@@ -1345,7 +1403,6 @@
                 }
             }
             
-            // Format check
             patients = patients.map(p => ({
                 id: p.id, name: p.name, age: p.age, cid: p.cid || '', hn: p.hn,
                 right: p.right_care || p.right || 'UC ผู้สูงอายุ', rightOther: p.right_care_other || p.rightOther || '',
@@ -1370,7 +1427,6 @@
         }
 
         async function updatePatientOnCloud(p) {
-            // Save locally first
             const idx = patients.findIndex(pat => pat.id === p.id);
             if(idx !== -1) {
                 patients[idx] = p;
@@ -1404,120 +1460,72 @@
         }
 
         // ==========================================
-        //  CORE NAVIGATION & VIEW SWITCHING
+        //  VISIT FUND CALCULATION ENGINE
         // ==========================================
-        async function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            const sec = document.getElementById(viewId);
-            if(sec) sec.classList.add('active');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-white/5', 'text-starlight-cyan', 'shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]');
-                btn.classList.add('text-gray-400');
-            });
-
-            const activeBtn = document.getElementById(`nav-${viewId}`);
-            if(activeBtn) {
-                activeBtn.classList.add('bg-white/5', 'text-starlight-cyan', 'shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]');
-                activeBtn.classList.remove('text-gray-400');
+        function calculateVisitFund(patientPcu, visitingStaff, visitNum) {
+            // Funds rule logic: Capped at maximum 6 visits per patient
+            if (visitNum > 6) {
+                return { total: 0, hosp: 0, pcu: 0, pcuName: patientPcu, desc: 'เกินข้อกำหนดเยี่ยม 6 ครั้ง' };
             }
 
-            await fetchPatients();
+            const cleanPcu = (patientPcu || '').trim();
+            const cleanStaff = (visitingStaff || '').trim();
 
-            if(viewId === 'dashboard') updateDashboard();
-            else if(viewId === 'patient-record') renderWardGrid();
+            // Group definitions
+            const group1 = ['รพ.สต. เขาทราย', 'รพ.สต. บ้านวังแดง', 'รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)', 'รพ.สต. บ้านไดอีเผือก'];
+            const group2 = ['รพ.สต. บ้านสายดงยาง', 'รพ.สต. ตำบลเขาเจ็ดลูก', 'รพ.สต.', 'รพ.สต. บ้านท้ายทุ่งหมู่2', 'รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)'];
+            const group3 = ['PCU ทับคล้อ'];
+
+            let total = 0;
+            let hospShare = 0;
+            let pcuShare = 0;
+            let note = 'ไม่ตรงเงื่อนไขกองทุน';
+
+            // 1. Hospital visiting Group 1 sub-districts (รพ.ทับคล้อ ไป รพ.สต. เขาทราย, บ้านวังแดง, บ้านเขาเจ็ดลูก(ไดวน), บ้านไดอีเผือก)
+            if (cleanStaff === 'รพ.ทับคล้อ' && group1.includes(cleanPcu)) {
+                total = 1000;
+                hospShare = 1000; // 100% to hospital
+                pcuShare = 0;
+                note = 'รพ.เยี่ยมในกลุ่ม 1 (รพ. 100%)';
+            }
+            // 2. No matter who visits Group 2 sub-districts (ไม่ว่าใครไปเยี่ยมผู้ป่วยในเขตกลุ่ม 2)
+            else if (group2.includes(cleanPcu)) {
+                total = 1000;
+                pcuShare = 700;   // 70% to sub-district
+                hospShare = 300;  // 30% to hospital
+                note = 'เยี่ยมกลุ่ม 2 (รพ.สต. 70%, รพ. 30%)';
+            }
+            // 3. Hospital visiting PCU Thap Khlo area (รพ.ทับคล้อ ไป PCU ทับคล้อ)
+            else if (cleanStaff === 'รพ.ทับคล้อ' && cleanPcu === 'PCU ทับคล้อ') {
+                total = 1000;
+                hospShare = 1000; // 100% to hospital
+                pcuShare = 0;
+                note = 'รพ.เยี่ยมในเขต PCU ทับคล้อ (รพ. 100%)';
+            }
+
+            return {
+                total: total,
+                hosp: hospShare,
+                pcu: pcuShare,
+                pcuName: cleanPcu,
+                staff: cleanStaff,
+                visitNum: visitNum,
+                desc: note
+            };
         }
 
-        function filterWard() { renderWardGrid(); }
-
-        // Core visual Ward Grid builder
-        function renderWardGrid() {
-            const search = document.getElementById('ward-search').value.toLowerCase();
-            const diseaseFilter = document.getElementById('ward-filter-disease').value;
-            const pcuFilter = document.getElementById('ward-filter-pcu').value;
-            const statusFilter = document.getElementById('ward-filter-status').value;
-            const importanceFilter = document.getElementById('ward-filter-importance').value;
-            const grid = document.getElementById('ward-grid');
-            grid.innerHTML = '';
-
-            let filtered = patients.filter(p => {
-                const matchSearch = p.name.toLowerCase().includes(search) || p.hn.includes(search) || (p.cid && p.cid.includes(search));
-                const matchDisease = (diseaseFilter === 'All') || p.disease === diseaseFilter;
-                const matchPCU = (pcuFilter === 'All') || p.pcu === pcuFilter;
-                
-                let matchStatus = true;
-                if(statusFilter === 'Active') matchStatus = p.status === 'Active' || p.status === 'Admit';
-                else if(statusFilter === 'Discharged') matchStatus = p.status === 'Discharged' || p.status === 'Referred';
-                else if(statusFilter === 'Death') matchStatus = p.status === 'Death';
-
-                let matchImportance = true;
-                const completedVisits = (p.statusLogs || []).filter(l => l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")).length;
-                const isIncomplete = completedVisits < 6 && p.offVisit === false && (p.status === 'Active' || p.status === 'Admit');
-
-                if (importanceFilter === 'Starred') matchImportance = p.isPinned === true;
-                else if (importanceFilter === 'IncompleteVisit') matchImportance = isIncomplete;
-                else if (importanceFilter === 'ActiveDying') matchImportance = p.isPinned === true && p.pinnedReason === 'ใกล้เสียชีวิต (Active Dying)';
-                else if (importanceFilter === 'UrgentVisit') matchImportance = p.isPinned === true && p.pinnedReason === 'ต้องเยี่ยมบ้านเร่งด่วน';
-                else if (importanceFilter === 'Worse') matchImportance = p.isPinned === true && p.pinnedReason === 'อาการทรุดลง';
-
-                return matchSearch && matchDisease && matchPCU && matchStatus && matchImportance;
-            });
-
-            filtered.sort((a,b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
-
-            if(filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-500 glass-panel border-dashed border-2 border-white/20"><i class="fa-solid fa-face-frown text-5xl mb-4 opacity-50"></i><p class="text-lg">ไม่พบข้อมูลผู้ป่วยที่ตรงกับเงื่อนไข</p></div>`;
-                return;
+        // Helper to toggle visit staff and checklist fields
+        function toggleVisitStaffField() {
+            const mode = document.getElementById('rec-mode').value;
+            const container = document.getElementById('vis-staff-container');
+            const checklist = document.getElementById('visit-checklist-group');
+            if (mode === 'เยี่ยมบ้าน (Home Visit)') {
+                container.classList.remove('hidden');
+                checklist.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+                checklist.classList.add('hidden');
             }
-
-            filtered.forEach(p => {
-                let statusColor = 'bg-green-500/20 text-green-400 border-green-500/30';
-                if(p.status === 'Death') statusColor = 'bg-red-500/20 text-red-400 border-red-500/30';
-                if(p.status === 'Admit') statusColor = 'bg-pink-500/20 text-pink-400 border-pink-500/30 animate-pulse';
-                if(p.status === 'Discharged' || p.status === 'Referred') statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-
-                const completedVisits = (p.statusLogs || []).filter(l => l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")).length;
-                const showWarning = completedVisits < 6 && p.offVisit === false && (p.status === 'Active' || p.status === 'Admit');
-
-                const card = document.createElement('div');
-                card.className = `glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 ${p.isPinned ? 'border-l-starlight-gold shadow-[0_15px_35px_rgba(244,208,63,0.15)]' : 'border-l-starlight-cyan'} cursor-pointer relative group flex flex-col justify-between h-full hover:scale-[1.02]`;
-                card.innerHTML = `
-                    <div class="absolute top-4 right-4 flex items-center gap-1.5 z-10">
-                        ${p.isPinned ? `<span class="text-starlight-gold text-sm animate-pulse drop-shadow-md" title="โฟกัสเคส: ${p.pinnedReason}"><i class="fa-solid fa-star"></i></span>` : ''}
-                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold border ${statusColor} shadow-inner">${p.status}</span>
-                    </div>
-                    <div onclick="openPatientProfile(${p.id})" class="relative z-10">
-                        <div class="flex items-center gap-4 mb-5">
-                            <div class="w-14 h-14 rounded-full bg-gradient-to-br from-space-900 to-black flex items-center justify-center text-starlight-cyan text-2xl border border-white/10 group-hover:border-starlight-cyan transition-all shadow-inner">
-                                <i class="fa-solid fa-user-injured drop-shadow-md"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-white font-bold text-lg group-hover:text-starlight-cyan transition-colors truncate w-40 drop-shadow-sm">${p.name}</h3>
-                                <p class="text-xs text-gray-400 font-light tracking-wide mt-0.5">HN: <span class="font-medium text-gray-300">${p.hn}</span> | อายุ: ${p.age} ปี</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2.5 text-xs text-gray-300 bg-black/30 p-4 rounded-xl border border-white/5 shadow-inner">
-                            <p class="flex justify-between"><span class="text-gray-500">กลุ่มโรค:</span> <span class="text-pink-400 font-bold">${p.disease}</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">PPS:</span> <span class="text-starlight-gold font-bold">${p.pps}%</span></p>
-                            <p class="flex justify-between"><span class="text-gray-500">เขตรพ.สต:</span> <span class="truncate max-w-[120px] font-medium">${p.pcu}</span></p>
-                            <p class="flex justify-between border-t border-white/10 pt-2 mt-2"><span class="text-gray-500">เยี่ยมบ้านสะสม:</span> <span class="font-bold text-starlight-cyan">${completedVisits} / 6 ครั้ง</span></p>
-                            
-                            ${showWarning ? `
-                                <div class="mt-2.5 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-[10px] flex items-center gap-1.5 font-bold animate-pulse shadow-inner">
-                                    <i class="fa-solid fa-triangle-exclamation"></i> เยี่ยมบ้านไม่ครบ / รอดำเนินการ
-                                </div>
-                            ` : ''}
-
-                            ${p.isPinned ? `
-                                <div class="mt-2 p-1.5 rounded-lg bg-starlight-gold/10 border border-starlight-gold/20 text-starlight-gold text-[10px] truncate shadow-inner">
-                                    📌 โฟกัส: ${p.pinnedReason}
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
         }
 
         // ==========================================
@@ -1623,6 +1631,7 @@
 
             if (tabName === 'daily') {
                 document.getElementById('rec-date').value = new Date().toISOString().substring(0, 10);
+                toggleVisitStaffField();
                 renderDailyLogs(p);
                 updateDailyCharts(p);
             } else if (tabName === 'mdnotes') {
@@ -1640,152 +1649,6 @@
                 document.getElementById('m-log-date').value = new Date().toISOString().substring(0, 16);
                 renderMorphineLogs(p);
                 updateMorphineCharts(p);
-            }
-        }
-
-        // ==========================================
-        //  STAR FOCUS MODE CONTROLLERS
-        // ==========================================
-        function openStarModalFromProfile() {
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if (!p) return;
-            document.getElementById('star-active').checked = p.isPinned;
-            document.getElementById('star-reason').value = p.pinnedReason || 'ใกล้เสียชีวิต (Active Dying)';
-            document.getElementById('star-detail').value = p.pinnedReasonDetail || '';
-            document.getElementById('star-reason-modal').classList.remove('hidden');
-        }
-
-        function closeStarModal() {
-            document.getElementById('star-reason-modal').classList.add('hidden');
-        }
-
-        async function handleStarSubmit(e) {
-            e.preventDefault();
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p) return;
-
-            p.isPinned = document.getElementById('star-active').checked;
-            p.pinnedReason = p.isPinned ? document.getElementById('star-reason').value : '';
-            p.pinnedReasonDetail = p.isPinned ? document.getElementById('star-detail').value : '';
-
-            await updatePatientOnCloud(p);
-            closeStarModal();
-            openPatientProfile(p.id);
-            showToast('อัปเดตสถานะเคสโฟกัส (ปักดาว) เรียบร้อยแล้ว');
-        }
-
-        // ==========================================
-        //  HOME VISIT TIMELINE CHECKLIST (1 TO 6+)
-        // ==========================================
-        function openOffVisitModal() {
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if (!p) return;
-            document.getElementById('off-visit-active').checked = p.offVisit;
-            document.getElementById('off-visit-reason').value = p.offVisitReason || 'เสียชีวิตอย่างสงบ';
-            document.getElementById('off-visit-note').value = p.offVisitNote || '';
-            document.getElementById('off-visit-modal').classList.remove('hidden');
-        }
-
-        function closeOffVisitModal() {
-            document.getElementById('off-visit-modal').classList.add('hidden');
-        }
-
-        async function handleOffVisitSubmit(e) {
-            e.preventDefault();
-            const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p) return;
-
-            p.offVisit = document.getElementById('off-visit-active').checked;
-            p.offVisitReason = p.offVisit ? document.getElementById('off-visit-reason').value : '';
-            p.offVisitNote = p.offVisit ? document.getElementById('off-visit-note').value : '';
-
-            await updatePatientOnCloud(p);
-            closeOffVisitModal();
-            openPatientProfile(p.id);
-            showToast('ปรับปรุงสถานะยุติแผนการเยี่ยมบ้าน (Off Visit) สำเร็จ');
-        }
-
-        function renderHomeVisitsTimeline(p) {
-            const container = document.getElementById('visit-slots-container');
-            container.innerHTML = '';
-
-            const banner = document.getElementById('off-visit-banner');
-            if (p.offVisit) {
-                banner.classList.remove('hidden');
-                document.getElementById('off-visit-v-reason').innerText = p.offVisitReason;
-                document.getElementById('off-visit-v-note').innerText = p.offVisitNote;
-            } else {
-                banner.classList.add('hidden');
-            }
-
-            // Standard minimum is 6 visits, but standard support also visit 6 and up (7, 8 etc).
-            const maxVisits = Math.max(6, (p.statusLogs || []).filter(l => l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")).length + 1);
-
-            for (let i = 1; i <= maxVisits; i++) {
-                let record = (p.statusLogs || []).find(l => l.note && l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${i}:`));
-                let isLogged = !!record;
-                let valDate = isLogged ? record.date : '';
-                
-                let valDetail = '';
-                let chkCpr = false;
-                let chkMeds = false;
-                let chkSkin = false;
-                let valVitals = '';
-
-                if(isLogged) {
-                    valDetail = record.note.replace(`เยี่ยมบ้านครั้งที่ ${i}: `, '');
-                    chkCpr = valDetail.includes('[CPR: Yes]');
-                    chkMeds = valDetail.includes('[Meds: Safe]');
-                    chkSkin = valDetail.includes('[Skin: Intact]');
-                    
-                    // extract vitals
-                    const vtMatch = valDetail.match(/Vitals:\s*([^\s\[]+)/);
-                    if(vtMatch) valVitals = vtMatch[1];
-                    
-                    // clean details
-                    valDetail = valDetail.replace(/\[CPR:.*?\]\s*|\[Meds:.*?\]\s*|\[Skin:.*?\]\s*|Vitals:.*?\s*-\s*/g, '');
-                }
-
-                const card = document.createElement('div');
-                card.className = `glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 ${isLogged ? 'border-l-green-500 bg-green-500/5' : 'border-l-starlight-cyan'} relative overflow-visible`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-sm font-bold ${isLogged ? 'text-green-400 drop-shadow-sm' : 'text-starlight-cyan'} tracking-wide uppercase">
-                            <i class="fa-solid fa-house-chimney mr-1.5"></i> ตรวจเยี่ยมครั้งที่ ${i}
-                        </span>
-                        ${isLogged ? '<span class="text-[10px] uppercase tracking-wider font-bold bg-green-500/20 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-md shadow-inner">Completed</span>' : ''}
-                    </div>
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">วันที่ออกเยี่ยมตรวจ</label>
-                                <input type="date" id="visit-${i}-date" value="${valDate}" ${p.offVisit ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs font-medium">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">Vitals (BP, HR, SpO2)</label>
-                                <input type="text" id="visit-${i}-vitals" value="${valVitals}" placeholder="เช่น 110/70, 80, 98%" ${p.offVisit ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs">
-                            </div>
-                        </div>
-
-                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/5 shadow-inner space-y-2">
-                            <label class="block text-[10px] text-starlight-gold font-bold uppercase tracking-wider"><i class="fa-solid fa-clipboard-check mr-1"></i> Safety Checklist:</label>
-                            <div class="grid grid-cols-1 gap-1.5 text-xs text-gray-300">
-                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-cpr" ${chkCpr ? 'checked' : ''} ${p.offVisit ? 'disabled' : ''} class="space-radio"> <span>เป้าหมายรักษาตรงกัน (No CPR/No Tube)</span></label>
-                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-meds" ${chkMeds ? 'checked' : ''} ${p.offVisit ? 'disabled' : ''} class="space-radio"> <span>เก็บรักษายากลุ่มฝิ่นอย่างปลอดภัยที่บ้าน</span></label>
-                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-skin" ${chkSkin ? 'checked' : ''} ${p.offVisit ? 'disabled' : ''} class="space-radio"> <span>ไม่มีแผลกดทับบวมแดง/ผิวหนังดี</span></label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">รายละเอียดทางกาย-ใจและการพยาบาล</label>
-                            <textarea id="visit-${i}-detail" rows="2" ${p.offVisit ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs" placeholder="พิมพ์สรุปสภาวะคนไข้...">${valDetail}</textarea>
-                        </div>
-                        <button type="button" onclick="saveHomeVisitItem(${i})" ${p.offVisit ? 'disabled' : ''} class="w-full ${isLogged ? 'bg-gradient-to-r from-green-600/30 to-green-500/20 hover:from-green-500/40 hover:to-green-400/30 text-green-400 border border-green-500/40' : 'bg-gradient-to-r from-starlight-cyan to-blue-400 text-space-950 hover:from-white hover:to-white font-bold'} text-xs font-extrabold py-2.5 rounded-lg transition-all shadow-md mt-2">
-                            <i class="fa-solid fa-save mr-1.5"></i> ${isLogged ? 'อัปเดตรายงานครั้งที่ ' + i : 'บันทึกรายงานเยี่ยมบ้านครั้งที่ ' + i}
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
             }
         }
 
@@ -1828,93 +1691,177 @@
         }
 
         // ==========================================
-        //  ADVANCED CARE PLAN (ACP) GOALS CONTROLLER
+        //  HOME VISIT TIMELINE CHECKLIST (1 TO 6+)
         // ==========================================
-        function renderACPTimeline(p) {
-            const summaryDiv = document.getElementById('p-v-acp-summary');
-            const timelineList = document.getElementById('p-v-acp-timeline-list');
-            
-            summaryDiv.innerHTML = '';
-            timelineList.innerHTML = '';
+        function renderHomeVisitsTimeline(p) {
+            const container = document.getElementById('visit-slots-container');
+            container.innerHTML = '';
 
-            const current = p.acpLogs && p.acpLogs.length > 0 ? p.acpLogs[p.acpLogs.length - 1] : null;
-
-            if(current) {
-                summaryDiv.innerHTML = `
-                    <div class="bg-black/40 p-5 rounded-xl border border-white/5 shadow-inner space-y-3">
-                        <p class="flex justify-between"><span class="text-gray-400">เป้าหมายสูงสุด:</span> <span class="text-starlight-gold font-bold text-lg">${current.goal}</span></p>
-                        <p class="flex justify-between"><span class="text-gray-400">ผู้ร่วมตัดสินใจ (Surrogate):</span> <span class="text-white font-medium">${current.surrogate || '-'}</span></p>
-                        <p class="flex justify-between"><span class="text-gray-400">สถานที่วาระสุดท้าย:</span> <span class="text-starlight-cyan font-semibold">${current.deathPlace === 'Home'?'บ้านตนเอง':'หอผู้ป่วย รพ.'}</span></p>
-                        <p class="flex justify-between"><span class="text-gray-400">บันทึกมิติจิตวิญญาณ:</span> <span class="text-gray-300">${current.note || '-'}</span></p>
-                        
-                        <div class="border-t border-white/10 pt-3 mt-3">
-                            <span class="text-xs text-gray-500 font-bold uppercase tracking-wider block mb-2">ข้อจำกัดการยื้อชีวิตที่กำหนด:</span>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <span class="${current.cpr?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No CPR</span>
-                                <span class="${current.tube?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No Intubation</span>
-                                <span class="${current.inotrope?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No Inotrope</span>
-                                <span class="${current.blood?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No Blood Transfusion</span>
-                                <span class="${current.abx?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No Antibiotic</span>
-                                <span class="${current.ng?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No NG insertion</span>
-                                <span class="${current.iv?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No IV access</span>
-                                <span class="${current.surg?'text-red-400 font-bold':'text-gray-500'}"><i class="fa-solid fa-ban"></i> No Palliative surgery</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            const banner = document.getElementById('off-visit-banner');
+            if (p.offVisit) {
+                banner.classList.remove('hidden');
+                document.getElementById('off-visit-v-reason').innerText = p.offVisitReason;
+                document.getElementById('off-visit-v-note').innerText = p.offVisitNote;
             } else {
-                summaryDiv.innerHTML = `<p class="text-gray-500 text-center py-8">ยังไม่มีบันทึกเป้าหมายการรักษาล่วงหน้า กรุณากรอกแบบฟอร์มด้านขวา</p>`;
+                banner.classList.add('hidden');
             }
 
-            if(p.acpLogs && p.acpLogs.length > 0) {
-                // Render list backward (newest on top)
-                [...p.acpLogs].reverse().forEach(log => {
-                    const el = document.createElement('div');
-                    el.className = "mb-6 ml-6 relative";
-                    el.innerHTML = `
-                        <span class="absolute -left-9 top-1.5 bg-starlight-cyan w-3 h-3 rounded-full border-4 border-space-950"></span>
-                        <div class="glass-panel p-4">
-                            <span class="text-xs text-starlight-cyan font-medium">${log.date}</span>
-                            <h4 class="text-sm font-bold text-white mt-1">เป้าหมาย: ${log.goal} (โดย ${log.author || 'สหวิชาชีพ'})</h4>
-                            <p class="text-xs text-gray-400 mt-1">${log.note || ''}</p>
-                            <p class="text-[10px] text-starlight-gold mt-2">Surrogate: ${log.surrogate || '-'} | Place: ${log.deathPlace || '-'}</p>
+            // Filter home visit records from daily logs
+            const homeVisitRecords = (p.dailyRecords || []).filter(r => r.mode === 'เยี่ยมบ้าน (Home Visit)');
+            const loggedCount = homeVisitRecords.length;
+            const maxVisits = Math.max(6, loggedCount + 1);
+
+            for (let i = 1; i <= maxVisits; i++) {
+                // Find visit record matching visit number i
+                let rec = homeVisitRecords.find(r => r.visitNum === i);
+                let isLogged = !!rec;
+                let valDate = isLogged ? rec.date : '';
+                let valVitals = isLogged ? `BP: ${rec.bp || '-'}, PR: ${rec.hr || '-'}, SpO2: ${rec.spo2 || '-'}` : '';
+                let valDetail = isLogged ? rec.note : '';
+                let valStaff = isLogged ? rec.staff : 'รพ.ทับคล้อ';
+                let chkCpr = isLogged ? (rec.visitCpr || false) : false;
+                let chkMeds = isLogged ? (rec.visitMeds || false) : false;
+                let chkSkin = isLogged ? (rec.visitSkin || false) : false;
+
+                // Calculate fund share for display
+                const fund = isLogged ? calculateVisitFund(p.pcu, rec.staff, i) : { total: 0, hosp: 0, pcu: 0, desc: '' };
+
+                const card = document.createElement('div');
+                card.className = `glass-panel p-6 border-t-0 border-r-0 border-b-0 border-l-4 ${isLogged ? 'border-l-green-500 bg-green-500/5' : 'border-l-starlight-cyan'} relative overflow-visible`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm font-bold ${isLogged ? 'text-green-400 drop-shadow-sm' : 'text-starlight-cyan'} tracking-wide uppercase">
+                            <i class="fa-solid fa-house-chimney mr-1.5"></i> ตรวจเยี่ยมครั้งที่ ${i}
+                        </span>
+                        ${isLogged ? '<span class="text-[10px] uppercase tracking-wider font-bold bg-green-500/20 text-green-400 border border-green-500/30 px-2.5 py-1 rounded-md shadow-inner">Completed</span>' : ''}
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">วันที่ออกเยี่ยมตรวจ</label>
+                                <input type="date" id="visit-${i}-date" value="${valDate}" ${p.offVisit || isLogged ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">สถิติสแกน Vitals</label>
+                                <input type="text" id="visit-${i}-vitals" value="${valVitals}" placeholder="กรอกที่แท็บ 2 อาการ & ESAS" disabled class="glass-input w-full p-2.5 rounded-lg text-xs bg-black/40 text-gray-400">
+                            </div>
                         </div>
-                    `;
-                    timelineList.appendChild(el);
-                });
+
+                        <div class="grid grid-cols-1 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">เจ้าหน้าที่ที่ลงเยี่ยม</label>
+                                <select id="visit-${i}-staff" ${p.offVisit || isLogged ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs font-bold text-starlight-cyan">
+                                    <option value="รพ.ทับคล้อ" ${valStaff === 'รพ.ทับคล้อ'?'selected':''}>รพ.ทับคล้อ</option>
+                                    <option value="PCU ทับคล้อ" ${valStaff === 'PCU ทับคล้อ'?'selected':''}>PCU ทับคล้อ</option>
+                                    <option value="รพ.สต. บ้านสายดงยาง" ${valStaff === 'รพ.สต. บ้านสายดงยาง'?'selected':''}>รพ.สต. บ้านสายดงยาง</option>
+                                    <option value="รพ.สต. เขาทราย" ${valStaff === 'รพ.สต. เขาทราย'?'selected':''}>รพ.สต. เขาทราย</option>
+                                    <option value="รพ.สต. บ้านวังแดง" ${valStaff === 'รพ.สต. บ้านวังแดง'?'selected':''}>รพ.สต. บ้านวังแดง</option>
+                                    <option value="รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)" ${valStaff === 'รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)'?'selected':''}>รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)</option>
+                                    <option value="รพ.สต. ตำบลเขาเจ็ดลูก" ${valStaff === 'รพ.สต. ตำบลเขาเจ็ดลูก'?'selected':''}>รพ.สต. ตำบลเขาเจ็ดลูก</option>
+                                    <option value="รพ.สต." ${valStaff === 'รพ.สต.'?'selected':''}>รพ.สต.</option>
+                                    <option value="รพ.สต. บ้านท้ายทุ่งหมู่2" ${valStaff === 'รพ.สต. บ้านท้ายทุ่งหมู่2'?'selected':''}>รพ.สต. บ้านท้ายทุ่งหมู่2</option>
+                                    <option value="รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)" ${valStaff === 'รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)'?'selected':''}>รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)</option>
+                                    <option value="รพ.สต. บ้านไดอีเผือก" ${valStaff === 'รพ.สต. บ้านไดอีเผือก'?'selected':''}>รพ.สต. บ้านไดอีเผือก</option>
+                                    <option value="นอกเขต" ${valStaff === 'นอกเขต'?'selected':''}>นอกเขต</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/30 p-3.5 rounded-xl border border-white/5 shadow-inner space-y-2">
+                            <label class="block text-[10px] text-starlight-gold font-bold uppercase tracking-wider"><i class="fa-solid fa-clipboard-check mr-1"></i> Safety Checklist:</label>
+                            <div class="grid grid-cols-1 gap-1.5 text-xs text-gray-300">
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-cpr" ${chkCpr ? 'checked' : ''} ${p.offVisit || isLogged ? 'disabled' : ''} class="space-radio"> <span>เป้าหมายรักษาตรงกัน (No CPR/No Tube)</span></label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-meds" ${chkMeds ? 'checked' : ''} ${p.offVisit || isLogged ? 'disabled' : ''} class="space-radio"> <span>เก็บรักษายากลุ่มฝิ่นอย่างปลอดภัยที่บ้าน</span></label>
+                                <label class="flex items-center space-x-2.5 cursor-pointer hover:text-white transition"><input type="checkbox" id="visit-${i}-chk-skin" ${chkSkin ? 'checked' : ''} ${p.offVisit || isLogged ? 'disabled' : ''} class="space-radio"> <span>ไม่มีแผลกดทับบวมแดง/ผิวหนังดี</span></label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-1 uppercase tracking-wider">รายละเอียดทางกาย-ใจและการพยาบาล</label>
+                            <textarea id="visit-${i}-detail" rows="2" ${p.offVisit || isLogged ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded-lg text-xs" placeholder="พิมพ์สรุปสภาวะคนไข้...">${valDetail}</textarea>
+                        </div>
+
+                        ${isLogged ? `
+                        <div class="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-xs space-y-1">
+                            <p class="font-bold text-yellow-400"><i class="fa-solid fa-coins mr-1"></i> การคำนวณงบประมาณจัดสรรสิทธิ์ครั้งนี้:</p>
+                            <p class="text-gray-300">ยอดรวมสะสม: <b class="text-white">${fund.total} บาท</b> | รพ.สต: <b class="text-starlight-cyan">${fund.pcu} บาท</b> | รพ.ทับคล้อ: <b class="text-purple-400">${fund.hosp} บาท</b></p>
+                            <p class="text-[10px] text-gray-400 font-light">หมายเหตุ: ${fund.desc}</p>
+                        </div>
+                        ` : `
+                        <button type="button" onclick="saveHomeVisitItemDirect(${i})" ${p.offVisit ? 'disabled' : ''} class="w-full bg-gradient-to-r from-starlight-cyan to-blue-400 text-space-950 hover:from-white hover:to-white font-extrabold py-2.5 rounded-lg text-xs transition-all shadow-md mt-2">
+                            <i class="fa-solid fa-save mr-1.5"></i> ลงบันทึกเยี่ยมบ้านโดยตรงครั้งที่ ${i}
+                        </button>
+                        `}
+                    </div>
+                `;
+                container.appendChild(card);
             }
         }
 
-        async function handlePatientACPLogSubmit(e) {
-            e.preventDefault();
+        // Save Home visit directly from timeline tab (which syncs back to daily symptoms tab)
+        async function saveHomeVisitItemDirect(num) {
             const p = patients.find(pat => pat.id === selectedPatientId);
-            if(!p) return;
+            if (!p) return;
 
-            const newLog = {
-                date: document.getElementById('acp-log-date').value,
-                goal: document.getElementById('acp-log-goal').value,
-                cpr: document.getElementById('acp-log-cpr').checked,
-                tube: document.getElementById('acp-log-tube').checked,
-                inotrope: document.getElementById('acp-log-inotrope').checked,
-                blood: document.getElementById('acp-log-blood').checked,
-                abx: document.getElementById('acp-log-abx').checked,
-                ng: document.getElementById('acp-log-ng').checked,
-                iv: document.getElementById('acp-log-iv').checked,
-                surg: document.getElementById('acp-log-surg').checked,
-                surrogate: document.getElementById('acp-log-surrogate').value,
-                deathPlace: document.getElementById('acp-log-death-place').value,
-                note: document.getElementById('acp-log-note').value,
-                author: 'นพ.ยตนา มาพันธ์สุ (แพทย์และทีมสหวิชาชีพ)'
+            const date = document.getElementById(`visit-${num}-date`).value;
+            const staff = document.getElementById(`visit-${num}-staff`).value;
+            const detail = document.getElementById(`visit-${num}-detail`).value;
+            const chkCpr = document.getElementById(`visit-${num}-chk-cpr`).checked;
+            const chkMeds = document.getElementById(`visit-${num}-chk-meds`).checked;
+            const chkSkin = document.getElementById(`visit-${num}-chk-skin`).checked;
+
+            if (!date || !detail) {
+                showToast(`กรุณากรอกวันที่และรายละเอียดสรุปสำหรับการเยี่ยมบ้านครั้งที่ ${num}`);
+                return;
+            }
+
+            // Check duplicate visit numbers
+            if (!p.dailyRecords) p.dailyRecords = [];
+            const duplicate = p.dailyRecords.some(r => r.mode === 'เยี่ยมบ้าน (Home Visit)' && r.visitNum === num);
+            if (duplicate) {
+                showToast(`การเยี่ยมบ้านครั้งที่ ${num} มีข้อมูลแล้วในระบบประเมินอาการประจำวัน`);
+                return;
+            }
+
+            // Sync with Tab 2 Daily Records (creates a mirroring record)
+            const syncedDailyLog = {
+                date: date,
+                mode: 'เยี่ยมบ้าน (Home Visit)',
+                bp: 'N/A',
+                hr: null,
+                spo2: null,
+                temp: null,
+                rr: null,
+                pain: 0, tiredness: 0, drowsiness: 0, nausea: 0, appetite: 0, sob: 0, depress: 0, anxiety: 0, wellbeing: 0,
+                other_symptom: 0, other_symptom_lbl: 'ไม่มี',
+                note: detail,
+                staff: staff,
+                visitNum: num,
+                visitCpr: chkCpr,
+                visitMeds: chkMeds,
+                visitSkin: chkSkin
             };
 
-            if(!p.acpLogs) p.acpLogs = [];
-            p.acpLogs.push(newLog);
+            p.dailyRecords.unshift(syncedDailyLog);
 
-            // Also keep initial text field updated
-            p.acp = `Goal: ${newLog.goal} | CPR: ${newLog.cpr?'No':'Yes'}, Tube: ${newLog.tube?'No':'Yes'}, NG: ${newLog.ng?'No':'Yes'}`;
+            // Also document in multidisciplinary progress timeline
+            const fullNoteText = `เยี่ยมบ้านครั้งที่ ${num}: ลงตรวจโดย [${staff}] [CPR: ${chkCpr?'Yes':'No'}] [Meds: ${chkMeds?'Safe':'Unsafe'}] [Skin: ${chkSkin?'Intact':'Wound'}] - ${detail}`;
+            
+            p.statusLogs = (p.statusLogs || []).filter(l => !l.note || !l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${num}:`));
+            p.statusLogs.push({ date: date, status: p.status, note: fullNoteText });
+
+            if(!p.multidisciplinaryNotes) p.multidisciplinaryNotes = [];
+            p.multidisciplinaryNotes.unshift({
+                date: new Date().toISOString().slice(0, 16),
+                role: 'Nurse', author: `ทีมเยี่ยมบ้าน (${staff})`,
+                clinFinding: `ติดตามเยี่ยมบ้านเชิงรุก ครั้งที่ ${num}`,
+                currentProb: 'สภาวะทางกายและเช็คลิสต์ดูแลที่บ้าน',
+                teamPlan: 'แผนการสนับสนุนงบประมาณจัดสรรกองทุน',
+                content: fullNoteText
+            });
 
             await updatePatientOnCloud(p);
-            showToast('ปรับปรุงข้อมูลและบันทึกเจตจำนงล่วงหน้า (ACP Timeline) สำเร็จ');
+            showToast(`บันทึกแผนเยี่ยมบ้านครั้งที่ ${num} เรียบร้อย (คำนวณสิทธิ์ส่วนแบ่งสำเร็จ)`);
             openPatientProfile(p.id);
         }
 
@@ -2121,9 +2068,12 @@
             if (p.dailyRecords && p.dailyRecords.length > 0) {
                 p.dailyRecords.forEach((d, index) => {
                     const row = document.createElement('tr');
+                    // Display staff info if visit mode
+                    const modeText = d.mode === 'เยี่ยมบ้าน (Home Visit)' ? `${d.mode}<br><span class="text-[10px] text-starlight-gold">โดย ${d.staff || '-'} (ครั้งที่ ${d.visitNum || '-'})</span>` : d.mode;
+
                     row.innerHTML = `
                         <td class="p-3 text-xs text-gray-300 font-medium">${d.date}</td>
-                        <td class="p-3"><span class="text-xs px-2 py-0.5 rounded bg-black/40 border border-white/10 font-bold text-starlight-cyan">${d.mode || 'ผู้ป่วยใน'}</span></td>
+                        <td class="p-3"><span class="text-xs px-2 py-0.5 rounded bg-black/40 border border-white/10 font-bold text-starlight-cyan">${modeText}</span></td>
                         <td class="p-3 text-white font-bold">${d.bp || '-'}</td>
                         <td class="p-3 text-starlight-gold font-bold">${d.hr || '-'}</td>
                         <td class="p-3 text-starlight-cyan font-bold">${d.spo2 || '-'} %</td>
@@ -2151,10 +2101,29 @@
             const p = patients.find(pat => pat.id === selectedPatientId);
             if(!p) return;
 
+            const modeVal = document.getElementById('rec-mode').value;
+            const staffVal = modeVal === 'เยี่ยมบ้าน (Home Visit)' ? document.getElementById('rec-vis-staff').value : null;
+
+            // Handle automatic linkage for visit index
+            let calculatedVisitNum = null;
+            let visitCpr = false;
+            let visitMeds = false;
+            let visitSkin = false;
+
+            if (modeVal === 'เยี่ยมบ้าน (Home Visit)') {
+                // Find existing visit numbers to avoid collision or dynamically allocate next visit
+                const existingVisits = (p.dailyRecords || []).filter(r => r.mode === 'เยี่ยมบ้าน (Home Visit)');
+                calculatedVisitNum = existingVisits.length + 1;
+
+                visitCpr = document.getElementById('rec-visit-chk-cpr').checked;
+                visitMeds = document.getElementById('rec-visit-chk-meds').checked;
+                visitSkin = document.getElementById('rec-visit-chk-skin').checked;
+            }
+
             const index = parseInt(document.getElementById('edit-record-index').value);
             const record = {
                 date: document.getElementById('rec-date').value,
-                mode: document.getElementById('rec-mode').value,
+                mode: modeVal,
                 bp: document.getElementById('rec-bp').value,
                 hr: parseInt(document.getElementById('rec-pulse').value) || null,
                 spo2: parseInt(document.getElementById('rec-spo2').value) || null,
@@ -2171,14 +2140,41 @@
                 wellbeing: parseInt(document.getElementById('rec-esas-wellbeing').value),
                 other_symptom: parseInt(document.getElementById('rec-esas-other').value),
                 other_symptom_lbl: document.getElementById('rec-esas-other-lbl').value,
-                note: document.getElementById('rec-note').value
+                note: document.getElementById('rec-note').value,
+                staff: staffVal,
+                visitNum: calculatedVisitNum,
+                visitCpr: visitCpr,
+                visitMeds: visitMeds,
+                visitSkin: visitSkin
             };
 
             if(!p.dailyRecords) p.dailyRecords = [];
 
             if(index === -1) {
                 p.dailyRecords.unshift(record);
-                showToast('บันทึกอาการและสัญญาณชีพสำเร็จ');
+
+                // Seamlessly write status logs of visits to populate the visits checklist timeline (Tab 4)
+                if (modeVal === 'เยี่ยมบ้าน (Home Visit)') {
+                    const fullNoteText = `เยี่ยมบ้านครั้งที่ ${record.visitNum}: Vitals: ${record.bp}, ${record.hr}, ${record.spo2} [CPR: ${visitCpr?'Yes':'No'}] [Meds: ${visitMeds?'Safe':'Unsafe'}] [Skin: ${visitSkin?'Intact':'Wound'}] - ${record.note}`;
+                    
+                    p.statusLogs.push({
+                        date: record.date,
+                        status: p.status,
+                        note: fullNoteText
+                    });
+
+                    // Auto-generate SOAP Notes for this Visit
+                    if(!p.multidisciplinaryNotes) p.multidisciplinaryNotes = [];
+                    p.multidisciplinaryNotes.unshift({
+                        date: new Date().toISOString().slice(0, 16),
+                        role: 'Nurse', author: `ทีมสหวิชาชีพ (${staffVal})`,
+                        clinFinding: `ติดตามประเมินเยี่ยมบ้านครั้งที่ ${record.visitNum}`,
+                        currentProb: 'สภาวะทางกายและเช็คลิสต์ดูแล',
+                        teamPlan: 'วิเคราะห์ส่วนแบ่งตามสิทธิ์รายครั้ง',
+                        content: fullNoteText
+                    });
+                }
+                showToast('บันทึกอาการและสัญญาณชีพสำเร็จ (เชื่อมต่อสถิติเยี่ยมบ้านเชิงรุกเรียบร้อย)');
             } else {
                 p.dailyRecords[index] = record;
                 showToast('แก้ไขข้อมูลการตรวจเรียบร้อย');
@@ -2198,6 +2194,15 @@
             document.getElementById('edit-record-index').value = index;
             document.getElementById('rec-date').value = d.date;
             document.getElementById('rec-mode').value = d.mode || 'ผู้ป่วยใน (IPD)';
+            toggleVisitStaffField();
+
+            if (d.mode === 'เยี่ยมบ้าน (Home Visit)') {
+                document.getElementById('rec-vis-staff').value = d.staff || 'รพ.ทับคล้อ';
+                document.getElementById('rec-visit-chk-cpr').checked = d.visitCpr || false;
+                document.getElementById('rec-visit-chk-meds').checked = d.visitMeds || false;
+                document.getElementById('rec-visit-chk-skin').checked = d.visitSkin || false;
+            }
+
             document.getElementById('rec-bp').value = d.bp || '';
             document.getElementById('rec-pulse').value = d.hr || '';
             document.getElementById('rec-spo2').value = d.spo2 || '';
@@ -2833,6 +2838,58 @@
             document.getElementById('kpi-active').innerText = active;
             document.getElementById('kpi-insurance').innerText = `${insurancePercentage}%`;
 
+            // 1. Process Financial Fund Calculations
+            let grandTotalFund = 0;
+            let grandHospShare = 0;
+            let grandPcuShare = 0;
+
+            const monthlyAggregation = {}; // { '2026-06': total }
+            const pcuFundAggregation = {};  // { 'รพ.สต. เขาทราย': { hosp: X, pcu: Y } }
+
+            // Initialize PCU categories
+            const PCU_AREAS = [
+                'PCU ทับคล้อ', 'รพ.สต. บ้านสายดงยาง', 'รพ.สต. เขาทราย', 'รพ.สต. บ้านวังแดง', 
+                'รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)', 'รพ.สต. ตำบลเขาเจ็ดลูก', 'รพ.สต.', 
+                'รพ.สต. บ้านท้ายทุ่งหมู่2', 'รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)', 'รพ.สต. บ้านไดอีเผือก', 'นอกเขต'
+            ];
+            PCU_AREAS.forEach(p => {
+                pcuFundAggregation[p] = { hosp: 0, pcu: 0, total: 0 };
+            });
+
+            patients.forEach(p => {
+                // Get home visit logs
+                const homeVisits = (p.dailyRecords || []).filter(r => r.mode === 'เยี่ยมบ้าน (Home Visit)');
+                // Sort by date ascending to allocate correct visit sequence numbers (1 to 6+)
+                const sortedVisits = [...homeVisits].sort((a,b) => new Date(a.date) - new Date(b.date));
+
+                sortedVisits.forEach((v, index) => {
+                    const visitNum = index + 1;
+                    const fund = calculateVisitFund(p.pcu, v.staff, visitNum);
+                    
+                    grandTotalFund += fund.total;
+                    grandHospShare += fund.hosp;
+                    grandPcuShare += fund.pcu;
+
+                    // Monthly aggregate (Format YYYY-MM)
+                    const monthKey = (v.date || '').substring(0, 7); // '2026-06'
+                    if (monthKey) {
+                        monthlyAggregation[monthKey] = (monthlyAggregation[monthKey] || 0) + fund.total;
+                    }
+
+                    // PCU area aggregate
+                    const targetPcu = pcuFundAggregation[fund.pcuName] ? fund.pcuName : 'นอกเขต';
+                    pcuFundAggregation[targetPcu].hosp += fund.hosp;
+                    pcuFundAggregation[targetPcu].pcu += fund.pcu;
+                    pcuFundAggregation[targetPcu].total += fund.total;
+                });
+            });
+
+            // Update Financial KPI DOM Nodes
+            document.getElementById('kpi-fund-total').innerText = `${grandTotalFund.toLocaleString()} บาท`;
+            document.getElementById('kpi-fund-hosp').innerText = `${grandHospShare.toLocaleString()} บาท`;
+            document.getElementById('kpi-fund-pcu').innerText = `${grandPcuShare.toLocaleString()} บาท`;
+
+            // Render existing clinical charts
             const diseases = {};
             const pcus = {};
             patients.forEach(p => {
@@ -2857,6 +2914,77 @@
                     type: 'bar',
                     data: { labels: Object.keys(pcus), datasets: [{ label: 'จำนวนผู้ป่วย', data: Object.values(pcus), backgroundColor: 'rgba(102, 252, 241, 0.6)', borderColor: '#66FCF1', borderWidth: 1 }] },
                     options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)'}, ticks: {color: '#a1b2d3'} }, x: { grid: { color: 'rgba(255, 255, 255, 0.05)'}, ticks: {color: '#a1b2d3'} } }, plugins: { legend: { labels: { color: '#E2E8F0' } } } }
+                });
+            }
+
+            // 2. Render Financial Monthly Line Chart
+            if(fundMonthlyChartInstance) fundMonthlyChartInstance.destroy();
+            const ctxMonthly = document.getElementById('fundMonthlyChart');
+            if (ctxMonthly) {
+                const sortedMonths = Object.keys(monthlyAggregation).sort();
+                const monthlyValues = sortedMonths.map(m => monthlyAggregation[m]);
+
+                fundMonthlyChartInstance = new Chart(ctxMonthly.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: sortedMonths.length > 0 ? sortedMonths : ['ไม่มีข้อมูล'],
+                        datasets: [{
+                            label: 'รายได้กองทุนรวมประจำเดือน (บาท)',
+                            data: sortedMonths.length > 0 ? monthlyValues : [0],
+                            borderColor: '#F4D03F',
+                            backgroundColor: 'rgba(244, 208, 63, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#66FCF1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#e2e8f0' } },
+                            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#e2e8f0' } }
+                        },
+                        plugins: { legend: { labels: { color: '#e2e8f0' } } }
+                    }
+                });
+            }
+
+            // 3. Render Stacked Bar Chart for Sub-district PCU split shares
+            if(fundPcuChartInstance) fundPcuChartInstance.destroy();
+            const ctxFundPcu = document.getElementById('fundPcuChart');
+            if (ctxFundPcu) {
+                const pcuLabels = Object.keys(pcuFundAggregation).filter(p => pcuFundAggregation[p].total > 0);
+                const hospShares = pcuLabels.map(p => pcuFundAggregation[p].hosp);
+                const pcuShares = pcuLabels.map(p => pcuFundAggregation[p].pcu);
+
+                fundPcuChartInstance = new Chart(ctxFundPcu.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: pcuLabels.length > 0 ? pcuLabels : ['ไม่มีข้อมูล'],
+                        datasets: [
+                            {
+                                label: 'สัดส่วนจัดสรร รพ.ทับคล้อ (บาท)',
+                                data: pcuLabels.length > 0 ? hospShares : [0],
+                                backgroundColor: 'rgba(102, 252, 241, 0.7)',
+                            },
+                            {
+                                label: 'สัดส่วนจัดสรร รพ.สต. (บาท)',
+                                data: pcuLabels.length > 0 ? pcuShares : [0],
+                                backgroundColor: 'rgba(168, 85, 247, 0.7)',
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#e2e8f0' } },
+                            x: { stacked: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#e2e8f0' } }
+                        },
+                        plugins: { legend: { labels: { color: '#e2e8f0' } } }
+                    }
                 });
             }
         }
