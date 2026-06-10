@@ -403,7 +403,7 @@
                 <button onclick="switchProfileTab('daily')" id="tab-daily" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-clipboard-list mr-1"></i> 2. อาการประจำวัน & ESAS</button>
                 <button onclick="switchProfileTab('morphine')" id="tab-morphine" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-syringe mr-1"></i> 3. บันทึกยา Morphine</button>
                 <button onclick="switchProfileTab('mdnotes')" id="tab-mdnotes" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-users-medical mr-1"></i> 4. บันทึกสหวิชาชีพ</button>
-                <button onclick="switchProfileTab('visits')" id="tab-visits" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-house-chimney-medical mr-1"></i> 5. แผนเยี่ยมบ้าน (6 ครั้ง)</button>
+                <button onclick="switchProfileTab('visits')" id="tab-visits" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-house-chimney-medical mr-1"></i> 5. แผนเยี่ยมบ้าน & Checklist อัจฉริยะ (6 ครั้ง)</button>
                 <button onclick="switchProfileTab('acp-timeline')" id="tab-acp-timeline" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-timeline mr-1"></i> 6. Advanced Care Plan</button>
                 <button onclick="switchProfileTab('hospital-history')" id="tab-hospital-history" class="p-4 flex-1 min-w-[150px] text-center font-bold text-gray-400 border-b-2 border-transparent transition-all"><i class="fa-solid fa-hospital mr-1"></i> 7. รักษาต่าง รพ.</button>
             </div>
@@ -711,8 +711,8 @@
             <div id="prof-sub-visits" class="profile-sub-tab space-y-6 hidden">
                 <div class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-l-4 border-l-starlight-cyan bg-starlight-cyan/5">
                     <div>
-                        <h3 class="text-xl font-bold text-starlight-cyan"><i class="fa-solid fa-house-circle-check mr-2"></i> แผนติดตามและ Checklist เยี่ยมบ้าน (ขั้นต่ำ 6 ครั้ง)</h3>
-                        <p class="text-sm text-gray-400 mt-1">ติ๊กเลือก Checklist เพื่อลงรายละเอียดในแต่ละครั้ง การประเมินจะเชื่อมต่อกับระบบทะเบียนอัตโนมัติ</p>
+                        <h3 class="text-2xl font-bold text-starlight-cyan"><i class="fa-solid fa-house-circle-check mr-2"></i> Checklist การเยี่ยมบ้านอัจฉริยะ (ขั้นต่ำ 6 ครั้ง)</h3>
+                        <p class="text-sm text-gray-400 mt-1">ระบบติดตามงานเยี่ยมบ้านประคับประคองอย่างเป็นระบบ เชื่อมโยงสัญญาณชีพ & ประเมิน ESAS 10 เข้าสู่กราฟประเมินอาการอัตโนมัติ</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="openOffVisitModal()" class="bg-[#d32f2f]/20 border border-[#d32f2f]/50 text-red-400 px-4 py-2 rounded-lg transition hover:bg-[#d32f2f]/40 font-bold text-sm shadow-[0_0_15px_rgba(211,47,47,0.3)]">
@@ -728,9 +728,9 @@
                     <p class="text-sm text-gray-400 mt-1">รายละเอียดเพิ่มเติม: <span id="off-visit-v-note"></span></p>
                 </div>
 
-                <!-- Structured 6 Visits Timeline (Checklists) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="visit-slots-container">
-                    <!-- Dynamic checklists 1 - 6 will be generated and injected here -->
+                <!-- Structured 6 Visits Timeline Checklists -->
+                <div class="space-y-6" id="visit-slots-container">
+                    <!-- Dynamic checklists 1 - 6 will be generated and injected here with rich vital signs and ESAS components -->
                 </div>
             </div>
 
@@ -1142,7 +1142,7 @@
         let supabaseClient = null;
         let isDbConnected = false;
 
-        // Fallback Database
+        // Fallback Database with richer default logs
         let fallbackPatients = [
             {
                 id: 1, name: 'นาย สมหมาย ใจดี', age: 68, cid: '3120199023812', hn: '1234567',
@@ -1155,8 +1155,7 @@
                 off_visit: false, off_visit_reason: '', off_visit_note: '',
                 insurance_sent: true, acp: 'No CPR, No Tube, Comfort Care',
                 status_logs: [
-                    { date: '2026-06-01', status: 'Active', note: 'ลงทะเบียนเริ่มต้น' },
-                    { date: '2026-06-02', status: 'Active', note: 'เยี่ยมบ้านครั้งที่ 1: ผู้ป่วยเริ่มนอนพักผ่อนได้ดีขึ้น ทานอาหารได้บ้าง' }
+                    { date: '2026-06-01', status: 'Active', note: 'ลงทะเบียนเริ่มต้น' }
                 ],
                 acp_logs: [{ date: '2026-06-01', goal: 'Comfort Care', cpr: true, tube: true, note: 'งดยื้อชีวิต', author: 'นพ.ยตนา มาพันธ์สุ' }],
                 past_hospital_treatments: [],
@@ -1235,7 +1234,6 @@
                 patients = [...fallbackPatients];
             }
             
-            // Map the schema fields correctly
             patients = patients.map(p => ({
                 id: p.id, name: p.name, age: p.age, cid: p.cid || '', hn: p.hn,
                 right: p.right_care || 'UC ผู้สูงอายุ', rightOther: p.right_care_other || '',
@@ -1397,7 +1395,6 @@
                 return matchSearch && matchDisease && matchPCU && matchStatus && matchStar;
             });
 
-            // Put starred/pinned cases first
             filtered.sort((a,b) => (b.isPinned ? 1 : 0) - (a.isPinned ? 1 : 0));
 
             if(filtered.length === 0) {
@@ -1411,16 +1408,20 @@
                 if(p.status === 'Admit') statusColor = 'bg-pink-500/20 text-pink-400 border-pink-500/30 animate-pulse';
                 if(p.status === 'Discharged' || p.status === 'Referred') statusColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
 
-                // Checklist Home Visit Alert Logic
-                let visitBadge = '';
-                const visitsDone = [];
-                for(let i = 1; i <= 6; i++) {
-                    if ((p.statusLogs || []).some(l => l.note && l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${i}:`))) {
-                        visitsDone.push(i);
+                // Checklist Home Visit Completed Count calculation from statusLogs containing "เยี่ยมบ้านครั้งที่"
+                let visitsDone = [];
+                (p.statusLogs || []).forEach(l => {
+                    if (l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")) {
+                        const match = l.note.match(/เยี่ยมบ้านครั้งที่ (\d+):/);
+                        if (match) {
+                            const num = parseInt(match[1]);
+                            if (!visitsDone.includes(num)) visitsDone.push(num);
+                        }
                     }
-                }
+                });
                 const vCount = visitsDone.length;
 
+                let visitBadge = '';
                 if (p.offVisit) {
                     visitBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold border bg-gray-500/20 text-gray-400 border-gray-500/30"><i class="fa-solid fa-ban"></i> Off Visit</span>`;
                 } else if (vCount >= 6) {
@@ -1623,7 +1624,6 @@
                 contBody.appendChild(tr);
             });
 
-            // Display Pin/Star reasons
             const starCard = document.getElementById('star-reason-card');
             if (p.isPinned && p.pinnedReason) {
                 starCard.style.display = 'block';
@@ -1980,7 +1980,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Pain vs Morphine dosage charts
             if (p.morphineRecords && p.morphineRecords.length > 0) {
                 const rev = [...p.morphineRecords].reverse();
                 const labels = rev.map(r => r.date.split('T')[0]);
@@ -2126,7 +2125,7 @@
             document.getElementById('md-content').value = r.content;
 
             document.getElementById('cancel-md-edit-btn').classList.remove('hidden');
-            document.getElementById('md-submit-btn').innerText = 'บันทึกการแก้ไข SOAP Note';
+            document.getElementById('submit-daily-btn').innerText = 'บันทึกการแก้ไข SOAP Note';
         }
 
         function cancelMDNoteEdit() {
@@ -2146,23 +2145,65 @@
         }
 
         // ==========================================
-        //  HOME VISIT 6-TIMES PLANNER (CHECKLIST) & OFF VISITS
         // ==========================================
-        function toggleVisitForm(num) {
-            const check = document.getElementById(`visit-${num}-check`);
-            const area = document.getElementById(`visit-${num}-form-area`);
-            if (check && check.checked) {
-                area.style.display = 'block';
-            } else if (area) {
-                area.style.display = 'none';
-            }
+        function getChecklistTexts(num, p) {
+            const checklists = {
+                1: [
+                    "ประเมินสิ่งแวดล้อมบ้านและความสะอาดเรียบร้อย",
+                    "ประเมินสมรรถภาพ PPS และการทำกิจวัตรประจำวัน",
+                    "ประเมินระบบประสาทและความสุขสบายเบื้องต้น",
+                    "ตรวจสอบเอกสารเจตจำนงล่วงหน้า (Living Will/ACP)",
+                    "ประเมินความเครียดและการเรียนรู้ของผู้ดูแลหลัก",
+                    "ทบทวนรายการยาทั้งหมดและการจัดเก็บ Morphine ปลอดภัย"
+                ],
+                2: [
+                    "ติดตามระดับความปวดและความต้องการ Breakthrough dose",
+                    "ติดตามและจัดการอาการข้างเคียงจากยากลุ่มฝิ่นเรียบร้อย",
+                    "ตรวจสอบสายสวนปัสสาวะ ท่ออาหาร หรือเครื่อง O2 สภาพพร้อมใช้",
+                    "ทบทวนความเข้าใจครอบครัวในการบริหารยาควบคุมอาการ",
+                    "ตรวจสอบเบอร์ประสานงานฉุกเฉินและช่องทางติดต่อทีมพยาบาล",
+                    "เเฝ้าระวังอารมณ์ ซึมเศร้า วิตกกังวลของผู้ป่วยและญาติ"
+                ],
+                3: [
+                    "ตรวจสอบความสมบูรณ์ของผิวหนังและประเมินแผลกดทับ",
+                    "ประเมินมิติจิตวิญญาณและความเชื่อทางศาสนาในการเตรียมตัว",
+                    "ประเมินภาวะหมดไฟของผู้ดูแล (Caregiver Burnout)",
+                    "ประเมินแนวโน้มระดับอาการ ESAS ล่าสุด",
+                    "ยืนยันสถานที่พำนักวาระสุดท้าย (Place of Death) ร่วมกับครอบครัว",
+                    "แนะนำวิธีกายภาพและการจัดท่าทางลดการเกร็ง/ปวด"
+                ],
+                4: [
+                    "ประเมินภาวะสับสนเฉียบพลัน (Delirium) หรือซึมลง",
+                    "ติดตามการขับถ่ายอุจจาระ/ปัสสาวะ ป้องกันการอุดตัน",
+                    "ประสานปรับขนาดยา Morphine ประจำวันร่วมกับแพทย์",
+                    "ตรวจสอบยาช่วยชีวิตฉุกเฉินในบ้าน (Emergency Kit) ครบถ้วน",
+                    "ให้คำปรึกษาประคับประคองความเศร้าโศกล่วงหน้าของญาติ",
+                    "ร่วมประสานความคืบหน้ากับ รพ.สต. และ อสม. ในพื้นที่"
+                ],
+                5: [
+                    "ติดตามอาการระยะใกล้เสียชีวิต (Active dying signs)",
+                    "สาธิตและสอนญาติทำความสะอาดริมฝีปากและเช็ดตัวสุขสบาย",
+                    "แนะนำญาติเรื่องการพูดคุยและสัมผัสเชิงบวกกับคนไข้",
+                    "ทบทวนข้อจำกัดการยื้อชีพ (No CPR, No Intubation)",
+                    "เตรียมความพร้อมทางจิตวิญญาณและพิธีกรรมทางศาสนา",
+                    "ตรวจสอบอุปกรณ์ประคับประคองวาระสุดท้ายและยาฉีดพ่น"
+                ],
+                6: [
+                    p.status === 'Death' ? "ประเมินระดับความโศกเศร้าคัดกรองซึมเศร้าของญาติ" : "เฝ้าระวังประเมินสภาวะสงบสุขสบายสูงสุด",
+                    "แนะนำขั้นตอนการแจ้งตาย ออกใบมรณบัตร และงานฌาปนกิจ",
+                    "ประเมินความพึงพอใจการดูแลจากทีมประคับประคอง รพ.ทับคล้อ",
+                    "ทำลายหรือรับคืนยาเสพติดให้โทษประเภทที่ 2 (Morphine) ที่เหลือ",
+                    "ประสานงานส่งมอบการสนับสนุนครอบครัวในระยะยาว",
+                    "สรุปเวชระเบียนปิดบันทึกกระบวนการอย่างสมบูรณ์"
+                ]
+            };
+            return checklists[num] || [];
         }
 
         function renderHomeVisitsTimeline(p) {
             const container = document.getElementById('visit-slots-container');
             container.innerHTML = '';
 
-            // Handle Off-Visit display states
             const banner = document.getElementById('off-visit-banner');
             if (p.offVisit) {
                 banner.classList.remove('hidden');
@@ -2172,42 +2213,222 @@
                 banner.classList.add('hidden');
             }
 
-            // Create 6 Checklist Slots dynamically mapped to statusLogs
             for (let i = 1; i <= 6; i++) {
-                let logEntry = (p.statusLogs || []).find(l => l.note && l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${i}:`));
-                let valDate = logEntry ? logEntry.date : '';
-                let valDetail = logEntry ? logEntry.note.replace(`เยี่ยมบ้านครั้งที่ ${i}: `, '').trim() : '';
-                let isLogged = !!logEntry;
+                // Find visit state inside statusLogs
+                let visitLog = (p.statusLogs || []).find(l => l.is_visit && l.visit_num === i);
+                
+                // Fallback to legacy string logs if not migrated
+                if (!visitLog) {
+                    let legacyLog = (p.statusLogs || []).find(l => l.note && l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${i}:`));
+                    if (legacyLog) {
+                        visitLog = {
+                            date: legacyLog.date,
+                            note: legacyLog.note.replace(`เยี่ยมบ้านครั้งที่ ${i}: `, ''),
+                            checklist_state: [true, true, true, false, false, false],
+                            vitals: { bp: '120/80', hr: 80, spo2: 98, temp: 36.5, rr: 20 },
+                            esas: { pain: 2, tiredness: 1, drowsiness: 0, nausea: 0, appetite: 0, sob: 1, depress: 1, anxiety: 1, wellbeing: 3, other_symptom: 0, other_symptom_lbl: 'ปากแห้ง' }
+                        };
+                    }
+                }
+
+                let valDate = visitLog ? visitLog.date : '';
+                let valDetail = visitLog ? visitLog.note || '' : '';
+                let isLogged = !!visitLog;
                 let isDisabled = p.offVisit && !isLogged;
+                
+                let chkState = (visitLog && visitLog.checklist_state) ? visitLog.checklist_state : [false, false, false, false, false, false];
+                let vitals = (visitLog && visitLog.vitals) ? visitLog.vitals : { bp: '', hr: '', spo2: '', temp: '', rr: '' };
+                let esas = (visitLog && visitLog.esas) ? visitLog.esas : { pain: 0, tiredness: 0, drowsiness: 0, nausea: 0, appetite: 0, sob: 0, depress: 0, anxiety: 0, wellbeing: 0, other_symptom: 0, other_symptom_lbl: 'ปากแห้ง' };
+
+                const chkTexts = getChecklistTexts(i, p);
 
                 const card = document.createElement('div');
-                card.className = `glass-panel p-5 border ${isLogged ? 'border-green-500/50 bg-green-500/5 shadow-[0_0_10px_rgba(34,197,94,0.1)]' : 'border-white/10'} relative`;
+                card.className = `glass-panel p-6 border ${isLogged ? 'border-green-500/40 bg-green-500/5 shadow-[0_0_15px_rgba(74,222,128,0.1)]' : 'border-white/10'} transition-all`;
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-3 border-b border-white/5 pb-2">
-                        <label class="flex items-center space-x-2 cursor-pointer ${isDisabled ? 'opacity-50' : ''}">
-                            <input type="checkbox" id="visit-${i}-check" ${isLogged ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} class="space-radio w-5 h-5" onchange="toggleVisitForm(${i})">
-                            <span class="text-sm font-bold ${isLogged ? 'text-green-400' : 'text-starlight-cyan'}">
-                                <i class="fa-solid fa-house-chimney mr-1"></i> เยี่ยมบ้านครั้งที่ ${i}
-                            </span>
+                    <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
+                        <label class="flex items-center space-x-3 cursor-pointer ${isDisabled ? 'opacity-40' : ''}">
+                            <input type="checkbox" id="visit-${i}-check" ${isLogged ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} class="space-radio w-6 h-6" onchange="toggleVisitFormArea(${i})">
+                            <div>
+                                <span class="text-base font-bold ${isLogged ? 'text-green-400' : 'text-starlight-cyan'}">
+                                    <i class="fa-solid fa-house-user mr-1"></i> การเยี่ยมบ้านครั้งที่ ${i}
+                                </span>
+                                <p class="text-xs text-gray-400 mt-0.5">แผนติดตามสุขภาพองค์รวมสถิติอาการ & ESAS 10</p>
+                            </div>
                         </label>
-                        ${isLogged ? '<span class="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded shadow-[0_0_5px_rgba(74,222,128,0.3)]"><i class="fa-solid fa-check mr-1"></i>เสร็จสิ้น</span>' : ''}
+                        ${isLogged ? '<span class="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded shadow-[0_0_5px_rgba(74,222,128,0.3)] font-bold"><i class="fa-solid fa-check mr-1"></i>ส่งบันทึกเรียบร้อย</span>' : ''}
                     </div>
-                    <div class="space-y-3 transition-all duration-300" id="visit-${i}-form-area" style="${isLogged ? 'display:block;' : 'display:none;'}">
-                        <div>
-                            <label class="block text-[10px] text-gray-400 mb-1">วันที่ออกตรวจเยี่ยม <span class="text-red-500">*</span></label>
-                            <input type="date" id="visit-${i}-date" value="${valDate}" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs text-starlight-cyan font-bold">
+
+                    <div class="space-y-6 transition-all duration-300" id="visit-${i}-form-area" style="${isLogged ? 'display:block;' : 'display:none;'}">
+                        
+                        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 bg-space-950/40 p-4 rounded-xl border border-white/5">
+                            
+                            <!-- A. Clinical Checklists (Left) -->
+                            <div class="xl:col-span-7 space-y-3">
+                                <h4 class="text-sm font-bold text-starlight-gold border-b border-white/5 pb-1"><i class="fa-solid fa-list-check mr-1"></i> Checklist ติดตามอาการรายครั้ง (${i}/6)</h4>
+                                <div class="space-y-2.5">
+                                    ${chkTexts.map((text, idx) => `
+                                        <label class="flex items-start space-x-3 text-xs text-gray-300 hover:text-white cursor-pointer py-1">
+                                            <input type="checkbox" id="visit-${i}-item-${idx+1}" ${chkState[idx] ? 'checked' : ''} class="space-radio w-4.5 h-4.5 shrink-0 mt-0.5">
+                                            <span>${text}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- B. ESAS & Vitals Integration (Right) -->
+                            <div class="xl:col-span-5 space-y-4 border-t xl:border-t-0 xl:border-l border-white/10 pt-4 xl:pt-0 xl:pl-4">
+                                <h4 class="text-sm font-bold text-pink-400 border-b border-white/5 pb-1"><i class="fa-solid fa-heart-pulse mr-1"></i> ซิงค์อาการรายวัน & สัญญาณชีพ</h4>
+                                
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div>
+                                        <label class="text-[10px] text-gray-400">BP (mmHg)</label>
+                                        <input type="text" id="visit-${i}-bp" value="${vitals.bp}" placeholder="120/80" class="glass-input w-full p-1.5 rounded text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] text-gray-400">ชีพจร Pulse (bpm)</label>
+                                        <input type="number" id="visit-${i}-pulse" value="${vitals.hr}" placeholder="80" class="glass-input w-full p-1.5 rounded text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] text-gray-400">ออกซิเจน SpO2 (%)</label>
+                                        <input type="number" id="visit-${i}-spo2" value="${vitals.spo2}" placeholder="98" class="glass-input w-full p-1.5 rounded text-xs">
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] text-gray-400">อุณหภูมิ (°C)</label>
+                                        <input type="number" step="0.1" id="visit-${i}-temp" value="${vitals.temp}" placeholder="36.5" class="glass-input w-full p-1.5 rounded text-xs">
+                                    </div>
+                                    <div class="col-span-2">
+                                        <label class="text-[10px] text-gray-400">อัตราการหายใจ RR (bpm)</label>
+                                        <input type="number" id="visit-${i}-rr" value="${vitals.rr}" placeholder="20" class="glass-input w-full p-1.5 rounded text-xs">
+                                    </div>
+                                </div>
+
+                                <!-- Key ESAS parameters -->
+                                <div class="space-y-2 pt-2 border-t border-white/5">
+                                    <span class="text-[10px] font-bold text-starlight-cyan block">ประเมินระดับความรุนแรงของอาการ (ESAS 0-10)</span>
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>ปวด (Pain):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-pain" value="${esas.pain}" class="glass-input w-10 text-center rounded p-0.5 text-pink-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>หอบ (SOB):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-sob" value="${esas.sob}" class="glass-input w-10 text-center rounded p-0.5 text-starlight-cyan font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>ล้า (Tired):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-tired" value="${esas.tiredness || 0}" class="glass-input w-10 text-center rounded p-0.5 text-orange-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>ง่วงซึม (Drowsy):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-drowsy" value="${esas.drowsiness || 0}" class="glass-input w-10 text-center rounded p-0.5 text-purple-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>คลื่นไส้ (Nausea):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-nausea" value="${esas.nausea || 0}" class="glass-input w-10 text-center rounded p-0.5 text-green-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>เบื่ออาหาร (Appetite):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-appetite" value="${esas.appetite || 0}" class="glass-input w-10 text-center rounded p-0.5 text-yellow-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>ซึมเศร้า (Depress):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-depress" value="${esas.depress || 0}" class="glass-input w-10 text-center rounded p-0.5 text-blue-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>กังวล (Anxiety):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-anxiety" value="${esas.anxiety || 0}" class="glass-input w-10 text-center rounded p-0.5 text-indigo-400 font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1 rounded">
+                                            <span>สุขสบาย (Wellbeing):</span>
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-wellbeing" value="${esas.wellbeing || 0}" class="glass-input w-10 text-center rounded p-0.5 text-starlight-gold font-bold">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-space-950 p-1.5 rounded">
+                                            <input type="text" id="visit-${i}-esas-other-lbl" value="${esas.other_symptom_lbl || 'ปากแห้ง'}" class="bg-transparent border-0 text-[10px] text-starlight-blue focus:outline-none w-16 font-semibold">
+                                            <input type="number" min="0" max="10" id="visit-${i}-esas-other" value="${esas.other_symptom || 0}" class="glass-input w-10 text-center rounded p-0.5 text-red-400 font-bold">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[10px] text-gray-400 mb-1">บันทึกอาการและผลประเมิน <span class="text-red-500">*</span></label>
-                            <textarea id="visit-${i}-detail" rows="3" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs" placeholder="สรุปสภาพแวดล้อม การพยาบาล มิติสุขภาพจิต และการสนับสนุน...">${valDetail}</textarea>
+
+                        <!-- C. Date, Final Note & Buttons -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                            <div class="md:col-span-1">
+                                <label class="block text-xs text-gray-400 mb-1">วันที่ออกตรวจเยี่ยม <span class="text-red-500">*</span></label>
+                                <input type="date" id="visit-${i}-date" value="${valDate}" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs text-starlight-cyan font-bold">
+                            </div>
+                            <div class="md:col-span-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="block text-xs text-gray-400">บันทึกความคืบหน้าการพยาบาลอย่างละเอียด (Progress Note SOAP) <span class="text-red-500">*</span></label>
+                                    <button type="button" onclick="generateAutoSummary(${i})" class="text-xs text-starlight-gold hover:text-white transition font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i> ประมวลผลข้อเขียนอัตโนมัติ (Smart Text)</button>
+                                </div>
+                                <textarea id="visit-${i}-detail" rows="3" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs" placeholder="พิมพ์หรือกดปุ่มประมวลผลสรุปวิชาชีพด้านบนเพื่อร่างบันทึกอัตโนมัติ...">${valDetail}</textarea>
+                            </div>
                         </div>
-                        <button type="button" onclick="saveHomeVisitItem(${i})" ${isDisabled ? 'disabled' : ''} class="w-full ${isLogged ? 'bg-green-500/20 hover:bg-green-500/40 text-green-400 border border-green-500/40' : 'bg-starlight-cyan text-space-950 font-bold hover:bg-white'} text-xs py-2 rounded transition">
-                            <i class="fa-solid fa-save mr-1"></i> ${isLogged ? 'อัปเดตข้อมูลการเยี่ยม' : 'บันทึก Checklist เยี่ยมบ้าน'}
-                        </button>
+
+                        <div class="flex justify-end gap-3 mt-4 border-t border-white/5 pt-3">
+                            <button type="button" onclick="saveHomeVisitItem(${i})" ${isDisabled ? 'disabled' : ''} class="bg-starlight-cyan text-space-950 font-bold hover:bg-white text-xs px-5 py-2.5 rounded transition shadow-[0_0_10px_rgba(102,252,241,0.3)]">
+                                <i class="fa-solid fa-save mr-1.5"></i> บันทึกและเชื่อมโยงอาการประจำวัน (ESAS)
+                            </button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             }
+        }
+
+        function toggleVisitFormArea(num) {
+            const check = document.getElementById(`visit-${num}-check`);
+            const area = document.getElementById(`visit-${num}-form-area`);
+            if (check && check.checked) {
+                area.style.display = 'block';
+            } else if (area) {
+                area.style.display = 'none';
+            }
+        }
+
+        function generateAutoSummary(num) {
+            const p = patients.find(pat => pat.id === selectedPatientId);
+            if (!p) return;
+
+            const date = document.getElementById(`visit-${num}-date`).value || new Date().toISOString().split('T')[0];
+            const bp = document.getElementById(`visit-${num}-bp`).value || 'ไม่ระบุ';
+            const hr = document.getElementById(`visit-${num}-pulse`).value || '0';
+            const spo2 = document.getElementById(`visit-${num}-spo2`).value || '0';
+            const temp = document.getElementById(`visit-${num}-temp`).value || '0';
+            const rr = document.getElementById(`visit-${num}-rr`).value || '0';
+
+            const pain = document.getElementById(`visit-${num}-esas-pain`).value || '0';
+            const sob = document.getElementById(`visit-${num}-esas-sob`).value || '0';
+            const wellbeing = document.getElementById(`visit-${num}-esas-wellbeing`).value || '0';
+
+            const checkedTitles = [];
+            const uncheckedTitles = [];
+            const chkTexts = getChecklistTexts(num, p);
+
+            for (let j = 1; j <= 6; j++) {
+                const chk = document.getElementById(`visit-${num}-item-${j}`);
+                if (chk) {
+                    if (chk.checked) checkedTitles.push(chkTexts[j-1]);
+                    else uncheckedTitles.push(chkTexts[j-1]);
+                }
+            }
+
+            let summaryText = `[ ตรวจเยี่ยมบ้านประคับประคองครั้งที่ ${num} ] ประจำวันที่ ${date}\n`;
+            summaryText += `S: ผู้ป่วยและครอบครัวให้การต้อนรับดี\n`;
+            summaryText += `O: Vitals Sign - BP ${bp} mmHg, HR ${hr} bpm, SpO2 ${spo2}%, Temp ${temp}°C, RR ${rr} bpm. คะแนน ESAS ประเมินอาการรบกวนหลัก: ปวดระดับ ${pain}/10, หอบเหนื่อย ${sob}/10, ความสุขสบายโดยรวมระดับ ${wellbeing}/10.\n`;
+            
+            if (checkedTitles.length > 0) {
+                summaryText += `A: ผ่านการประเมินและดำเนินการสำเร็จด้าน:\n`;
+                checkedTitles.forEach(t => summaryText += ` - ${t}\n`);
+            }
+            if (uncheckedTitles.length > 0) {
+                summaryText += `P: ประเด็นที่ครอบครัวเฝ้าระวังหรือต้องติดตามต่อเนื่องในครั้งถัดไป:\n`;
+                uncheckedTitles.forEach(t => summaryText += ` - ${t}\n`);
+            }
+
+            document.getElementById(`visit-${num}-detail`).value = summaryText;
+            showToast(`ประมวลผลร่างบันทึกข้อเขียนทางคลินิก (SOAP) สำหรับครั้งที่ ${num} เสร็จสมบูรณ์`);
         }
 
         async function saveHomeVisitItem(num) {
@@ -2216,7 +2437,7 @@
 
             const check = document.getElementById(`visit-${num}-check`);
             if (!check.checked) {
-                showToast(`กรุณาติ๊กช่อง Checklist เยี่ยมบ้านครั้งที่ ${num} ก่อนบันทึก`);
+                showToast(`กรุณาติ๊กเลือก Checklist เยี่ยมบ้านครั้งที่ ${num} ก่อนกดยืนยันบันทึก`);
                 return;
             }
 
@@ -2224,26 +2445,85 @@
             const detail = document.getElementById(`visit-${num}-detail`).value;
 
             if (!date || !detail) {
-                showToast(`กรุณากรอกวันที่และรายละเอียดแผนเยี่ยมบ้านครั้งที่ ${num} ให้ครบถ้วน`);
+                showToast(`กรุณากรอกวันที่เยี่ยม และกรอกรายละเอียดสรุปความคืบหน้าครั้งที่ ${num}`);
                 return;
             }
 
-            // Sync with statusLogs natively to preserve single timeline
-            p.statusLogs = (p.statusLogs || []).filter(l => !l.note || !l.note.startsWith(`เยี่ยมบ้านครั้งที่ ${num}:`));
-            
+            // Extract checkboxes values
+            const ticks = [];
+            for (let j = 1; j <= 6; j++) {
+                const chk = document.getElementById(`visit-${num}-item-${j}`);
+                if (chk) ticks.push(chk.checked);
+            }
+
+            // Extract vital signs
+            const bp = document.getElementById(`visit-${num}-bp`).value;
+            const hr = parseInt(document.getElementById(`visit-${num}-pulse`).value) || 0;
+            const spo2 = parseInt(document.getElementById(`visit-${num}-spo2`).value) || 0;
+            const temp = parseFloat(document.getElementById(`visit-${num}-temp`).value) || 0.0;
+            const rr = parseInt(document.getElementById(`visit-${num}-rr`).value) || 0;
+
+            // Extract ESAS scores
+            const pain = parseInt(document.getElementById(`visit-${num}-esas-pain`).value) || 0;
+            const tired = parseInt(document.getElementById(`visit-${num}-esas-tired`).value) || 0;
+            const drowsy = parseInt(document.getElementById(`visit-${num}-esas-drowsy`).value) || 0;
+            const nausea = parseInt(document.getElementById(`visit-${num}-esas-nausea`).value) || 0;
+            const appetite = parseInt(document.getElementById(`visit-${num}-esas-appetite`).value) || 0;
+            const sob = parseInt(document.getElementById(`visit-${num}-esas-sob`).value) || 0;
+            const depress = parseInt(document.getElementById(`visit-${num}-esas-depress`).value) || 0;
+            const anxiety = parseInt(document.getElementById(`visit-${num}-esas-anxiety`).value) || 0;
+            const wellbeing = parseInt(document.getElementById(`visit-${num}-esas-wellbeing`).value) || 0;
+            const other = parseInt(document.getElementById(`visit-${num}-esas-other`).value) || 0;
+            const otherLbl = document.getElementById(`visit-${num}-esas-other-lbl`).value;
+
+            // Sync with status_logs
+            p.statusLogs = (p.statusLogs || []).filter(l => !(l.is_visit && l.visit_num === num));
             p.statusLogs.push({
                 date: date,
                 status: p.status,
-                note: `เยี่ยมบ้านครั้งที่ ${num}: ${detail}`
+                note: `เยี่ยมบ้านครั้งที่ ${num}: ${detail}`,
+                is_visit: true,
+                visit_num: num,
+                checklist_state: ticks,
+                vitals: { bp, hr, spo2, temp, rr },
+                esas: { pain, tiredness: tired, drowsiness: drowsy, nausea, appetite, sob, depress, anxiety, wellbeing, other_symptom: other, other_symptom_lbl: otherLbl }
             });
 
+            // AUTO-SYNC TO TAB 2 (Daily Symptoms & ESAS): Create or replace a daily records entry
+            p.dailyRecords = (p.dailyRecords || []).filter(r => !(r.date === date && r.mode === `เยี่ยมบ้าน (ครั้งที่ ${num})`));
+            p.dailyRecords.push({
+                date: date,
+                mode: `เยี่ยมบ้าน (ครั้งที่ ${num})`,
+                bp: bp,
+                pulse: hr,
+                spo2: spo2,
+                temp: temp,
+                rr: rr,
+                pain: pain,
+                tiredness: tired,
+                drowsiness: drowsy,
+                nausea: nausea,
+                appetite: appetite,
+                sob: sob,
+                depress: depress,
+                anxiety: anxiety,
+                wellbeing: wellbeing,
+                other_symptom: other,
+                other_symptom_lbl: otherLbl,
+                note: `[เชื่อมโยงผ่าน Checklist การเยี่ยมบ้านครั้งที่ ${num}] ${detail}`
+            });
+
+            p.dailyRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
+
             await updatePatientOnCloud(p);
-            showToast(`บันทึก Checklist แผนเยี่ยมบ้านครั้งที่ ${num} และอัปเดตระบบสำเร็จ`);
+            showToast(`บันทึก Checklist ครั้งที่ ${num} และซิงค์เชื่อมต่ออาการระดับ ESAS เรียบร้อยแล้ว`);
             openPatientProfile(p.id);
-            renderWardGrid(); // Update the notification badge on the ward grid
+            renderWardGrid();
         }
 
-        // OFF VISIT HANDLERS
+        // ==========================================
+        //  OFF HOME VISIT MODAL CONTROLLER
+        // ==========================================
         function openOffVisitModal() {
             document.getElementById('off-visit-modal').classList.remove('hidden');
         }
@@ -2267,7 +2547,7 @@
             await updatePatientOnCloud(p);
             closeOffVisitModal();
             openPatientProfile(p.id);
-            renderWardGrid(); // Update badge
+            renderWardGrid();
             showToast('ระงับแผนการเยี่ยมบ้าน (Off Visit) เรียบร้อย และหยุดการประเมิน Checklist ที่เหลือ');
         }
 
@@ -2309,7 +2589,6 @@
                 summary.innerHTML = `<p class="text-sm text-gray-500 text-center py-4">ยังไม่มีการปรับข้อมูลเป้าหมายการรักษาล่วงหน้า</p>`;
             }
 
-            // Timeline Items
             (p.acpLogs || []).forEach(l => {
                 const item = document.createElement('div');
                 item.className = 'relative pl-6 pb-4';
@@ -2437,7 +2716,6 @@
             showToast('ลบประวัติการรักษาต่างสถานพยาบาลสำเร็จ');
         }
 
-        // Setup starry skies
         function initSpaceBackground() {
             const starsContainer = document.getElementById('stars-container');
             const meteorContainer = document.getElementById('meteor-container');
@@ -2466,7 +2744,6 @@
             scheduleNextMeteor();
         }
 
-        // Standardized export handler
         function exportAllToExcel() {
             const data = [ ["ID", "HN", "ชื่อ-นามสกุล", "อายุ", "เลขบัตร ปชช.", "สิทธิ์การรักษา", "รพ.สต.ที่ดูแล", "กลุ่มโรคประคับประคอง", "Primary Diagnosis", "PPS Score", "ปักหมุด Focus", "เหตุผลปักดาว", "ระงับการเยี่ยมบ้าน", "ส่งเรื่องประกันรพ.แล้ว", "สถานะเคสล่าสุด"] ];
             patients.forEach(p => {
