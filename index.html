@@ -1465,12 +1465,10 @@
                 // Checklist Home Visit Completed Count
                 let visitsDone = [];
                 (p.statusLogs || []).forEach(l => {
-                    if (l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")) {
+                    if (l.note && (l.note.startsWith("เยี่ยมบ้านครั้งที่") || l.is_visit)) {
                         const match = l.note.match(/เยี่ยมบ้านครั้งที่ (\d+):/);
-                        if (match) {
-                            const num = parseInt(match[1]);
-                            if (!visitsDone.includes(num)) visitsDone.push(num);
-                        }
+                        const num = match ? parseInt(match[1]) : l.visit_num;
+                        if (num && !visitsDone.includes(num)) visitsDone.push(num);
                     }
                 });
                 const vCount = visitsDone.length;
@@ -2473,13 +2471,15 @@
                             note: legacyLog.note.replace(`เยี่ยมบ้านครั้งที่ ${i}: `, ''),
                             checklist_state: [true, true, true, false, false, false],
                             vitals: { bp: '120/80', hr: 80, spo2: 98, temp: 36.5, rr: 20 },
-                            esas: { pain: 2, tiredness: 1, drowsiness: 0, nausea: 0, appetite: 0, sob: 1, depress: 1, anxiety: 1, wellbeing: 3, other_symptom: 0, other_symptom_lbl: 'ปากแห้ง' }
+                            esas: { pain: 2, tiredness: 1, drowsiness: 0, nausea: 0, appetite: 0, sob: 1, depress: 1, anxiety: 1, wellbeing: 3, other_symptom: 0, other_symptom_lbl: 'ปากแห้ง' },
+                            visitor_unit: 'PCU ทับคล้อ'
                         };
                     }
                 }
 
                 let valDate = visitLog ? visitLog.date : '';
                 let valDetail = visitLog ? visitLog.note || '' : '';
+                let valUnit = visitLog ? visitLog.visitor_unit || '' : '';
                 let isLogged = !!visitLog;
                 let isDisabled = p.offVisit && !isLogged;
                 
@@ -2502,7 +2502,7 @@
                                 <p class="text-xs text-gray-400 mt-0.5">แผนติดตามสุขภาพองค์รวมสถิติอาการ & ESAS 10</p>
                             </div>
                         </label>
-                        ${isLogged ? '<span class="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded shadow-[0_0_5px_rgba(74,222,128,0.3)] font-bold"><i class="fa-solid fa-check mr-1"></i>ส่งบันทึกเรียบร้อย</span>' : ''}
+                        ${isLogged ? `<span class="text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded shadow-[0_0_5px_rgba(74,222,128,0.3)] font-bold"><i class="fa-solid fa-check mr-1"></i>สรุปบันทึกโดย: ${valUnit || 'ไม่ระบุ'}</span>` : ''}
                     </div>
 
                     <div class="space-y-6 transition-all duration-300" id="visit-${i}-form-area" style="${isLogged ? 'display:block;' : 'display:none;'}">
@@ -2598,16 +2598,34 @@
                             </div>
                         </div>
 
-                        <!-- C. Date, Final Note & Buttons -->
+                        <!-- C. Date, Visitor Unit, Final Note & Buttons -->
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                             <div class="md:col-span-1">
                                 <label class="block text-xs text-gray-400 mb-1">วันที่ออกตรวจเยี่ยม <span class="text-red-500">*</span></label>
                                 <input type="date" id="visit-${i}-date" value="${valDate}" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs text-starlight-cyan font-bold">
                             </div>
-                            <div class="md:col-span-3">
+                            <div class="md:col-span-1">
+                                <label class="block text-xs text-gray-400 mb-1">หน่วยงานเจ้าหน้าที่ที่ลงเยี่ยม <span class="text-red-500">*</span></label>
+                                <select id="visit-${i}-unit" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2.5 rounded text-xs text-starlight-gold font-bold">
+                                    <option value="" disabled ${!valUnit ? 'selected' : ''}>-- เลือกหน่วยงาน --</option>
+                                    <option value="รพ.ทับคล้อ" ${valUnit === 'รพ.ทับคล้อ' ? 'selected' : ''}>รพ.ทับคล้อ</option>
+                                    <option value="PCU ทับคล้อ" ${valUnit === 'PCU ทับคล้อ' ? 'selected' : ''}>PCU ทับคล้อ</option>
+                                    <option value="รพ.สต. บ้านสายดงยาง" ${valUnit === 'รพ.สต. บ้านสายดงยาง' ? 'selected' : ''}>รพ.สต. บ้านสายดงยาง</option>
+                                    <option value="รพ.สต. เขาทราย" ${valUnit === 'รพ.สต. เขาทราย' ? 'selected' : ''}>รพ.สต. เขาทราย</option>
+                                    <option value="รพ.สต. บ้านวังแดง" ${valUnit === 'รพ.สต. บ้านวังแดง' ? 'selected' : ''}>รพ.สต. บ้านวังแดง</option>
+                                    <option value="รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)" ${valUnit === 'รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)' ? 'selected' : ''}>รพ.สต. บ้านเขาเจ็ดลูก(ไดวน)</option>
+                                    <option value="รพ.สต. ตำบลเขาเจ็ดลูก" ${valUnit === 'รพ.สต. ตำบลเขาเจ็ดลูก' ? 'selected' : ''}>รพ.สต. ตำบลเขาเจ็ดลูก</option>
+                                    <option value="รพ.สต. บ้านท้ายทุ่งหมู่2" ${valUnit === 'รพ.สต. บ้านท้ายทุ่งหมู่2' ? 'selected' : ''}>รพ.สต. บ้านท้ายทุ่งหมู่2</option>
+                                    <option value="รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)" ${valUnit === 'รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)' ? 'selected' : ''}>รพ.สต. ตำบลท้ายทุ่ง(วังกระชัน)</option>
+                                    <option value="รพ.สต. บ้านไดอีเผือก" ${valUnit === 'รพ.สต. บ้านไดอีเผือก' ? 'selected' : ''}>รพ.สต. บ้านไดอีเผือก</option>
+                                    <option value="รพ.สต." ${valUnit === 'รพ.สต.' ? 'selected' : ''}>รพ.สต.</option>
+                                    <option value="นอกเขต" ${valUnit === 'นอกเขต' ? 'selected' : ''}>นอกเขต</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
                                 <div class="flex justify-between items-center mb-1">
                                     <label class="block text-xs text-gray-400">บันทึกความคืบหน้าการพยาบาลอย่างละเอียด (SOAP) <span class="text-red-500">*</span></label>
-                                    <button type="button" onclick="generateAutoSummary(${i})" class="text-xs text-starlight-gold hover:text-white transition font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i> ร่างประมวลผลข้อเขียนอัจฉริยะ (SOAP Note)</button>
+                                    <button type="button" onclick="generateAutoSummary(${i})" class="text-xs text-starlight-gold hover:text-white transition font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i> ร่าง SOAP อัตโนมัติ</button>
                                 </div>
                                 <textarea id="visit-${i}-detail" rows="3" ${isDisabled ? 'disabled' : ''} class="glass-input w-full p-2 rounded text-xs" placeholder="สรุปสภาพทางคลินิก สิ่งแวดล้อม และกระบวนการสนับสนุนครอบครัว...">${valDetail}</textarea>
                             </div>
@@ -2639,6 +2657,7 @@
             if (!p) return;
 
             const date = document.getElementById(`visit-${num}-date`).value || new Date().toISOString().split('T')[0];
+            const unit = document.getElementById(`visit-${num}-unit`).value || 'ทีมเยี่ยมบ้าน';
             const bp = document.getElementById(`visit-${num}-bp`).value || 'ไม่ระบุ';
             const hr = document.getElementById(`visit-${num}-pulse`).value || '0';
             const spo2 = document.getElementById(`visit-${num}-spo2`).value || '0';
@@ -2661,16 +2680,16 @@
                 }
             }
 
-            let summaryText = `[ ตรวจเยี่ยมบ้านประคับประคองครั้งที่ ${num} ] ประจำวันที่ ${date}\n`;
-            summaryText += `S: ผู้ป่วยรู้สึกตัวดี บรรเทาความปวดได้ตามประสงค์ สัมผัสสัมพันธ์ในครอบครัวเป็นไปด้วยดี\n`;
+            let summaryText = `[ ตรวจเยี่ยมบ้านโดยเจ้าหน้าที่จาก ${unit} ครั้งที่ ${num} ] ประจำวันที่ ${date}\n`;
+            summaryText += `S: ผู้ป่วยและครอบครัวให้การต้อนรับดี บรรเทาความปวดได้ตามประสงค์ สัมผัสสัมพันธ์ในครอบครัวดี\n`;
             summaryText += `O: Vital Signs - BP ${bp} mmHg, HR ${hr} bpm, SpO2 ${spo2}%, Temp ${temp}°C, RR ${rr} bpm. คะแนน ESAS ประเมินอาการรบกวนหลัก: ปวดระดับ ${pain}/10, หอบเหนื่อย ${sob}/10, ความสุขสบายโดยรวมระดับ ${wellbeing}/10.\n`;
             
             if (checkedTitles.length > 0) {
-                summaryText += `A: ดำเนินการคัดกรองประเมินสำเร็จด้าน:\n`;
+                summaryText += `A: เจ้าหน้าที่ดำเนินการตรวจประเมินสำเร็จเสร็จสิ้นในกระบวนการด้าน:\n`;
                 checkedTitles.forEach(t => summaryText += ` - ${t}\n`);
             }
             if (uncheckedTitles.length > 0) {
-                summaryText += `P: แผนงานที่ครอบครัวต้องเฝ้าระวังหรือปฏิบัติความช่วยเหลือต่อเนื่อง:\n`;
+                summaryText += `P: วางแผนการเฝ้าระวังหรือปฏิบัติความช่วยเหลือต่อเนื่องแก่ครอบครัว:\n`;
                 uncheckedTitles.forEach(t => summaryText += ` - ${t}\n`);
             }
 
@@ -2690,9 +2709,15 @@
 
             const date = document.getElementById(`visit-${num}-date`).value;
             const detail = document.getElementById(`visit-${num}-detail`).value;
+            const unit = document.getElementById(`visit-${num}-unit`).value;
 
             if (!date || !detail) {
                 showToast(`กรุณากรอกวันที่เยี่ยม และกรอกรายละเอียดสรุปความคืบหน้าครั้งที่ ${num}`);
+                return;
+            }
+            
+            if (!unit) {
+                showToast(`กรุณาเลือกหน่วยงานเจ้าหน้าที่ที่ลงตรวจเยี่ยมในครั้งที่ ${num}`);
                 return;
             }
 
@@ -2727,6 +2752,7 @@
                 note: `เยี่ยมบ้านครั้งที่ ${num}: ${detail}`,
                 is_visit: true,
                 visit_num: num,
+                visitor_unit: unit,
                 checklist_state: ticks,
                 vitals: { bp, hr, spo2, temp, rr },
                 esas: { pain, tiredness: tired, drowsiness: drowsy, nausea, appetite, sob, depress, anxiety, wellbeing, other_symptom: other, other_symptom_lbl: otherLbl }
@@ -2752,13 +2778,13 @@
                 wellbeing: wellbeing,
                 other_symptom: other,
                 other_symptom_lbl: otherLbl,
-                note: `[เชื่อมโยงผ่าน Checklist การเยี่ยมบ้านครั้งที่ ${num}] ${detail}`
+                note: `[ลงเยี่ยมโดย ${unit} ผ่าน Checklist เยี่ยมบ้านครั้งที่ ${num}] ${detail}`
             });
 
             p.dailyRecords.sort((a,b) => new Date(b.date) - new Date(a.date));
 
             await updatePatientOnCloud(p);
-            showToast(`บันทึก Checklist ครั้งที่ ${num} และซิงค์เชื่อมต่ออาการระดับ ESAS เรียบร้อยแล้ว`);
+            showToast(`บันทึก Checklist และระบุผู้ลงเยี่ยมจาก ${unit} ในครั้งที่ ${num} เรียบร้อยแล้ว`);
             openPatientProfile(p.id);
             renderWardGrid();
         }
@@ -3065,7 +3091,7 @@
                 
                 let visitsCount = 0;
                 (p.statusLogs || []).forEach(l => {
-                    if (l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่")) {
+                    if (l.is_visit || (l.note && l.note.startsWith("เยี่ยมบ้านครั้งที่"))) {
                         visitsCount++;
                     }
                 });
